@@ -1,0 +1,2867 @@
+{
+  "version": "2.8",
+  "children": [
+    {
+      "type": "frame",
+      "id": "fmlaO",
+      "x": 0,
+      "y": 0,
+      "name": "MyCoffeeStore Website",
+      "width": 1440,
+      "fill": "#FFFFFF",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "gcVyD",
+          "name": "Header",
+          "width": "fill_container",
+          "height": 80,
+          "fill": "#1A1A1A",
+          "padding": [
+            0,
+            60
+          ],
+          "children": [
+            {
+              "type": "text",
+              "id": "k49gY",
+              "name": "logo",
+              "content": "MyCoffeeStore",
+              "fontFamily": "Georgia",
+              "fontSize": 28,
+              "fontWeight": "bold"
+            },
+            {
+              "type": "frame",
+              "id": "OIVcB",
+              "name": "nav",
+              "width": "fill_container",
+              "gap": 40,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "AB663",
+                  "name": "homeLink",
+                  "content": "首页",
+                  "fontFamily": "Inter",
+                  "fontSize": 16,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "6Fjj2",
+                  "name": "menuLink",
+                  "content": "菜单",
+                  "fontFamily": "Inter",
+                  "fontSize": 16,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "frliR",
+                  "name": "aboutLink",
+                  "content": "关于我们",
+                  "fontFamily": "Inter",
+                  "fontSize": 16,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "BIXjr",
+              "name": "loginBtn",
+              "fill": "transparent",
+              "cornerRadius": 6,
+              "padding": [
+                12,
+                24
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "OHzwo",
+                  "name": "loginText",
+                  "content": "登录",
+                  "fontFamily": "Inter",
+                  "fontSize": 16,
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "aZaqP",
+              "name": "registerBtn",
+              "fill": "#D4A574",
+              "cornerRadius": 6,
+              "padding": [
+                12,
+                24
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "9SBuc",
+                  "name": "registerText",
+                  "content": "注册",
+                  "fontFamily": "Inter",
+                  "fontSize": 16,
+                  "fontWeight": "500"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "3jgGC",
+          "name": "Hero Section",
+          "width": "fill_container",
+          "height": 600,
+          "layout": "vertical",
+          "gap": 24,
+          "padding": [
+            100,
+            60
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "AOoQj",
+              "name": "heroBg",
+              "metadata": {
+                "type": "unsplash",
+                "username": "mjmolo",
+                "link": "https://unsplash.com/@mjmolo",
+                "author": "Michael Moloney"
+              },
+              "width": "fill_container",
+              "height": "fill_container",
+              "fill": {
+                "type": "image",
+                "enabled": true,
+                "url": "https://images.unsplash.com/photo-1702677413541-ffc41d8c08b3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NzIwNzQ3MDR8&ixlib=rb-4.1.0&q=80&w=1080",
+                "mode": "fill"
+              },
+              "layout": "vertical",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "kCcnc",
+                  "name": "heroOverlay",
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "fill": "#00000060",
+                  "layout": "vertical",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "oJyKQ",
+                      "name": "heroContent",
+                      "width": 700,
+                      "layout": "vertical",
+                      "gap": 24,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "OQ4RN",
+                          "name": "heroBadge",
+                          "fill": "#D4A574",
+                          "cornerRadius": 20,
+                          "padding": [
+                            10,
+                            20
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "zWWeo",
+                              "name": "badgeText",
+                              "content": "Haight Ashbury 精品咖啡",
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "500"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "JCrZf",
+                          "name": "heroTitle",
+                          "content": "每一杯咖啡，都是一种生活方式",
+                          "lineHeight": 1.2,
+                          "fontFamily": "Georgia",
+                          "fontSize": 56,
+                          "fontWeight": "bold"
+                        },
+                        {
+                          "type": "text",
+                          "id": "4JTWf",
+                          "name": "heroSubtitle",
+                          "content": "在旧金山 Haight Ashbury，我们用心烘焙每一颗咖啡豆，为您带来独特的咖啡体验。无论是堂食、外带还是外卖，我们都期待为您服务。",
+                          "lineHeight": 1.6,
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "HoFU8",
+                          "name": "ctaGroup",
+                          "gap": 16,
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "YwWr6",
+                              "name": "orderBtn",
+                              "fill": "#D4A574",
+                              "cornerRadius": 8,
+                              "padding": [
+                                16,
+                                32
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "wO3GD",
+                                  "name": "orderText",
+                                  "content": "立即下单",
+                                  "fontFamily": "Inter",
+                                  "fontSize": 18,
+                                  "fontWeight": "600"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "K5qdY",
+                              "name": "menuBtn",
+                              "fill": "transparent",
+                              "cornerRadius": 8,
+                              "padding": [
+                                16,
+                                32
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "6Tugb",
+                                  "name": "menuText",
+                                  "content": "查看菜单",
+                                  "fontFamily": "Inter",
+                                  "fontSize": 18,
+                                  "fontWeight": "600"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "59WOQ",
+          "name": "Featured Coffees",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 40,
+          "padding": [
+            80,
+            60
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "Ke5lU",
+              "name": "featuredHeader",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 12,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "csa3x",
+                  "name": "featuredTitle",
+                  "content": "精选咖啡",
+                  "fontFamily": "Georgia",
+                  "fontSize": 42,
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "text",
+                  "id": "8ireQ",
+                  "name": "featuredSubtitle",
+                  "content": "用心烘焙，每一杯都是艺术品",
+                  "fontFamily": "Inter",
+                  "fontSize": 18,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "zEZYW",
+              "name": "coffeeGrid",
+              "width": "fill_container",
+              "gap": 32,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "MIfAb",
+                  "name": "coffee1",
+                  "width": 360,
+                  "fill": "#FFFFFF",
+                  "cornerRadius": 16,
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": 24,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "GK5RL",
+                      "name": "coffee1Img",
+                      "metadata": {
+                        "type": "unsplash",
+                        "username": "siriusharrison",
+                        "link": "https://unsplash.com/@siriusharrison",
+                        "author": "Sirius Harrison"
+                      },
+                      "width": "fit_content(0)",
+                      "height": 240,
+                      "fill": {
+                        "type": "image",
+                        "enabled": true,
+                        "url": "https://images.unsplash.com/photo-1729825128096-4f784c2c6dc0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NzIwNzQ3MDR8&ixlib=rb-4.1.0&q=80&w=1080",
+                        "mode": "fill"
+                      },
+                      "cornerRadius": 12
+                    },
+                    {
+                      "type": "text",
+                      "id": "6krJJ",
+                      "name": "coffee1Name",
+                      "content": "经典拿铁",
+                      "fontFamily": "Inter",
+                      "fontSize": 22,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "UJIvV",
+                      "name": "coffee1Desc",
+                      "content": "丝滑奶泡与浓缩咖啡的完美融合，带来浓郁香醇的口感体验。",
+                      "lineHeight": 1.5,
+                      "fontFamily": "Inter",
+                      "fontSize": 15,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "fMCLX",
+                      "name": "coffee1Footer",
+                      "width": "fill_container",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "f65Nu",
+                          "name": "coffee1Price",
+                          "content": "$5.50",
+                          "fontFamily": "Inter",
+                          "fontSize": 24,
+                          "fontWeight": "bold"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "7tGbh",
+                          "name": "coffee1Btn",
+                          "fill": "#1A1A1A",
+                          "cornerRadius": 6,
+                          "padding": [
+                            10,
+                            20
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "Xb9Y5",
+                              "name": "coffee1BtnText",
+                              "content": "加入购物车",
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "500"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "ZwIND",
+                  "name": "coffee2",
+                  "width": 360,
+                  "fill": "#FFFFFF",
+                  "cornerRadius": 16,
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": 24,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "WgVVv",
+                      "name": "coffee2Img",
+                      "metadata": {
+                        "type": "unsplash",
+                        "username": "alexandra_p_d",
+                        "link": "https://unsplash.com/@alexandra_p_d",
+                        "author": "Alexandra"
+                      },
+                      "width": "fit_content(0)",
+                      "height": 240,
+                      "fill": {
+                        "type": "image",
+                        "enabled": true,
+                        "url": "https://images.unsplash.com/photo-1759593914762-11026921ef2d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NzIwNzQ3MDV8&ixlib=rb-4.1.0&q=80&w=1080",
+                        "mode": "fill"
+                      },
+                      "cornerRadius": 12
+                    },
+                    {
+                      "type": "text",
+                      "id": "ytPJv",
+                      "name": "coffee2Name",
+                      "content": "卡布奇诺",
+                      "fontFamily": "Inter",
+                      "fontSize": 22,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "eSHeZ",
+                      "name": "coffee2Desc",
+                      "content": "意式经典，绵密奶泡与浓缩咖啡的黄金比例。",
+                      "lineHeight": 1.5,
+                      "fontFamily": "Inter",
+                      "fontSize": 15,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "puK4P",
+                      "name": "coffee2Footer",
+                      "width": "fill_container",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "gQ8wj",
+                          "name": "coffee2Price",
+                          "content": "$5.00",
+                          "fontFamily": "Inter",
+                          "fontSize": 24,
+                          "fontWeight": "bold"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "WrN4T",
+                          "name": "coffee2Btn",
+                          "fill": "#1A1A1A",
+                          "cornerRadius": 6,
+                          "padding": [
+                            10,
+                            20
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "uIk2p",
+                              "name": "coffee2BtnText",
+                              "content": "加入购物车",
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "500"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "euo1i",
+                  "name": "coffee3",
+                  "width": 360,
+                  "fill": "#FFFFFF",
+                  "cornerRadius": 16,
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": 24,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "Lyacb",
+                      "name": "coffee3Img",
+                      "metadata": {
+                        "type": "unsplash",
+                        "username": "blender_person",
+                        "link": "https://unsplash.com/@blender_person",
+                        "author": "Wesley Ford"
+                      },
+                      "width": "fit_content(0)",
+                      "height": 240,
+                      "fill": {
+                        "type": "image",
+                        "enabled": true,
+                        "url": "https://images.unsplash.com/photo-1758883019110-04c79dc56a71?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NzIwNzQ3MDV8&ixlib=rb-4.1.0&q=80&w=1080",
+                        "mode": "fill"
+                      },
+                      "cornerRadius": 12
+                    },
+                    {
+                      "type": "text",
+                      "id": "0YlzX",
+                      "name": "coffee3Name",
+                      "content": "浓缩咖啡",
+                      "fontFamily": "Inter",
+                      "fontSize": 22,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "t4zB6",
+                      "name": "coffee3Desc",
+                      "content": "纯正意式浓缩，咖啡爱好者的每日能量源泉。",
+                      "lineHeight": 1.5,
+                      "fontFamily": "Inter",
+                      "fontSize": 15,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "YllI2",
+                      "name": "coffee3Footer",
+                      "width": "fill_container",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "ogrsR",
+                          "name": "coffee3Price",
+                          "content": "$3.50",
+                          "fontFamily": "Inter",
+                          "fontSize": 24,
+                          "fontWeight": "bold"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "LVtMZ",
+                          "name": "coffee3Btn",
+                          "fill": "#1A1A1A",
+                          "cornerRadius": 6,
+                          "padding": [
+                            10,
+                            20
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "yjvBa",
+                              "name": "coffee3BtnText",
+                              "content": "加入购物车",
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "500"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "Z7Yge",
+          "name": "About Section",
+          "width": "fill_container",
+          "height": 500,
+          "fill": "#1A1A1A",
+          "gap": 60,
+          "padding": [
+            80,
+            60
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "34Ijx",
+              "name": "aboutContent",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 24,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "Qbqag",
+                  "name": "aboutTitle",
+                  "content": "关于 MyCoffeeStore",
+                  "fontFamily": "Georgia",
+                  "fontSize": 36,
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "text",
+                  "id": "Kklri",
+                  "name": "aboutText",
+                  "content": "位于旧金山 Haight Ashbury 的精品咖啡店，我们致力于为每一位顾客提供最优质的咖啡体验。从精选咖啡豆到专业烘焙，从精心冲煮到完美呈现，每一杯咖啡都承载着我们的热情与专注。",
+                  "lineHeight": 1.8,
+                  "fontFamily": "Inter",
+                  "fontSize": 16,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "aixFi",
+                  "name": "aboutInfo",
+                  "layout": "vertical",
+                  "gap": 16,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "5q8zd",
+                      "name": "info1",
+                      "gap": 12,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "AAMG9",
+                          "name": "info1Icon",
+                          "content": "Haight Ashbury, San Francisco",
+                          "fontFamily": "Inter",
+                          "fontSize": 16,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "o104w",
+                      "name": "info2",
+                      "gap": 12,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "YyfKQ",
+                          "name": "info2Icon",
+                          "content": "每天 7:00 - 21:00",
+                          "fontFamily": "Inter",
+                          "fontSize": 16,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "ZizkN",
+              "name": "aboutImg",
+              "metadata": {
+                "type": "unsplash",
+                "username": "cmrcn_",
+                "link": "https://unsplash.com/@cmrcn_",
+                "author": "Cemrecan Yurtman"
+              },
+              "width": 500,
+              "height": "fill_container",
+              "fill": {
+                "type": "image",
+                "enabled": true,
+                "url": "https://images.unsplash.com/photo-1736813133887-321f44e44224?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NzIwNzQ3MDZ8&ixlib=rb-4.1.0&q=80&w=1080",
+                "mode": "fill"
+              },
+              "cornerRadius": 16
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "gC4a9",
+          "name": "Footer",
+          "width": "fill_container",
+          "fill": "#111111",
+          "layout": "vertical",
+          "gap": 40,
+          "padding": 60,
+          "children": [
+            {
+              "type": "frame",
+              "id": "Vp7kP",
+              "name": "footerTop",
+              "width": "fill_container",
+              "gap": 80,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "sk53v",
+                  "name": "footerBrand",
+                  "width": 300,
+                  "layout": "vertical",
+                  "gap": 12,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "ywQ7v",
+                      "name": "footerLogo",
+                      "content": "MyCoffeeStore",
+                      "fontFamily": "Georgia",
+                      "fontSize": 24,
+                      "fontWeight": "bold"
+                    },
+                    {
+                      "type": "text",
+                      "id": "CfqeF",
+                      "name": "footerTagline",
+                      "content": "每一杯咖啡，都是一种生活方式",
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "c7wOO",
+                  "name": "footerLinks",
+                  "width": "fill_container",
+                  "gap": 60,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "uidPv",
+                      "name": "links1",
+                      "layout": "vertical",
+                      "gap": 12,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "Mj6Xk",
+                          "name": "links1Title",
+                          "content": "产品",
+                          "fontFamily": "Inter",
+                          "fontSize": 16,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "hlFyO",
+                          "name": "links1Item1",
+                          "content": "咖啡",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "text",
+                          "id": "xiZJg",
+                          "name": "links1Item2",
+                          "content": "糕点",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "ZyfjU",
+                      "name": "links2",
+                      "layout": "vertical",
+                      "gap": 12,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "fjCe5",
+                          "name": "links2Title",
+                          "content": "关于",
+                          "fontFamily": "Inter",
+                          "fontSize": 16,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "Oq8Ka",
+                          "name": "links2Item1",
+                          "content": "关于我们",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "text",
+                          "id": "mr52k",
+                          "name": "links2Item2",
+                          "content": "联系方式",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "bUAMW",
+                      "name": "links3",
+                      "layout": "vertical",
+                      "gap": 12,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "kiNZN",
+                          "name": "links3Title",
+                          "content": "帮助",
+                          "fontFamily": "Inter",
+                          "fontSize": 16,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "vLt1k",
+                          "name": "links3Item1",
+                          "content": "常见问题",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "text",
+                          "id": "LbZVO",
+                          "name": "links3Item2",
+                          "content": "配送政策",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "KSeyV",
+              "name": "footerBottom",
+              "width": "fill_container",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "pLqff",
+                  "name": "footerCopyright",
+                  "content": "© 2026 MyCoffeeStore. All rights reserved.",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "2zuky",
+      "x": 0,
+      "y": 0,
+      "name": "Login Page",
+      "width": 1440,
+      "height": 800,
+      "fill": "#FAFAFA",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "8WOC2",
+          "name": "loginHeader",
+          "width": "fill_container",
+          "height": 80,
+          "fill": "#FFFFFF",
+          "children": [
+            {
+              "type": "text",
+              "id": "gmuji",
+              "name": "loginLogo",
+              "fill": "#1A1A1A",
+              "content": "MyCoffeeStore",
+              "fontFamily": "Inter",
+              "fontSize": 24,
+              "fontWeight": "bold"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "jKzOx",
+          "name": "loginContent",
+          "width": 400,
+          "fill": "#FFFFFF",
+          "cornerRadius": 16,
+          "layout": "vertical",
+          "gap": 32,
+          "padding": 48,
+          "children": [
+            {
+              "type": "text",
+              "id": "KeELx",
+              "name": "loginTitle",
+              "fill": "#1A1A1A",
+              "content": "欢迎回来",
+              "fontFamily": "Inter",
+              "fontSize": 32,
+              "fontWeight": "bold"
+            },
+            {
+              "type": "text",
+              "id": "ZVfQP",
+              "name": "loginSubtitle",
+              "fill": "#666666",
+              "content": "登录您的账户",
+              "fontFamily": "Inter",
+              "fontSize": 16,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "PI4aQ",
+              "name": "emailLabel",
+              "fill": "#1A1A1A",
+              "content": "邮箱/用户名",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "500"
+            },
+            {
+              "type": "frame",
+              "id": "k9X8L",
+              "name": "emailInput",
+              "width": "fill_container",
+              "height": 50,
+              "fill": "#F5F5F5",
+              "cornerRadius": 8,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "IJ8PD",
+                  "name": "emailPlaceholder",
+                  "fill": "#999999",
+                  "content": "请输入邮箱或用户名",
+                  "fontFamily": "Inter",
+                  "fontSize": 15,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "ZzLEe",
+              "name": "passwordLabel",
+              "fill": "#1A1A1A",
+              "content": "密码",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "500"
+            },
+            {
+              "type": "frame",
+              "id": "TRejM",
+              "name": "passwordInput",
+              "width": "fill_container",
+              "height": 50,
+              "fill": "#F5F5F5",
+              "cornerRadius": 8,
+              "padding": [
+                0,
+                16
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "9meiz",
+                  "name": "passwordField",
+                  "fill": "#999999",
+                  "content": "请输入密码",
+                  "fontFamily": "Inter",
+                  "fontSize": 15,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "ULJFm",
+                  "name": "forgotLink",
+                  "fill": "#D4A574",
+                  "content": "忘记密码?",
+                  "fontFamily": "Inter",
+                  "fontSize": 13,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "MUi6K",
+              "name": "loginSubmitBtn",
+              "width": "fill_container",
+              "height": 50,
+              "fill": "#D4A574",
+              "cornerRadius": 8,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "Mt9Wy",
+                  "name": "loginSubmitText",
+                  "fill": "#1A1A1A",
+                  "content": "登录",
+                  "fontFamily": "Inter",
+                  "fontSize": 16,
+                  "fontWeight": "600"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "g8z0g",
+              "name": "loginFooter",
+              "gap": 8,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "L0okb",
+                  "name": "loginFooterText",
+                  "fill": "#666666",
+                  "content": "还没有账户?",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "l26Cp",
+                  "name": "loginFooterLink",
+                  "fill": "#D4A574",
+                  "content": "注册",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "500"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "BNAUy",
+      "x": 0,
+      "y": 0,
+      "name": "Register Page",
+      "width": 1440,
+      "height": 1000,
+      "fill": "#FAFAFA",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "eUucc",
+          "name": "regHeader",
+          "width": "fill_container",
+          "height": 80,
+          "fill": "#FFFFFF",
+          "children": [
+            {
+              "type": "text",
+              "id": "ljcaJ",
+              "name": "regLogo",
+              "fill": "#1A1A1A",
+              "content": "MyCoffeeStore",
+              "fontFamily": "Inter",
+              "fontSize": 24,
+              "fontWeight": "bold"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "eNE7t",
+          "name": "regContent",
+          "width": 420,
+          "fill": "#FFFFFF",
+          "cornerRadius": 16,
+          "layout": "vertical",
+          "gap": 24,
+          "padding": 48,
+          "children": [
+            {
+              "type": "text",
+              "id": "dYZQ3",
+              "name": "regTitle",
+              "fill": "#1A1A1A",
+              "content": "创建账户",
+              "fontFamily": "Inter",
+              "fontSize": 32,
+              "fontWeight": "bold"
+            },
+            {
+              "type": "text",
+              "id": "uKtDf",
+              "name": "regSubtitle",
+              "fill": "#666666",
+              "content": "加入我们的社区",
+              "fontFamily": "Inter",
+              "fontSize": 16,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "AgxLX",
+              "name": "usernameLabel",
+              "fill": "#1A1A1A",
+              "content": "用户名",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "500"
+            },
+            {
+              "type": "frame",
+              "id": "jB74W",
+              "name": "usernameInput",
+              "width": "fill_container",
+              "height": 50,
+              "fill": "#F5F5F5",
+              "cornerRadius": 8,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "ueaK9",
+                  "name": "usernamePlaceholder",
+                  "fill": "#999999",
+                  "content": "请输入用户名",
+                  "fontFamily": "Inter",
+                  "fontSize": 15,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "ApNsE",
+              "name": "regEmailLabel",
+              "fill": "#1A1A1A",
+              "content": "邮箱",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "500"
+            },
+            {
+              "type": "frame",
+              "id": "kCJBF",
+              "name": "regEmailInput",
+              "width": "fill_container",
+              "height": 50,
+              "fill": "#F5F5F5",
+              "cornerRadius": 8,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "f99iB",
+                  "name": "regEmailPlaceholder",
+                  "fill": "#999999",
+                  "content": "请输入邮箱地址",
+                  "fontFamily": "Inter",
+                  "fontSize": 15,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "NGBJQ",
+              "name": "phoneLabel",
+              "fill": "#1A1A1A",
+              "content": "手机号",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "500"
+            },
+            {
+              "type": "frame",
+              "id": "vYPGw",
+              "name": "phoneInput",
+              "width": "fill_container",
+              "height": 50,
+              "fill": "#F5F5F5",
+              "cornerRadius": 8,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "mxE3A",
+                  "name": "phonePlaceholder",
+                  "fill": "#999999",
+                  "content": "请输入手机号",
+                  "fontFamily": "Inter",
+                  "fontSize": 15,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "o4ovE",
+              "name": "regPasswordLabel",
+              "fill": "#1A1A1A",
+              "content": "密码",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "500"
+            },
+            {
+              "type": "frame",
+              "id": "meowX",
+              "name": "regPasswordInput",
+              "width": "fill_container",
+              "height": 50,
+              "fill": "#F5F5F5",
+              "cornerRadius": 8,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "y4PHa",
+                  "name": "regPasswordPlaceholder",
+                  "fill": "#999999",
+                  "content": "请输入密码(至少6位)",
+                  "fontFamily": "Inter",
+                  "fontSize": 15,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "69oZn",
+              "name": "confirmPasswordLabel",
+              "fill": "#1A1A1A",
+              "content": "确认密码",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "500"
+            },
+            {
+              "type": "frame",
+              "id": "f9QZ4",
+              "name": "confirmPasswordInput",
+              "width": "fill_container",
+              "height": 50,
+              "fill": "#F5F5F5",
+              "cornerRadius": 8,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "FjCVa",
+                  "name": "confirmPasswordPlaceholder",
+                  "fill": "#999999",
+                  "content": "请再次输入密码",
+                  "fontFamily": "Inter",
+                  "fontSize": 15,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "ToIlE",
+              "name": "agreeTerms",
+              "gap": 8,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "KjaPa",
+                  "name": "agreeCheckbox",
+                  "width": 20,
+                  "height": 20,
+                  "cornerRadius": 4
+                },
+                {
+                  "type": "text",
+                  "id": "1pwVr",
+                  "name": "agreeText",
+                  "fill": "#666666",
+                  "content": "我同意服务条款和隐私政策",
+                  "fontFamily": "Inter",
+                  "fontSize": 13,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "52Grr",
+              "name": "regSubmitBtn",
+              "width": "fill_container",
+              "height": 50,
+              "fill": "#D4A574",
+              "cornerRadius": 8,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "owdTf",
+                  "name": "regSubmitText",
+                  "fill": "#1A1A1A",
+                  "content": "注册",
+                  "fontFamily": "Inter",
+                  "fontSize": 16,
+                  "fontWeight": "600"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "DnCCr",
+              "name": "regFooter",
+              "gap": 8,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "VL9NW",
+                  "name": "regFooterText",
+                  "fill": "#666666",
+                  "content": "已有账户?",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "LesCn",
+                  "name": "regFooterLink",
+                  "fill": "#D4A574",
+                  "content": "登录",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "500"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "myJHi",
+      "x": 0,
+      "y": 0,
+      "name": "Coffee List Page",
+      "width": 1440,
+      "height": 1400,
+      "fill": "#FFFFFF",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "oCfQl",
+          "name": "listHeader",
+          "width": "fill_container",
+          "height": 80,
+          "fill": "#1A1A1A",
+          "padding": [
+            0,
+            60
+          ],
+          "children": [
+            {
+              "type": "text",
+              "id": "SbV0h",
+              "name": "listLogo",
+              "fill": "#FFFFFF",
+              "content": "MyCoffeeStore",
+              "fontFamily": "Inter",
+              "fontSize": 24,
+              "fontWeight": "bold"
+            },
+            {
+              "type": "frame",
+              "id": "ISLMh",
+              "name": "listNav",
+              "width": "fill_container",
+              "gap": 40,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "PWJVx",
+                  "name": "listHome",
+                  "fill": "#CCCCCC",
+                  "content": "首页",
+                  "fontFamily": "Inter",
+                  "fontSize": 15,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "BuB1D",
+                  "name": "listMenu",
+                  "fill": "#D4A574",
+                  "content": "菜单",
+                  "fontFamily": "Inter",
+                  "fontSize": 15,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "RIDrd",
+                  "name": "listAbout",
+                  "fill": "#CCCCCC",
+                  "content": "关于我们",
+                  "fontFamily": "Inter",
+                  "fontSize": 15,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "TcM42",
+              "name": "listCart",
+              "gap": 8,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "ObmBa",
+                  "name": "cartIcon",
+                  "fill": "#FFFFFF",
+                  "content": "购物车",
+                  "fontFamily": "Inter",
+                  "fontSize": 15,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "NsWpI",
+                  "name": "cartCount",
+                  "width": 24,
+                  "height": 24,
+                  "fill": "#D4A574",
+                  "cornerRadius": 12,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "KDNRN",
+                      "name": "cartCountText",
+                      "fill": "#1A1A1A",
+                      "content": "0",
+                      "fontFamily": "Inter",
+                      "fontSize": 12,
+                      "fontWeight": "bold"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "VcQDP",
+          "name": "filterSection",
+          "width": "fill_container",
+          "gap": 16,
+          "padding": [
+            40,
+            60
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "RkJV7",
+              "name": "filterAll",
+              "fill": "#1A1A1A",
+              "cornerRadius": 20,
+              "padding": [
+                10,
+                24
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "rx1fL",
+                  "name": "filterAllText",
+                  "fill": "#FFFFFF",
+                  "content": "全部",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "951cC",
+              "name": "filterLatte",
+              "fill": "#F5F5F5",
+              "cornerRadius": 20,
+              "padding": [
+                10,
+                24
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "8klOM",
+                  "name": "filterLatteText",
+                  "fill": "#666666",
+                  "content": "拿铁",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "Yu0v8",
+              "name": "filterCappuccino",
+              "fill": "#F5F5F5",
+              "cornerRadius": 20,
+              "padding": [
+                10,
+                24
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "pSjI6",
+                  "name": "filterCappuccinoText",
+                  "fill": "#666666",
+                  "content": "卡布奇诺",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "kspN1",
+              "name": "filterEspresso",
+              "fill": "#F5F5F5",
+              "cornerRadius": 20,
+              "padding": [
+                10,
+                24
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "GKTRD",
+                  "name": "filterEspressoText",
+                  "fill": "#666666",
+                  "content": "浓缩",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "qW4C0",
+          "name": "listCoffeeGrid",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 24,
+          "padding": [
+            40,
+            60
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "phmNL",
+              "name": "listRow1",
+              "width": "fill_container",
+              "gap": 24,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "bawJQ",
+                  "name": "listCoffee1",
+                  "width": 320,
+                  "fill": "#FFFFFF",
+                  "cornerRadius": 12,
+                  "layout": "vertical",
+                  "gap": 12,
+                  "padding": 20,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "k6JN2",
+                      "name": "listCoffee1Img",
+                      "metadata": {
+                        "type": "unsplash",
+                        "username": "haberdoedas",
+                        "link": "https://unsplash.com/@haberdoedas",
+                        "author": "Haberdoedas"
+                      },
+                      "width": "fit_content(0)",
+                      "height": 200,
+                      "fill": {
+                        "type": "image",
+                        "enabled": true,
+                        "url": "https://images.unsplash.com/photo-1769986804844-d8edf7117121?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NzIwNzQ3ODl8&ixlib=rb-4.1.0&q=80&w=1080",
+                        "mode": "fill"
+                      },
+                      "cornerRadius": 8
+                    },
+                    {
+                      "type": "text",
+                      "id": "NtU2A",
+                      "name": "listCoffee1Name",
+                      "fill": "#1A1A1A",
+                      "content": "经典拿铁",
+                      "fontFamily": "Inter",
+                      "fontSize": 18,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "P2BjU",
+                      "name": "listCoffee1Footer",
+                      "width": "fill_container",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "Vbcdh",
+                          "name": "listCoffee1Price",
+                          "fill": "#D4A574",
+                          "content": "$5.50",
+                          "fontFamily": "Inter",
+                          "fontSize": 20,
+                          "fontWeight": "bold"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "YHlmn",
+                          "name": "listCoffee1Btn",
+                          "fill": "#1A1A1A",
+                          "cornerRadius": 6,
+                          "padding": [
+                            8,
+                            16
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "pFXqz",
+                              "name": "listCoffee1BtnText",
+                              "fill": "#FFFFFF",
+                              "content": "+ 加入",
+                              "fontFamily": "Inter",
+                              "fontSize": 13,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "MXgwm",
+                  "name": "listCoffee2",
+                  "width": 320,
+                  "fill": "#FFFFFF",
+                  "cornerRadius": 12,
+                  "layout": "vertical",
+                  "gap": 12,
+                  "padding": 20,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "Wy5iw",
+                      "name": "listCoffee2Img",
+                      "metadata": {
+                        "type": "unsplash",
+                        "username": "siriusharrison",
+                        "link": "https://unsplash.com/@siriusharrison",
+                        "author": "Sirius Harrison"
+                      },
+                      "width": "fit_content(0)",
+                      "height": 200,
+                      "fill": {
+                        "type": "image",
+                        "enabled": true,
+                        "url": "https://images.unsplash.com/photo-1729825127983-1b38d39ff13e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NzIwNzQ3OTB8&ixlib=rb-4.1.0&q=80&w=1080",
+                        "mode": "fill"
+                      },
+                      "cornerRadius": 8
+                    },
+                    {
+                      "type": "text",
+                      "id": "9b45D",
+                      "name": "listCoffee2Name",
+                      "fill": "#1A1A1A",
+                      "content": "卡布奇诺",
+                      "fontFamily": "Inter",
+                      "fontSize": 18,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "LispH",
+                      "name": "listCoffee2Footer",
+                      "width": "fill_container",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "5Sbv5",
+                          "name": "listCoffee2Price",
+                          "fill": "#D4A574",
+                          "content": "$5.00",
+                          "fontFamily": "Inter",
+                          "fontSize": 20,
+                          "fontWeight": "bold"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "vacpF",
+                          "name": "listCoffee2Btn",
+                          "fill": "#1A1A1A",
+                          "cornerRadius": 6,
+                          "padding": [
+                            8,
+                            16
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "FlU3i",
+                              "name": "listCoffee2BtnText",
+                              "fill": "#FFFFFF",
+                              "content": "+ 加入",
+                              "fontFamily": "Inter",
+                              "fontSize": 13,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "212Si",
+                  "name": "listCoffee3",
+                  "width": 320,
+                  "fill": "#FFFFFF",
+                  "cornerRadius": 12,
+                  "layout": "vertical",
+                  "gap": 12,
+                  "padding": 20,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "PCK1X",
+                      "name": "listCoffee3Img",
+                      "metadata": {
+                        "type": "unsplash",
+                        "username": "cmrcn_",
+                        "link": "https://unsplash.com/@cmrcn_",
+                        "author": "Cemrecan Yurtman"
+                      },
+                      "width": "fit_content(0)",
+                      "height": 200,
+                      "fill": {
+                        "type": "image",
+                        "enabled": true,
+                        "url": "https://images.unsplash.com/photo-1736813132481-029dbcc2d89e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NzIwNzQ3OTB8&ixlib=rb-4.1.0&q=80&w=1080",
+                        "mode": "fill"
+                      },
+                      "cornerRadius": 8
+                    },
+                    {
+                      "type": "text",
+                      "id": "31HWl",
+                      "name": "listCoffee3Name",
+                      "fill": "#1A1A1A",
+                      "content": "浓缩咖啡",
+                      "fontFamily": "Inter",
+                      "fontSize": 18,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "fTZT8",
+                      "name": "listCoffee3Footer",
+                      "width": "fill_container",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "dypLF",
+                          "name": "listCoffee3Price",
+                          "fill": "#D4A574",
+                          "content": "$3.50",
+                          "fontFamily": "Inter",
+                          "fontSize": 20,
+                          "fontWeight": "bold"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "RHxFT",
+                          "name": "listCoffee3Btn",
+                          "fill": "#1A1A1A",
+                          "cornerRadius": 6,
+                          "padding": [
+                            8,
+                            16
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "A4ILp",
+                              "name": "listCoffee3BtnText",
+                              "fill": "#FFFFFF",
+                              "content": "+ 加入",
+                              "fontFamily": "Inter",
+                              "fontSize": 13,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "ffjbh",
+                  "name": "listCoffee4",
+                  "width": 320,
+                  "fill": "#FFFFFF",
+                  "cornerRadius": 12,
+                  "layout": "vertical",
+                  "gap": 12,
+                  "padding": 20,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "d83vb",
+                      "name": "listCoffee4Img",
+                      "metadata": {
+                        "type": "unsplash",
+                        "username": "nil_foto",
+                        "link": "https://unsplash.com/@nil_foto",
+                        "author": "József Szabó"
+                      },
+                      "width": "fit_content(0)",
+                      "height": 200,
+                      "fill": {
+                        "type": "image",
+                        "enabled": true,
+                        "url": "https://images.unsplash.com/photo-1637590594015-9caa6148d381?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NzIwNzQ3OTF8&ixlib=rb-4.1.0&q=80&w=1080",
+                        "mode": "fill"
+                      },
+                      "cornerRadius": 8
+                    },
+                    {
+                      "type": "text",
+                      "id": "qq3jr",
+                      "name": "listCoffee4Name",
+                      "fill": "#1A1A1A",
+                      "content": "冷萃咖啡",
+                      "fontFamily": "Inter",
+                      "fontSize": 18,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "MmBAE",
+                      "name": "listCoffee4Footer",
+                      "width": "fill_container",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "kt8nP",
+                          "name": "listCoffee4Price",
+                          "fill": "#D4A574",
+                          "content": "$4.50",
+                          "fontFamily": "Inter",
+                          "fontSize": 20,
+                          "fontWeight": "bold"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "pN448",
+                          "name": "listCoffee4Btn",
+                          "fill": "#1A1A1A",
+                          "cornerRadius": 6,
+                          "padding": [
+                            8,
+                            16
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "x0U01",
+                              "name": "listCoffee4BtnText",
+                              "fill": "#FFFFFF",
+                              "content": "+ 加入",
+                              "fontFamily": "Inter",
+                              "fontSize": 13,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "ioSa2",
+      "x": 0,
+      "y": 0,
+      "name": "Cart Page",
+      "width": 1440,
+      "height": 1200,
+      "fill": "#FAFAFA",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "VU9Ph",
+          "name": "cartHeader",
+          "width": "fill_container",
+          "height": 80,
+          "fill": "#1A1A1A",
+          "padding": [
+            0,
+            60
+          ],
+          "children": [
+            {
+              "type": "text",
+              "id": "OLmPT",
+              "name": "cartBackBtn",
+              "fill": "#FFFFFF",
+              "content": "返回",
+              "fontFamily": "Inter",
+              "fontSize": 16,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "UaVbE",
+              "name": "cartTitle",
+              "fill": "#FFFFFF",
+              "content": "购物车 (3 件)",
+              "fontFamily": "Inter",
+              "fontSize": 20,
+              "fontWeight": "bold"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "ba3MZ",
+          "name": "cartContent",
+          "width": 800,
+          "layout": "vertical",
+          "gap": 24,
+          "padding": [
+            40,
+            60
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "ucuje",
+              "name": "cartItem1",
+              "width": "fill_container",
+              "fill": "#FFFFFF",
+              "cornerRadius": 12,
+              "gap": 20,
+              "padding": 24,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "HrzoF",
+                  "name": "cartItem1Img",
+                  "metadata": {
+                    "type": "unsplash",
+                    "username": "onlysiamak",
+                    "link": "https://unsplash.com/@onlysiamak",
+                    "author": "Siamak"
+                  },
+                  "width": 100,
+                  "height": 100,
+                  "fill": {
+                    "type": "image",
+                    "enabled": true,
+                    "url": "https://images.unsplash.com/photo-1724168659171-bc1864cd9f2c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NzIwNzQ4Mjl8&ixlib=rb-4.1.0&q=80&w=1080",
+                    "mode": "fill"
+                  },
+                  "cornerRadius": 8
+                },
+                {
+                  "type": "frame",
+                  "id": "B5u3u",
+                  "name": "cartItem1Info",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "RX1uU",
+                      "name": "cartItem1Name",
+                      "fill": "#1A1A1A",
+                      "content": "经典拿铁 - 中杯",
+                      "fontFamily": "Inter",
+                      "fontSize": 16,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "5dPeR",
+                      "name": "cartItem1Qty",
+                      "gap": 12,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "ArREu",
+                          "name": "cartItem1QtyMinus",
+                          "width": 32,
+                          "height": 32,
+                          "fill": "#F5F5F5",
+                          "cornerRadius": 6,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "B4X8p",
+                              "name": "cartItem1QtyMinusText",
+                              "fill": "#1A1A1A",
+                              "content": "-",
+                              "fontFamily": "Inter",
+                              "fontSize": 16,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "Jvyp0",
+                          "name": "cartItem1QtyNum",
+                          "fill": "#1A1A1A",
+                          "content": "1",
+                          "fontFamily": "Inter",
+                          "fontSize": 16,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "aFRBE",
+                          "name": "cartItem1QtyPlus",
+                          "width": 32,
+                          "height": 32,
+                          "fill": "#F5F5F5",
+                          "cornerRadius": 6,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "swDiO",
+                              "name": "cartItem1QtyPlusText",
+                              "fill": "#1A1A1A",
+                              "content": "+",
+                              "fontFamily": "Inter",
+                              "fontSize": 16,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "CzT7B",
+                      "name": "cartItem1Footer",
+                      "width": "fill_container",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "vEGQf",
+                          "name": "cartItem1Price",
+                          "fill": "#D4A574",
+                          "content": "$5.50",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "bold"
+                        },
+                        {
+                          "type": "text",
+                          "id": "OCzIY",
+                          "name": "cartItem1Delete",
+                          "fill": "#FF4D4F",
+                          "content": "删除",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "uFwFH",
+              "name": "cartItem2",
+              "width": "fill_container",
+              "fill": "#FFFFFF",
+              "cornerRadius": 12,
+              "gap": 20,
+              "padding": 24,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "UOpgA",
+                  "name": "cartItem2Img",
+                  "metadata": {
+                    "type": "unsplash",
+                    "username": "lauraseidlitz",
+                    "link": "https://unsplash.com/@lauraseidlitz",
+                    "author": "Laura Seidlitz"
+                  },
+                  "width": 100,
+                  "height": 100,
+                  "fill": {
+                    "type": "image",
+                    "enabled": true,
+                    "url": "https://images.unsplash.com/photo-1560968711-b1eec406b060?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NzIwNzQ4Mjl8&ixlib=rb-4.1.0&q=80&w=1080",
+                    "mode": "fill"
+                  },
+                  "cornerRadius": 8
+                },
+                {
+                  "type": "frame",
+                  "id": "uP27c",
+                  "name": "cartItem2Info",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "Dz7aY",
+                      "name": "cartItem2Name",
+                      "fill": "#1A1A1A",
+                      "content": "卡布奇诺 - 中杯",
+                      "fontFamily": "Inter",
+                      "fontSize": 16,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "Wqpni",
+                      "name": "cartItem2Qty",
+                      "gap": 12,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "ZG2Ro",
+                          "name": "cartItem2QtyMinus",
+                          "width": 32,
+                          "height": 32,
+                          "fill": "#F5F5F5",
+                          "cornerRadius": 6,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "4rMa5",
+                              "name": "cartItem2QtyMinusText",
+                              "fill": "#1A1A1A",
+                              "content": "-",
+                              "fontFamily": "Inter",
+                              "fontSize": 16,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "5SdZH",
+                          "name": "cartItem2QtyNum",
+                          "fill": "#1A1A1A",
+                          "content": "2",
+                          "fontFamily": "Inter",
+                          "fontSize": 16,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "6MB1Y",
+                          "name": "cartItem2QtyPlus",
+                          "width": 32,
+                          "height": 32,
+                          "fill": "#F5F5F5",
+                          "cornerRadius": 6,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "4f9Uj",
+                              "name": "cartItem2QtyPlusText",
+                              "fill": "#1A1A1A",
+                              "content": "+",
+                              "fontFamily": "Inter",
+                              "fontSize": 16,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "wG2AZ",
+                      "name": "cartItem2Footer",
+                      "width": "fill_container",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "iSvg1",
+                          "name": "cartItem2Price",
+                          "fill": "#D4A574",
+                          "content": "$10.00",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "bold"
+                        },
+                        {
+                          "type": "text",
+                          "id": "U9xaU",
+                          "name": "cartItem2Delete",
+                          "fill": "#FF4D4F",
+                          "content": "删除",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "oXciL",
+              "name": "cartSummary",
+              "fill": "#FFFFFF",
+              "cornerRadius": 12,
+              "layout": "vertical",
+              "gap": 16,
+              "padding": 24,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "g4v4i",
+                  "name": "summaryLine1",
+                  "width": "fill_container",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "1ZQDe",
+                      "name": "summarySubtotal",
+                      "fill": "#666666",
+                      "content": "小计",
+                      "fontFamily": "Inter",
+                      "fontSize": 15,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "8Dli3",
+                      "name": "summarySubtotalValue",
+                      "fill": "#1A1A1A",
+                      "content": "$15.50",
+                      "fontFamily": "Inter",
+                      "fontSize": 15,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "Jba9L",
+                  "name": "summaryLine2",
+                  "width": "fill_container",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "zAlNX",
+                      "name": "summaryFee",
+                      "fill": "#666666",
+                      "content": "配送费",
+                      "fontFamily": "Inter",
+                      "fontSize": 15,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "vBzuE",
+                      "name": "summaryFeeValue",
+                      "fill": "#1A1A1A",
+                      "content": "$2.00",
+                      "fontFamily": "Inter",
+                      "fontSize": 15,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "IlyTU",
+                  "name": "summaryDivider",
+                  "width": "fill_container",
+                  "height": 1,
+                  "fill": "#E0E0E0"
+                },
+                {
+                  "type": "frame",
+                  "id": "0BVvU",
+                  "name": "summaryTotal",
+                  "width": "fill_container",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "5Y6uJ",
+                      "name": "summaryTotalLabel",
+                      "fill": "#1A1A1A",
+                      "content": "总计",
+                      "fontFamily": "Inter",
+                      "fontSize": 18,
+                      "fontWeight": "bold"
+                    },
+                    {
+                      "type": "text",
+                      "id": "p268F",
+                      "name": "summaryTotalValue",
+                      "fill": "#D4A574",
+                      "content": "$17.50",
+                      "fontFamily": "Inter",
+                      "fontSize": 22,
+                      "fontWeight": "bold"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "cnh8L",
+                  "name": "checkoutBtn",
+                  "width": "fill_container",
+                  "height": 50,
+                  "fill": "#D4A574",
+                  "cornerRadius": 8,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "zVCII",
+                      "name": "checkoutText",
+                      "fill": "#1A1A1A",
+                      "content": "去结算",
+                      "fontFamily": "Inter",
+                      "fontSize": 16,
+                      "fontWeight": "600"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "6HeXQ",
+      "x": 0,
+      "y": 0,
+      "name": "Order Page",
+      "width": 1440,
+      "height": 1000,
+      "fill": "#FAFAFA",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "5PVS0",
+          "name": "orderHeader",
+          "width": "fill_container",
+          "height": 80,
+          "fill": "#1A1A1A",
+          "padding": [
+            0,
+            60
+          ],
+          "children": [
+            {
+              "type": "text",
+              "id": "hfO8m",
+              "name": "orderBack",
+              "fill": "#FFFFFF",
+              "content": "返回",
+              "fontFamily": "Inter",
+              "fontSize": 16,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "V5qFP",
+              "name": "orderTitle",
+              "fill": "#FFFFFF",
+              "content": "我的订单",
+              "fontFamily": "Inter",
+              "fontSize": 20,
+              "fontWeight": "bold"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "kzVqo",
+          "name": "orderFilter",
+          "width": "fill_container",
+          "gap": 12,
+          "padding": [
+            24,
+            60
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "7uvSt",
+              "name": "orderFilterAll",
+              "fill": "#1A1A1A",
+              "cornerRadius": 16,
+              "padding": [
+                8,
+                20
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "I00R2",
+                  "name": "orderFilterAllText",
+                  "fill": "#FFFFFF",
+                  "content": "全部",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "Tu9XR",
+              "name": "orderFilterPending",
+              "fill": "#F5F5F5",
+              "cornerRadius": 16,
+              "padding": [
+                8,
+                20
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "Lz2w1",
+                  "name": "orderFilterPendingText",
+                  "fill": "#666666",
+                  "content": "待支付",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "Vp9AY",
+              "name": "orderFilterMaking",
+              "fill": "#F5F5F5",
+              "cornerRadius": 16,
+              "padding": [
+                8,
+                20
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "v5TqV",
+                  "name": "orderFilterMakingText",
+                  "fill": "#666666",
+                  "content": "制作中",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "NS6kt",
+              "name": "orderFilterDone",
+              "fill": "#F5F5F5",
+              "cornerRadius": 16,
+              "padding": [
+                8,
+                20
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "nqtlz",
+                  "name": "orderFilterDoneText",
+                  "fill": "#666666",
+                  "content": "已完成",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "nTeC1",
+          "name": "orderList",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 16,
+          "padding": [
+            20,
+            60
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "0LEw9",
+              "name": "orderCard1",
+              "width": "fill_container",
+              "fill": "#FFFFFF",
+              "cornerRadius": 12,
+              "padding": 24,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "QPCg4",
+                  "name": "orderCard1Info",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "TzEBN",
+                      "name": "orderCard1Header",
+                      "width": "fill_container",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "bi2Ra",
+                          "name": "orderCard1Id",
+                          "fill": "#1A1A1A",
+                          "content": "订单 #202602260001",
+                          "fontFamily": "Inter",
+                          "fontSize": 16,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "fakT5",
+                          "name": "orderCard1Status",
+                          "fill": "#52C41A",
+                          "cornerRadius": 4,
+                          "padding": [
+                            4,
+                            12
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "w7uGb",
+                              "name": "orderCard1StatusText",
+                              "fill": "#FFFFFF",
+                              "content": "已完成",
+                              "fontFamily": "Inter",
+                              "fontSize": 12,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "RRngj",
+                      "name": "orderCard1Date",
+                      "fill": "#999999",
+                      "content": "2026-02-26 14:30",
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "lAtUH",
+                      "name": "orderCard1Items",
+                      "fill": "#666666",
+                      "content": "经典拿铁 x1, 卡布奇诺 x2",
+                      "fontFamily": "Inter",
+                      "fontSize": 15,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "2eL8w",
+                      "name": "orderCard1Footer",
+                      "width": "fill_container",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "UAoPs",
+                          "name": "orderCard1Total",
+                          "fill": "#D4A574",
+                          "content": "总计: $15.50",
+                          "fontFamily": "Inter",
+                          "fontSize": 16,
+                          "fontWeight": "bold"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "3Npdy",
+                          "name": "orderCard1Actions",
+                          "gap": 8,
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "gfYpI",
+                              "name": "orderCard1DetailBtn",
+                              "cornerRadius": 6,
+                              "padding": [
+                                6,
+                                16
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "4h1Ti",
+                                  "name": "orderCard1DetailText",
+                                  "fill": "#D4A574",
+                                  "content": "查看详情",
+                                  "fontFamily": "Inter",
+                                  "fontSize": 13,
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "h5KBs",
+                              "name": "orderCard1ReorderBtn",
+                              "fill": "#1A1A1A",
+                              "cornerRadius": 6,
+                              "padding": [
+                                6,
+                                16
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "fVYEE",
+                                  "name": "orderCard1ReorderText",
+                                  "fill": "#FFFFFF",
+                                  "content": "再来一单",
+                                  "fontFamily": "Inter",
+                                  "fontSize": 13,
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "8Ge15",
+              "name": "orderCard2",
+              "width": "fill_container",
+              "fill": "#FFFFFF",
+              "cornerRadius": 12,
+              "padding": 24,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "uh6OK",
+                  "name": "orderCard2Info",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "LOSRc",
+                      "name": "orderCard2Header",
+                      "width": "fill_container",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "C1LqU",
+                          "name": "orderCard2Id",
+                          "fill": "#1A1A1A",
+                          "content": "订单 #202602260002",
+                          "fontFamily": "Inter",
+                          "fontSize": 16,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "QMhnP",
+                          "name": "orderCard2Status",
+                          "fill": "#FAAD14",
+                          "cornerRadius": 4,
+                          "padding": [
+                            4,
+                            12
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "wTkYM",
+                              "name": "orderCard2StatusText",
+                              "fill": "#FFFFFF",
+                              "content": "制作中",
+                              "fontFamily": "Inter",
+                              "fontSize": 12,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "iQu5q",
+                      "name": "orderCard2Date",
+                      "fill": "#999999",
+                      "content": "2026-02-26 15:20",
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "ChNMh",
+                      "name": "orderCard2Items",
+                      "fill": "#666666",
+                      "content": "浓缩咖啡 x1, 美式咖啡 x1",
+                      "fontFamily": "Inter",
+                      "fontSize": 15,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "86ett",
+                      "name": "orderCard2Footer",
+                      "width": "fill_container",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "0uv9l",
+                          "name": "orderCard2Total",
+                          "fill": "#D4A574",
+                          "content": "总计: $6.50",
+                          "fontFamily": "Inter",
+                          "fontSize": 16,
+                          "fontWeight": "bold"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "cXkwH",
+                          "name": "orderCard2Actions",
+                          "gap": 8,
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "nHS0O",
+                              "name": "orderCard2DetailBtn",
+                              "cornerRadius": 6,
+                              "padding": [
+                                6,
+                                16
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "I5HnQ",
+                                  "name": "orderCard2DetailText",
+                                  "fill": "#D4A574",
+                                  "content": "查看详情",
+                                  "fontFamily": "Inter",
+                                  "fontSize": 13,
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
