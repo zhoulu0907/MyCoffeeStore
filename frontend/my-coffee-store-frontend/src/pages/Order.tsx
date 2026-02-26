@@ -16,7 +16,7 @@ const Order: React.FC = () => {
   const { user, isAuthenticated } = useAuth();
   const { clearCart } = useCart();
 
-  const [selectedStatus, setSelectedStatus] = useState<string>('all');
+  const [selectedTab, setSelectedTab] = useState<string>('processing'); // processing | history
   const [orders, setOrders] = useState<OrderType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useState(1);
@@ -30,6 +30,11 @@ const Order: React.FC = () => {
     }
   }, [isAuthenticated, navigate]);
 
+  // 正在处理中的状态
+  const processingStatuses = ['pending', 'confirmed', 'preparing', 'ready'];
+  // 历史成交的状态
+  const historyStatuses = ['completed', 'cancelled'];
+
   // 获取订单列表
   useEffect(() => {
     const fetchOrders = async () => {
@@ -42,16 +47,22 @@ const Order: React.FC = () => {
           size: pageSize,
         };
 
-        // 状态筛选
-        if (selectedStatus !== 'all') {
-          params.status = selectedStatus;
-        }
-
-        const response = await orderApi.getList(params) as unknown as ApiResponse<PageResponse<OrderType>>;
+        // 根据选择的标签获取对应的订单
+        // 注意：后端可能不支持多个状态查询，所以这里获取全部后前端过滤
+        const response = await orderApi.getList({ page, size: pageSize * 2 }) as unknown as ApiResponse<PageResponse<OrderType>>;
 
         if (response.code === 200 && response.data) {
-          setOrders(response.data.list || []);
-          setTotal(response.data.total || 0);
+          let filteredOrders = response.data.list || [];
+
+          // 前端过滤订单
+          if (selectedTab === 'processing') {
+            filteredOrders = filteredOrders.filter((order) => processingStatuses.includes(order.status));
+          } else if (selectedTab === 'history') {
+            filteredOrders = filteredOrders.filter((order) => historyStatuses.includes(order.status));
+          }
+
+          setOrders(filteredOrders);
+          setTotal(filteredOrders.length);
         }
       } catch (error) {
         console.error('获取订单列表失败:', error);
@@ -62,17 +73,17 @@ const Order: React.FC = () => {
     };
 
     fetchOrders();
-  }, [isAuthenticated, selectedStatus, page]);
+  }, [isAuthenticated, selectedTab, page]);
 
   // 处理返回
   const handleBack = () => {
     navigate(-1);
   };
 
-  // 处理状态筛选切换
-  const handleStatusChange = (status: string) => {
-    setSelectedStatus(status);
-    setPage(1); // 切换状态时重置页码
+  // 处理标签切换
+  const handleTabChange = (tab: string) => {
+    setSelectedTab(tab);
+    setPage(1); // 切换标签时重置页码
   };
 
   // 取消订单
@@ -85,7 +96,9 @@ const Order: React.FC = () => {
           // 取消成功，刷新订单列表
           setOrders((prevOrders) =>
             prevOrders.map((order) =>
-              order.orderNo === orderId ? { ...order, status: 'cancelled' as OrderStatus } : order
+              (order.orderId === orderId || order.orderNo === orderId)
+                ? { ...order, status: 'cancelled' as OrderStatus }
+                : order
             )
           );
         } else {
@@ -143,44 +156,24 @@ const Order: React.FC = () => {
           <div className="bg-white border-b border-gray-200 px-6 py-4">
             <div className="flex flex-wrap gap-2">
               <button
-                onClick={() => handleStatusChange('all')}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                  selectedStatus === 'all'
-                    ? 'bg-primary text-white'
+                onClick={() => handleTabChange('processing')}
+                className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
+                  selectedTab === 'processing'
+                    ? 'bg-accent text-white'
                     : 'bg-gray-100 text-text-primary hover:bg-gray-200'
                 }`}
               >
-                全部
+                正在处理
               </button>
               <button
-                onClick={() => handleStatusChange('pending')}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                  selectedStatus === 'pending'
-                    ? 'bg-primary text-white'
+                onClick={() => handleTabChange('history')}
+                className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
+                  selectedTab === 'history'
+                    ? 'bg-accent text-white'
                     : 'bg-gray-100 text-text-primary hover:bg-gray-200'
                 }`}
               >
-                待确认
-              </button>
-              <button
-                onClick={() => handleStatusChange('preparing')}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                  selectedStatus === 'preparing'
-                    ? 'bg-primary text-white'
-                    : 'bg-gray-100 text-text-primary hover:bg-gray-200'
-                }`}
-              >
-                制作中
-              </button>
-              <button
-                onClick={() => handleStatusChange('completed')}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                  selectedStatus === 'completed'
-                    ? 'bg-primary text-white'
-                    : 'bg-gray-100 text-text-primary hover:bg-gray-200'
-                }`}
-              >
-                已完成
+                历史成交
               </button>
             </div>
           </div>
@@ -223,7 +216,7 @@ const Order: React.FC = () => {
               <div className="divide-y divide-gray-100">
                 {orders.map((order) => (
                   <OrderCard
-                    key={order.orderNo}
+                    key={order.orderId || order.orderNo}
                     order={order}
                     onCancel={handleCancelOrder}
                     onConfirm={handleConfirmOrder}
@@ -252,6 +245,9 @@ interface OrderCardProps {
 const OrderCard: React.FC<OrderCardProps> = ({ order, onCancel, onConfirm }) => {
   const statusInfo = ORDER_STATUS[order.status];
   const orderTypeInfo = ORDER_TYPES.find((t) => t.value === order.orderType);
+  // 兼容后端返回的字段名
+  const orderNo = order.orderId || order.orderNo || '';
+  const totalPrice = order.totalAmount || order.totalPrice || 0;
 
   return (
     <div className="p-6 hover:bg-gray-50 transition-colors">
@@ -259,7 +255,7 @@ const OrderCard: React.FC<OrderCardProps> = ({ order, onCancel, onConfirm }) => 
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-4">
           <span className="font-mono text-sm text-text-secondary">
-            {order.orderNo}
+            {orderNo}
           </span>
           <span className="px-2 py-1 bg-gray-100 text-text-secondary text-xs rounded">
             {orderTypeInfo?.label}
@@ -275,29 +271,31 @@ const OrderCard: React.FC<OrderCardProps> = ({ order, onCancel, onConfirm }) => 
       </div>
 
       {/* 订单商品 */}
-      <div className="flex gap-4 mb-4 overflow-x-auto">
-        {order.items.map((item) => (
-          <div
-            key={item.id}
-            className="flex-shrink-0 flex items-center gap-3 p-3 bg-gray-50 rounded-button"
-          >
-            <img
-              src={item.coffeeImage || item.imageUrl || ''}
-              alt={item.coffeeName}
-              className="w-16 h-16 object-cover rounded"
-            />
-            <div>
-              <div className="font-medium text-primary">{item.coffeeName}</div>
-              <div className="text-sm text-text-secondary">
-                {item.size && `(${item.size})`} x {item.quantity}
-              </div>
-              <div className="text-sm font-medium text-accent">
-                {formatPrice(item.price * item.quantity)}
+      {order.items && order.items.length > 0 && (
+        <div className="flex gap-4 mb-4 overflow-x-auto">
+          {order.items.map((item) => (
+            <div
+              key={item.itemId || item.id}
+              className="flex-shrink-0 flex items-center gap-3 p-3 bg-gray-50 rounded-button"
+            >
+              <img
+                src={item.coffeeImage || item.imageUrl || ''}
+                alt={item.coffeeName}
+                className="w-16 h-16 object-cover rounded"
+              />
+              <div>
+                <div className="font-medium text-primary">{item.coffeeName}</div>
+                <div className="text-sm text-text-secondary">
+                  {item.size && `(${item.size})`} x {item.quantity}
+                </div>
+                <div className="text-sm font-medium text-accent">
+                  {formatPrice(item.price * item.quantity)}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
       {/* 订单信息 */}
       <div className="text-sm text-text-secondary mb-4">
@@ -316,7 +314,7 @@ const OrderCard: React.FC<OrderCardProps> = ({ order, onCancel, onConfirm }) => 
       {/* 订单底部 */}
       <div className="flex items-center justify-between pt-4 border-t border-gray-200">
         <div className="text-lg font-bold text-primary">
-          总计：{formatPrice(order.totalPrice)}
+          总计：{formatPrice(totalPrice)}
         </div>
 
         {/* 操作按钮 */}
@@ -324,7 +322,7 @@ const OrderCard: React.FC<OrderCardProps> = ({ order, onCancel, onConfirm }) => 
           {order.status === 'pending' && (
             <>
               <button
-                onClick={() => onCancel(order.orderNo)}
+                onClick={() => onCancel(orderNo)}
                 className="px-4 py-2 border border-red-500 text-red-500 rounded-button text-sm font-medium hover:bg-red-50 transition-colors"
               >
                 取消订单
@@ -341,7 +339,7 @@ const OrderCard: React.FC<OrderCardProps> = ({ order, onCancel, onConfirm }) => 
           )}
           {order.status === 'ready' && (
             <button
-              onClick={() => onConfirm(order.orderNo)}
+              onClick={() => onConfirm(orderNo)}
               className="px-4 py-2 bg-accent text-white rounded-button text-sm font-medium hover:bg-accent-light transition-colors"
             >
               确认收货

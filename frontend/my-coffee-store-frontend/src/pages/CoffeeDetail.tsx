@@ -3,6 +3,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Header, Footer, Loading } from '../components';
 import { useCart } from '../contexts';
@@ -20,6 +21,8 @@ const CoffeeDetail: React.FC = () => {
   const [quantity, setQuantity] = useState<number>(1);
   const [coffee, setCoffee] = useState<Coffee | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isAdding, setIsAdding] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   // 从后端获取咖啡详情
@@ -99,9 +102,45 @@ const CoffeeDetail: React.FC = () => {
     }
   };
 
+  // 显示 toast 提示
+  const showToast = (msg: string) => {
+    setToast(msg);
+    setTimeout(() => setToast(null), 5000);
+  };
+
   // 处理添加到购物车
-  const handleAddToCart = () => {
-    addItem(coffee.coffeeId, quantity);
+  const handleAddToCart = async () => {
+    console.log('=== [CoffeeDetail] 开始添加到购物车 ===');
+    console.log('[CoffeeDetail] coffeeId:', coffee!.coffeeId);
+    console.log('[CoffeeDetail] quantity:', quantity);
+    console.log('[CoffeeDetail] selectedSize:', selectedSize);
+
+    // 用原生 DOM 弹框测试，完全绕过 React
+    console.log('[CoffeeDetail] 创建原生 DOM 弹窗...');
+    const div = document.createElement('div');
+    div.id = 'debug-toast';
+    div.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:999999;background:rgba(0,0,0,0.8);color:#fff;padding:24px 48px;border-radius:12px;font-size:18px;';
+    div.textContent = '添加购物车成功！';
+    console.log('[CoffeeDetail] 准备将弹窗添加到 body, 当前 body 子元素数量:', document.body.children.length);
+    document.body.appendChild(div);
+    console.log('[CoffeeDetail] 弹窗已添加, 新的 body 子元素数量:', document.body.children.length);
+    console.log('[CoffeeDetail] 弹窗元素:', div);
+    setTimeout(() => {
+      console.log('[CoffeeDetail] 移除弹窗');
+      div.remove();
+    }, 2000);
+
+    setIsAdding(true);
+    try {
+      console.log('[CoffeeDetail] 调用 CartContext.addItem...');
+      await addItem(coffee!.coffeeId, quantity);
+      console.log('[CoffeeDetail] addItem 调用完成');
+    } catch (err) {
+      console.error('[CoffeeDetail] addItem 出错:', err);
+    } finally {
+      setIsAdding(false);
+      console.log('=== [CoffeeDetail] 添加到购物车流程结束 ===');
+    }
   };
 
   // 处理立即购买
@@ -335,7 +374,7 @@ const CoffeeDetail: React.FC = () => {
                 <div className="flex flex-col sm:flex-row gap-3">
                   <button
                     onClick={handleAddToCart}
-                    disabled={coffee.stock === 0}
+                    disabled={coffee.stock === 0 || isAdding}
                     className="flex-1 btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <svg
@@ -351,7 +390,7 @@ const CoffeeDetail: React.FC = () => {
                         d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
                       />
                     </svg>
-                    加入购物车
+                    {isAdding ? '添加中...' : '加入购物车'}
                   </button>
                   <button
                     onClick={handleBuyNow}
@@ -386,6 +425,16 @@ const CoffeeDetail: React.FC = () => {
       </main>
 
       <Footer />
+
+      {/* Toast 提示 */}
+      {toast && createPortal(
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 99999, display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'none' }}>
+          <div style={{ background: 'rgba(0,0,0,0.75)', color: '#ffffff', padding: '20px 40px', borderRadius: '12px', fontSize: '16px', fontWeight: 'bold' }}>
+            {toast}
+          </div>
+        </div>,
+        document.body
+      )}
     </div>
   );
 };

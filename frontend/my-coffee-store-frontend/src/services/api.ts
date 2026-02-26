@@ -24,6 +24,7 @@ const axiosInstance: AxiosInstance = axios.create(config);
  */
 axiosInstance.interceptors.request.use(
   (config) => {
+    console.log('[API] 发送请求:', config.method?.toUpperCase(), config.url, config.data);
     // 添加 token 到请求头
     const token = tokenManager.getToken();
     if (token) {
@@ -32,6 +33,7 @@ axiosInstance.interceptors.request.use(
     return config;
   },
   (error) => {
+    console.error('[API] 请求拦截器错误:', error);
     return Promise.reject(error);
   }
 );
@@ -41,9 +43,11 @@ axiosInstance.interceptors.request.use(
  */
 axiosInstance.interceptors.response.use(
   (response: AxiosResponse) => {
+    console.log('[API] 响应成功:', response.config.method?.toUpperCase(), response.config.url, response.data);
     return response.data;
   },
   (error: AxiosError) => {
+    console.error('[API] 响应失败:', error.config?.method?.toUpperCase(), error.config?.url, error.response?.status, error.response?.data);
     // 处理错误
     if (error.response) {
       const status = error.response.status;
@@ -129,6 +133,20 @@ export const userApi = {
   logout: () => {
     return post('/v1/auth/logout');
   },
+
+  /**
+   * 查询余额
+   */
+  getBalance: () => {
+    return get('/v1/user/balance');
+  },
+
+  /**
+   * 充值
+   */
+  recharge: (amount: number) => {
+    return post('/v1/user/recharge', { amount });
+  },
 };
 
 /**
@@ -165,6 +183,7 @@ export const cartApi = {
    * 获取购物车
    */
   getCart: () => {
+    console.log('[cartApi] getCart 调用');
     return get('/v1/cart/list');
   },
 
@@ -172,6 +191,7 @@ export const cartApi = {
    * 添加到购物车
    */
   add: (data: { coffeeId: number; quantity: number }) => {
+    console.log('[cartApi] add 调用, 参数:', data);
     return post('/v1/cart/add', data);
   },
 
@@ -179,6 +199,7 @@ export const cartApi = {
    * 更新购物车项数量
    */
   update: (data: { cartId: number; quantity: number }) => {
+    console.log('[cartApi] update 调用, 参数:', data);
     return post('/v1/cart/update', data);
   },
 
@@ -186,6 +207,7 @@ export const cartApi = {
    * 删除购物车项
    */
   remove: (cartId: number) => {
+    console.log('[cartApi] remove 调用, cartId:', cartId);
     return post(`/v1/cart/remove?cartId=${cartId}`);
   },
 
@@ -193,6 +215,7 @@ export const cartApi = {
    * 清空购物车
    */
   clear: () => {
+    console.log('[cartApi] clear 调用');
     return post('/v1/cart/clear');
   },
 };

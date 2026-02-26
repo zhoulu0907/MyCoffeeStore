@@ -1,6 +1,7 @@
 package com.mycoffeestore.entity;
 
 import com.mycoffeestore.common.base.BaseEntity;
+import com.mybatisflex.annotation.Column;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
@@ -11,6 +12,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -72,6 +74,13 @@ public class User extends BaseEntity {
      */
     @Schema(description = "状态：0-禁用，1-正常", example = "1")
     private Integer status;
+
+    /**
+     * 账户余额
+     */
+    @Schema(description = "账户余额", example = "500.00")
+    @Column(onInsertValue = "500.00")
+    private BigDecimal balance;
 
     /**
      * 最后登录时间

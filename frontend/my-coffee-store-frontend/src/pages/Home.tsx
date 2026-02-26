@@ -36,8 +36,32 @@ const Home: React.FC = () => {
   }, []);
 
   // 处理添加到购物车
-  const handleAddToCart = (coffee: Coffee) => {
-    addItem(coffee.coffeeId, 1);
+  const handleAddToCart = async (coffee: Coffee) => {
+    console.log('=== [Home] 开始添加到购物车 ===');
+    console.log('[Home] coffee:', coffee.name, 'coffeeId:', coffee.coffeeId);
+
+    // 用原生 DOM 弹框测试
+    console.log('[Home] 创建原生 DOM 弹窗...');
+    const div = document.createElement('div');
+    div.id = 'home-toast';
+    div.style.cssText = 'position:fixed;top:20%;left:50%;transform:translate(-50%,-50%);z-index:999999;background:rgba(0,0,0,0.8);color:#fff;padding:20px 40px;border-radius:12px;font-size:16px;';
+    div.textContent = `已将 ${coffee.name} 加入购物车！`;
+    document.body.appendChild(div);
+    console.log('[Home] 弹窗已添加到 body');
+
+    setTimeout(() => {
+      console.log('[Home] 移除弹窗');
+      div.remove();
+    }, 2000);
+
+    try {
+      console.log('[Home] 调用 addItem...');
+      await addItem(coffee.coffeeId, 1);
+      console.log('[Home] addItem 完成');
+    } catch (err) {
+      console.error('[Home] addItem 出错:', err);
+    }
+    console.log('=== [Home] 添加到购物车结束 ===');
   };
 
   return (

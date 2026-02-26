@@ -73,6 +73,19 @@ public class OrderServiceImpl implements OrderService {
             totalAmount = totalAmount.add(coffee.getPrice().multiply(new BigDecimal(item.getQuantity())));
         }
 
+        // 查询用户余额并验证
+        User user = userMapper.selectOneById(userId);
+        if (user == null) {
+            throw new BusinessException(404, "用户不存在");
+        }
+        if (user.getBalance().compareTo(totalAmount) < 0) {
+            throw new BusinessException(4001, "余额不足，当前余额：¥" + user.getBalance());
+        }
+
+        // 扣减用户余额
+        user.setBalance(user.getBalance().subtract(totalAmount));
+        userMapper.update(user);
+
         // 生成订单号
         String orderNo = generateOrderNo();
 
@@ -98,6 +111,7 @@ public class OrderServiceImpl implements OrderService {
                 .status(OrderStatus.PENDING.getCode())
                 .remark(dto.getRemark())
                 .deliveryAddress(deliveryAddressJson)
+                .paidAt(LocalDateTime.now())
                 .createTime(LocalDateTime.now())
                 .updateTime(LocalDateTime.now())
                 .build();
@@ -204,6 +218,15 @@ public class OrderServiceImpl implements OrderService {
         order.setUpdateTime(LocalDateTime.now());
         orderMapper.update(order);
 
+        // 退还用户余额
+        User user = userMapper.selectOneById(userId);
+        if (user != null) {
+            user.setBalance(user.getBalance().add(order.getTotalAmount()));
+            userMapper.update(user);
+            log.info("订单取消退款: userId={}, orderNo={}, refund={}, newBalance={}",
+                    userId, orderNo, order.getTotalAmount(), user.getBalance());
+        }
+
         // 恢复库存
         List<OrderItem> items = orderItemMapper.selectListByQuery(
                 QueryWrapper.create().eq(OrderItem::getOrderId, order.getId()));
@@ -252,9 +275,21 @@ public class OrderServiceImpl implements OrderService {
      * 转换为列表项VO
      */
     private OrderListItemVO convertToListItemVO(Order order) {
-        // 查询订单项数量
-        long itemCount = orderItemMapper.selectCountByQuery(
+        // 查询订单项
+        List<OrderItem> items = orderItemMapper.selectListByQuery(
                 QueryWrapper.create().eq(OrderItem::getOrderId, order.getId()));
+
+        List<OrderItemDetailVO> itemVOs = items.stream()
+                .map(item -> OrderItemDetailVO.builder()
+                        .itemId(item.getId())
+                        .coffeeId(item.getCoffeeId())
+                        .coffeeName(item.getCoffeeName())
+                        .imageUrl(item.getImageUrl())
+                        .quantity(item.getQuantity())
+                        .price(item.getPrice())
+                        .subtotal(item.getSubtotal())
+                        .build())
+                .collect(Collectors.toList());
 
         return OrderListItemVO.builder()
                 .orderId(order.getOrderNo())
@@ -263,7 +298,8 @@ public class OrderServiceImpl implements OrderService {
                 .orderTypeName(OrderType.fromCode(order.getOrderType()).getName())
                 .status(order.getStatus())
                 .statusName(OrderStatus.fromCode(order.getStatus()).getName())
-                .itemCount((int) itemCount)
+                .itemCount(items.size())
+                .items(itemVOs)
                 .createTime(order.getCreateTime())
                 .build();
     }

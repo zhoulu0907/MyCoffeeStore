@@ -17,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -33,6 +34,8 @@ public class UserAuthServiceImpl implements UserAuthService {
     private final UserMapper userMapper;
     private final JwtUtil jwtUtil;
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+    private static final BigDecimal DEFAULT_BALANCE = new BigDecimal("500.00");
 
     @Override
     @Transactional
@@ -58,6 +61,7 @@ public class UserAuthServiceImpl implements UserAuthService {
                 .email(dto.getEmail())
                 .phone(dto.getPhone())
                 .status(1)
+                .balance(DEFAULT_BALANCE)
                 .createTime(LocalDateTime.now())
                 .updateTime(LocalDateTime.now())
                 .isDeleted(0)
@@ -75,6 +79,7 @@ public class UserAuthServiceImpl implements UserAuthService {
                 .email(user.getEmail())
                 .phone(user.getPhone())
                 .token(token)
+                .balance(user.getBalance())
                 .build();
     }
 
@@ -116,6 +121,7 @@ public class UserAuthServiceImpl implements UserAuthService {
                 .email(user.getEmail())
                 .phone(user.getPhone())
                 .token(token)
+                .balance(user.getBalance())
                 .build();
     }
 

@@ -7,7 +7,15 @@ export interface User {
   email: string;
   phone?: string;
   avatar?: string;
+  balance?: number;
   createTime: string;
+}
+
+/**
+ * 余额响应类型
+ */
+export interface BalanceResponse {
+  balance: number;
 }
 
 /**
@@ -65,13 +73,15 @@ export interface LocalCartItem {
  * 订单类型
  */
 export interface Order {
-  id: number;
-  userId: number;
-  orderNo: string;
-  totalPrice: number;
+  orderId?: string;  // 后端列表返回
+  orderNo?: string;  // 兼容旧字段
+  id?: number;       // 兼容旧字段
+  userId?: number;
+  totalPrice?: number;       // 兼容旧字段
+  totalAmount?: number;      // 后端返回
   status: OrderStatus;
   orderType: OrderType;
-  items: OrderItem[];
+  items?: OrderItem[];
   createTime: string;
   updateTime?: string;
   remark?: string;
@@ -91,14 +101,16 @@ export type OrderType = 'dine_in' | 'takeout' | 'delivery';
  * 订单详情项类型
  */
 export interface OrderItem {
-  id: number;
-  orderId: number;
+  itemId?: number;      // 后端返回
+  id?: number;          // 兼容旧字段
+  orderId?: number;
   coffeeId: number;
   coffeeName: string;
   coffeeImage?: string;
   imageUrl?: string;
   quantity: number;
   price: number;
+  subtotal?: number;    // 后端返回
   size?: string;
 }
 

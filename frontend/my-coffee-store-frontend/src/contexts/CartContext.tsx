@@ -70,19 +70,27 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
    * 添加商品到购物车
    */
   const addItem = useCallback(async (coffeeId: number, quantity: number = 1) => {
+    console.log('=== [CartContext] addItem 开始 ===');
+    console.log('[CartContext] coffeeId:', coffeeId, 'quantity:', quantity);
+    console.log('[CartContext] isAuthenticated:', isAuthenticated);
     try {
+      console.log('[CartContext] 调用 cartApi.add...');
       const response = await cartApi.add({ coffeeId, quantity }) as unknown as ApiResponse;
+      console.log('[CartContext] API 响应:', response);
 
       if (response.code === 200) {
+        console.log('[CartContext] 添加成功，刷新购物车...');
         // 添加成功后刷新购物车
         await refreshCart();
+        console.log('[CartContext] 购物车刷新完成');
       } else {
-        console.error('添加购物车失败:', response.message);
+        console.error('[CartContext] 添加购物车失败, code:', response.code, 'message:', response.message);
       }
     } catch (error) {
-      console.error('添加购物车失败:', error);
+      console.error('[CartContext] 添加购物车异常:', error);
     }
-  }, [refreshCart]);
+    console.log('=== [CartContext] addItem 结束 ===');
+  }, [refreshCart, isAuthenticated]);
 
   /**
    * 从购物车移除商品

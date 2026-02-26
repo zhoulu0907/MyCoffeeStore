@@ -5,7 +5,7 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, CartProvider } from './contexts';
-import { Home, Login, Register, CoffeeList, CoffeeDetail, Cart, Order } from './pages';
+import { Home, Login, Register, CoffeeList, CoffeeDetail, Cart, Checkout, Order, Profile } from './pages';
 import { ROUTES } from './utils/constants';
 
 function App() {
@@ -26,7 +26,9 @@ function App() {
 
           {/* 购物车和订单 */}
           <Route path={ROUTES.CART} element={<Cart />} />
+          <Route path={ROUTES.CHECKOUT} element={<Checkout />} />
           <Route path={ROUTES.ORDER} element={<Order />} />
+          <Route path={ROUTES.PROFILE} element={<Profile />} />
 
           {/* 默认重定向到首页 */}
           <Route path="*" element={<Navigate to={ROUTES.HOME} replace />} />

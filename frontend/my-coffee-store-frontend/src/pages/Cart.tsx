@@ -35,7 +35,7 @@ const Cart: React.FC = () => {
 
   // 处理去结算
   const handleCheckout = () => {
-    navigate(ROUTES.ORDER);
+    navigate(ROUTES.CHECKOUT);
   };
 
   // 空状态

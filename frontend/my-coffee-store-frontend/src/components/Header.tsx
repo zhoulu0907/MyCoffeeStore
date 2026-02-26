@@ -2,12 +2,14 @@
  * 页头组件
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts';
 import { useCart } from '../contexts';
+import { userApi } from '../services/api';
 import { formatPrice } from '../utils/helpers';
 import { ROUTES } from '../utils/constants';
+import type { ApiResponse } from '../types';
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
@@ -15,6 +17,28 @@ const Header: React.FC = () => {
   const { user, isAuthenticated } = useAuth();
   const { totalQuantity, totalPrice } = useCart();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [balance, setBalance] = useState<number | null>(null);
+
+  // 获取用户余额
+  useEffect(() => {
+    const fetchBalance = async () => {
+      if (!isAuthenticated) {
+        setBalance(null);
+        return;
+      }
+
+      try {
+        const response = await userApi.getBalance() as unknown as ApiResponse<{ balance: number }>;
+        if (response.code === 200 && response.data) {
+          setBalance(response.data.balance);
+        }
+      } catch (error) {
+        console.error('获取余额失败:', error);
+      }
+    };
+
+    fetchBalance();
+  }, [isAuthenticated]);
 
   // 导航菜单配置
   const navItems = [
@@ -99,10 +123,15 @@ const Header: React.FC = () => {
             {/* 登录/用户信息按钮 */}
             {isAuthenticated ? (
               <Link
-                to={ROUTES.ORDER}
+                to={ROUTES.PROFILE}
                 className="px-4 py-2 text-sm font-medium text-white hover:text-accent transition-colors"
               >
-                {user?.username}
+                <span>{user?.username}</span>
+                {balance !== null && (
+                  <span className="ml-2 text-xs text-accent">
+                    {formatPrice(balance)}
+                  </span>
+                )}
               </Link>
             ) : (
               <button
@@ -194,10 +223,15 @@ const Header: React.FC = () => {
             {/* 登录/用户信息 */}
             {isAuthenticated ? (
               <button
-                onClick={() => handleNavClick(ROUTES.ORDER)}
+                onClick={() => handleNavClick(ROUTES.PROFILE)}
                 className="block w-full text-left px-3 py-2 text-base font-medium text-white rounded-button hover:text-accent hover:bg-gray-900 transition-colors"
               >
-                {user?.username} 的订单
+                <span>{user?.username}</span>
+                {balance !== null && (
+                  <span className="ml-2 text-xs text-accent">
+                    余额：{formatPrice(balance)}
+                  </span>
+                )}
               </button>
             ) : (
               <button

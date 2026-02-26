@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 订单列表项VO
@@ -66,6 +67,12 @@ public class OrderListItemVO implements Serializable {
      */
     @Schema(description = "订单项数量", example = "3")
     private Integer itemCount;
+
+    /**
+     * 订单项列表
+     */
+    @Schema(description = "订单项列表")
+    private List<OrderItemDetailVO> items;
 
     /**
      * 创建时间

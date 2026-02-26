@@ -116,8 +116,9 @@ const Register: React.FC = () => {
       }) as unknown as ApiResponse;
 
       if (response.code === 200) {
-        // 注册成功，从响应中获取 token 和用户信息
-        const { token, user: userData } = response.data;
+        // 注册成功，从响应中提取 token 和用户信息
+        const { token, userId, username, email, phone } = response.data;
+        const userData = { id: userId, username, email, phone, createTime: '' };
         login(userData, token);
         navigate(ROUTES.HOME);
       } else {

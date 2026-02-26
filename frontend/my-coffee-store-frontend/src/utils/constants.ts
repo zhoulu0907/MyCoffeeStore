@@ -19,8 +19,8 @@ export const ORDER_STATUS = {
   pending: { label: '待确认', color: 'text-yellow-600', bgColor: 'bg-yellow-100' },
   confirmed: { label: '已确认', color: 'text-blue-600', bgColor: 'bg-blue-100' },
   preparing: { label: '制作中', color: 'text-orange-600', bgColor: 'bg-orange-100' },
-  ready: { label: '已完成', color: 'text-green-600', bgColor: 'bg-green-100' },
-  completed: { label: '已取餐', color: 'text-gray-600', bgColor: 'bg-gray-100' },
+  ready: { label: '待取餐', color: 'text-green-600', bgColor: 'bg-green-100' },
+  completed: { label: '已完成', color: 'text-gray-600', bgColor: 'bg-gray-100' },
   cancelled: { label: '已取消', color: 'text-red-600', bgColor: 'bg-red-100' },
 } as const;
 
@@ -60,6 +60,7 @@ export const ROUTES = {
   COFFEE_LIST: '/coffee',
   COFFEE_DETAIL: '/coffee/:id',
   CART: '/cart',
+  CHECKOUT: '/checkout',
   ORDER: '/order',
   ORDER_DETAIL: '/order/:id',
   PROFILE: '/profile',

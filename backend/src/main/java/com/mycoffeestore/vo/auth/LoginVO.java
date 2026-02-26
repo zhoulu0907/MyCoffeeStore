@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * 登录响应VO
@@ -52,4 +53,10 @@ public class LoginVO implements Serializable {
      */
     @Schema(description = "访问令牌")
     private String token;
+
+    /**
+     * 账户余额
+     */
+    @Schema(description = "账户余额", example = "500.00")
+    private BigDecimal balance;
 }
