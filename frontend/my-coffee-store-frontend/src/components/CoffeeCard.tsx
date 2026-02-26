@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Coffee } from '../types';
+import type { Coffee } from '../types';
 import { formatPrice } from '../utils/helpers';
 
 interface CoffeeCardProps {
@@ -21,7 +21,7 @@ const CoffeeCard: React.FC<CoffeeCardProps> = ({ coffee, onAddToCart }) => {
   };
 
   return (
-    <Link to={`/coffee/${coffee.id}`} className="block">
+    <Link to={`/coffee/${coffee.coffeeId}`} className="block">
       <div className="card-base group cursor-pointer">
         {/* 图片容器 */}
         <div className="relative overflow-hidden rounded-card mb-4 aspect-square bg-gray-100">

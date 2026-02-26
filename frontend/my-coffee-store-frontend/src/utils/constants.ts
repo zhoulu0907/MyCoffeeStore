@@ -2,18 +2,16 @@
  * 应用常量配置
  */
 
-// API 基础路径
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api';
+// API 基础路径（开发环境通过 vite proxy 转发到 http://localhost:8080/api）
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
 
 // 咖啡分类配置
 export const COFFEE_CATEGORIES = [
   { value: 'all', label: '全部' },
-  { value: 'espresso', label: '浓缩咖啡' },
-  { value: 'latte', label: '拿铁' },
-  { value: 'cappuccino', label: '卡布奇诺' },
-  { value: 'americano', label: '美式' },
-  { value: 'mocha', label: '摩卡' },
-  { value: 'other', label: '其他' },
+  { value: 'espresso', label: '意式浓缩系列' },
+  { value: 'brew', label: '手冲系列' },
+  { value: 'cold', label: '冷萃/冰咖啡' },
+  { value: 'blend', label: '拼配系列' },
 ] as const;
 
 // 订单状态配置
@@ -29,7 +27,7 @@ export const ORDER_STATUS = {
 // 订单类型配置
 export const ORDER_TYPES = [
   { value: 'dine_in', label: '堂食' },
-  { value: 'takeout', label: '外带' },
+  { value: 'takeaway', label: '外带' },
   { value: 'delivery', label: '外卖' },
 ] as const;
 

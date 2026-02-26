@@ -2,7 +2,8 @@
  * API 服务层
  */
 
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
+import axios from 'axios';
+import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 import { API_BASE_URL } from '../utils/constants';
 import { tokenManager } from '../utils/helpers';
 
@@ -74,213 +75,169 @@ axiosInstance.interceptors.response.use(
 );
 
 /**
- * 通用请求方法
- */
-const request = async <T = any>(
-  method: 'GET' | 'POST',
-  url: string,
-  data?: any,
-  config?: AxiosRequestConfig
-): Promise<T> => {
-  try {
-    const response = await axiosInstance.request<T>({
-      method,
-      url,
-      data,
-      ...config,
-    });
-    return response;
-  } catch (error) {
-    throw error;
-  }
-};
-
-/**
  * GET 请求
  */
 export const get = <T = any>(url: string, params?: any, config?: AxiosRequestConfig): Promise<T> => {
-  return request<T>('GET', url, params, config);
+  return axiosInstance.request<any, T>({
+    method: 'GET',
+    url,
+    params,
+    ...config,
+  });
 };
 
 /**
  * POST 请求
  */
 export const post = <T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> => {
-  return request<T>('POST', url, data, config);
+  return axiosInstance.request<any, T>({
+    method: 'POST',
+    url,
+    data,
+    ...config,
+  });
 };
 
 /**
- * 用户相关 API
+ * 用户认证 API
  */
 export const userApi = {
   /**
    * 用户登录
    */
-  login: (data: { username: string; password: string }) => {
-    return post('/user/login', data);
+  login: (data: { account: string; password: string }) => {
+    return post('/v1/auth/login', data);
   },
 
   /**
    * 用户注册
    */
   register: (data: { username: string; email: string; phone?: string; password: string }) => {
-    return post('/user/register', data);
+    return post('/v1/auth/register', data);
   },
 
   /**
    * 获取用户信息
    */
   getUserInfo: () => {
-    return get('/user/info');
+    return get('/v1/auth/info');
   },
 
   /**
-   * 更新用户信息
+   * 用户退出
    */
-  updateUserInfo: (data: any) => {
-    return post('/user/update', data);
-  },
-
-  /**
-   * 修改密码
-   */
-  changePassword: (data: { oldPassword: string; newPassword: string }) => {
-    return post('/user/change-password', data);
+  logout: () => {
+    return post('/v1/auth/logout');
   },
 };
 
 /**
- * 咖啡产品相关 API
+ * 咖啡产品 API
  */
 export const coffeeApi = {
   /**
    * 获取咖啡列表
    */
-  getList: (params?: { category?: string; page?: number; pageSize?: number }) => {
-    return get('/coffee/list', params);
+  getList: (params?: { category?: string; page?: number; size?: number }) => {
+    return get('/v1/coffee/list', params);
   },
 
   /**
    * 获取咖啡详情
    */
-  getDetail: (id: number) => {
-    return get(`/coffee/detail/${id}`);
+  getDetail: (coffeeId: number) => {
+    return get('/v1/coffee/detail', { coffeeId });
   },
 
   /**
-   * 获取精选咖啡
+   * 获取咖啡分类
    */
-  getFeatured: () => {
-    return get('/coffee/featured');
-  },
-
-  /**
-   * 搜索咖啡
-   */
-  search: (keyword: string) => {
-    return get('/coffee/search', { keyword });
+  getCategories: () => {
+    return get('/v1/coffee/categories');
   },
 };
 
 /**
- * 购物车相关 API
+ * 购物车 API
  */
 export const cartApi = {
   /**
    * 获取购物车
    */
   getCart: () => {
-    return get('/cart/list');
+    return get('/v1/cart/list');
   },
 
   /**
    * 添加到购物车
    */
-  add: (data: { coffeeId: number; quantity: number; size?: string }) => {
-    return post('/cart/add', data);
+  add: (data: { coffeeId: number; quantity: number }) => {
+    return post('/v1/cart/add', data);
   },
 
   /**
-   * 更新购物车项
+   * 更新购物车项数量
    */
-  update: (data: { id: number; quantity: number }) => {
-    return post('/cart/update', data);
+  update: (data: { cartId: number; quantity: number }) => {
+    return post('/v1/cart/update', data);
   },
 
   /**
    * 删除购物车项
    */
-  remove: (id: number) => {
-    return post('/cart/remove', { id });
+  remove: (cartId: number) => {
+    return post(`/v1/cart/remove?cartId=${cartId}`);
   },
 
   /**
    * 清空购物车
    */
   clear: () => {
-    return post('/cart/clear');
+    return post('/v1/cart/clear');
   },
 };
 
 /**
- * 订单相关 API
+ * 订单 API
  */
 export const orderApi = {
   /**
    * 创建订单
    */
   create: (data: {
-    items: Array<{ coffeeId: number; quantity: number; size?: string }>;
+    items: Array<{ coffeeId: number; quantity: number; price: number }>;
     orderType: string;
     remark?: string;
+    deliveryAddress?: {
+      address: string;
+      city: string;
+      state: string;
+      zipCode: string;
+      phone: string;
+    };
   }) => {
-    return post('/order/create', data);
+    return post('/v1/order/create', data);
   },
 
   /**
    * 获取订单列表
    */
-  getList: (params?: { status?: string; page?: number; pageSize?: number }) => {
-    return get('/order/list', params);
+  getList: (params?: { status?: string; page?: number; size?: number }) => {
+    return get('/v1/order/list', params);
   },
 
   /**
    * 获取订单详情
    */
-  getDetail: (id: number) => {
-    return get(`/order/detail/${id}`);
+  getDetail: (orderId: string) => {
+    return get('/v1/order/detail', { orderId });
   },
 
   /**
    * 取消订单
    */
-  cancel: (id: number) => {
-    return post('/order/cancel', { id });
-  },
-
-  /**
-   * 确认收货
-   */
-  confirm: (id: number) => {
-    return post('/order/confirm', { id });
-  },
-};
-
-/**
- * 文件上传 API
- */
-export const uploadApi = {
-  /**
-   * 上传图片
-   */
-  uploadImage: (file: File) => {
-    const formData = new FormData();
-    formData.append('file', file);
-    return post('/upload/image', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
+  cancel: (orderId: string, reason?: string) => {
+    return post(`/v1/order/cancel?orderId=${orderId}${reason ? '&reason=' + encodeURIComponent(reason) : ''}`);
   },
 };
 

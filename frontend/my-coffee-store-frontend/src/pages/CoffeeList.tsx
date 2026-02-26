@@ -2,30 +2,93 @@
  * 咖啡列表页面
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Header, Footer, CoffeeCard, Loading } from '../components';
 import { useCart } from '../contexts';
-import { MOCK_COFFEES, COFFEE_CATEGORIES } from '../utils/constants';
-import { Coffee, CoffeeCategory } from '../types';
+import { coffeeApi } from '../services/api';
+import type { Coffee, ApiResponse, PageResponse } from '../types';
+import { COFFEE_CATEGORIES } from '../utils/constants';
 
 const CoffeeList: React.FC = () => {
   const { addItem } = useCart();
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchKeyword, setSearchKeyword] = useState('');
+  const [coffees, setCoffees] = useState<Coffee[]>([]);
+  const [categories, setCategories] = useState<Array<{ value: string; label: string }>>([
+    { value: 'all', label: '全部' },
+  ]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const pageSize = 12;
 
-  // 过滤咖啡列表
-  const filteredCoffees = MOCK_COFFEES.filter((coffee) => {
-    const matchCategory = selectedCategory === 'all' || coffee.category === selectedCategory;
-    const matchSearch =
-      !searchKeyword ||
+  // 获取分类列表
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await coffeeApi.getCategories() as unknown as ApiResponse<Array<{ code: string; name: string; count: number }>>;
+        if (response.code === 200 && response.data) {
+          const categoryList = [
+            { value: 'all', label: '全部' },
+            ...response.data.map((cat) => ({ value: cat.code, label: cat.name })),
+          ];
+          setCategories(categoryList);
+        }
+      } catch (error) {
+        console.error('获取分类失败:', error);
+        // 失败时使用默认分类
+        setCategories(COFFEE_CATEGORIES as unknown as Array<{ value: string; label: string }>);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+  // 获取咖啡列表
+  useEffect(() => {
+    const fetchCoffees = async () => {
+      setIsLoading(true);
+      try {
+        const params: { category?: string; page: number; size: number } = {
+          page,
+          size: pageSize,
+        };
+
+        // 分类筛选
+        if (selectedCategory !== 'all') {
+          params.category = selectedCategory;
+        }
+
+        const response = await coffeeApi.getList(params) as unknown as ApiResponse<PageResponse<Coffee>>;
+
+        if (response.code === 200 && response.data) {
+          setCoffees(response.data.list || []);
+          setTotal(response.data.total || 0);
+        }
+      } catch (error) {
+        console.error('获取咖啡列表失败:', error);
+        setCoffees([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchCoffees();
+  }, [selectedCategory, page]);
+
+  // 本地搜索过滤（在已获取的数据中搜索）
+  const filteredCoffees = coffees.filter((coffee) => {
+    if (!searchKeyword) return true;
+    return (
       coffee.name.toLowerCase().includes(searchKeyword.toLowerCase()) ||
-      coffee.description.toLowerCase().includes(searchKeyword.toLowerCase());
-    return matchCategory && matchSearch;
+      coffee.description.toLowerCase().includes(searchKeyword.toLowerCase())
+    );
   });
 
   // 处理分类选择
   const handleCategoryChange = (category: string) => {
     setSelectedCategory(category);
+    setPage(1); // 切换分类时重置页码
   };
 
   // 处理搜索
@@ -35,7 +98,7 @@ const CoffeeList: React.FC = () => {
 
   // 处理添加到购物车
   const handleAddToCart = (coffee: Coffee) => {
-    addItem(coffee, 1);
+    addItem(coffee.coffeeId, 1);
   };
 
   return (
@@ -59,7 +122,7 @@ const CoffeeList: React.FC = () => {
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               {/* 分类过滤 */}
               <div className="flex flex-wrap gap-2">
-                {COFFEE_CATEGORIES.map((category) => (
+                {categories.map((category) => (
                   <button
                     key={category.value}
                     onClick={() => handleCategoryChange(category.value)}
@@ -104,45 +167,76 @@ const CoffeeList: React.FC = () => {
         {/* 咖啡列表 */}
         <div className="py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            {/* 结果数量 */}
-            <div className="mb-6">
-              <p className="text-text-secondary">
-                找到 <span className="font-medium text-primary">{filteredCoffees.length}</span> 款咖啡
-              </p>
-            </div>
-
-            {/* 空状态 */}
-            {filteredCoffees.length === 0 ? (
-              <div className="text-center py-16">
-                <svg
-                  className="mx-auto h-24 w-24 text-gray-300 mb-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-                <h3 className="text-lg font-medium text-primary mb-2">未找到相关咖啡</h3>
-                <p className="text-text-secondary">
-                  试试调整筛选条件或搜索关键词
-                </p>
+            {isLoading ? (
+              <div className="flex justify-center py-16">
+                <Loading />
               </div>
             ) : (
-              /* 咖啡卡片网格 */
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {filteredCoffees.map((coffee) => (
-                  <CoffeeCard
-                    key={coffee.id}
-                    coffee={coffee}
-                    onAddToCart={handleAddToCart}
-                  />
-                ))}
-              </div>
+              <>
+                {/* 结果数量 */}
+                <div className="mb-6">
+                  <p className="text-text-secondary">
+                    找到 <span className="font-medium text-primary">{filteredCoffees.length}</span> 款咖啡
+                  </p>
+                </div>
+
+                {/* 空状态 */}
+                {filteredCoffees.length === 0 ? (
+                  <div className="text-center py-16">
+                    <svg
+                      className="mx-auto h-24 w-24 text-gray-300 mb-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                    <h3 className="text-lg font-medium text-primary mb-2">未找到相关咖啡</h3>
+                    <p className="text-text-secondary">
+                      试试调整筛选条件或搜索关键词
+                    </p>
+                  </div>
+                ) : (
+                  /* 咖啡卡片网格 */
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    {filteredCoffees.map((coffee) => (
+                      <CoffeeCard
+                        key={coffee.coffeeId}
+                        coffee={coffee}
+                        onAddToCart={handleAddToCart}
+                      />
+                    ))}
+                  </div>
+                )}
+
+                {/* 分页 */}
+                {total > pageSize && (
+                  <div className="flex justify-center mt-8 gap-2">
+                    <button
+                      onClick={() => setPage((p) => Math.max(1, p - 1))}
+                      disabled={page === 1}
+                      className="px-4 py-2 border border-gray-300 rounded-button text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                    >
+                      上一页
+                    </button>
+                    <span className="px-4 py-2 text-sm text-text-secondary">
+                      第 {page} 页 / 共 {Math.ceil(total / pageSize)} 页
+                    </span>
+                    <button
+                      onClick={() => setPage((p) => p + 1)}
+                      disabled={page >= Math.ceil(total / pageSize)}
+                      className="px-4 py-2 border border-gray-300 rounded-button text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                    >
+                      下一页
+                    </button>
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>

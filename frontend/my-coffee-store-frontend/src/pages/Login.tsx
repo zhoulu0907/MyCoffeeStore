@@ -7,19 +7,20 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts';
 import { ROUTES } from '../utils/constants';
 import { validatePassword } from '../utils/helpers';
-import { User } from '../types';
+import { userApi } from '../services/api';
+import type { ApiResponse } from '../types';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
 
   const [formData, setFormData] = useState({
-    username: '',
+    account: '',
     password: '',
   });
 
   const [errors, setErrors] = useState<{
-    username?: string;
+    account?: string;
     password?: string;
     general?: string;
   }>({});
@@ -38,8 +39,8 @@ const Login: React.FC = () => {
   const validateForm = (): boolean => {
     const newErrors: typeof errors = {};
 
-    if (!formData.username.trim()) {
-      newErrors.username = '请输入用户名或邮箱';
+    if (!formData.account.trim()) {
+      newErrors.account = '请输入用户名或邮箱';
     }
 
     if (!formData.password) {
@@ -62,25 +63,25 @@ const Login: React.FC = () => {
     setErrors({});
 
     try {
-      // 模拟 API 调用
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // 调用后端登录 API
+      const response = await userApi.login({
+        account: formData.account,
+        password: formData.password,
+      }) as unknown as ApiResponse;
 
-      // 模拟登录成功
-      const mockUser: User = {
-        id: 1,
-        username: formData.username,
-        email: 'user@example.com',
-        phone: '13800138000',
-        createTime: new Date().toISOString(),
-      };
-
-      const mockToken = 'mock-jwt-token-' + Date.now();
-
-      login(mockUser, mockToken);
-      navigate(ROUTES.HOME);
-    } catch (error) {
+      if (response.code === 200) {
+        // 登录成功，从响应中获取 token 和用户信息
+        const { token, user: userData } = response.data;
+        login(userData, token);
+        navigate(ROUTES.HOME);
+      } else {
+        setErrors({
+          general: response.message || '登录失败，请检查您的账号和密码',
+        });
+      }
+    } catch (error: any) {
       setErrors({
-        general: '登录失败，请检查您的用户名和密码',
+        general: error?.response?.data?.message || '登录失败，请检查您的账号和密码',
       });
     } finally {
       setIsLoading(false);
@@ -112,23 +113,23 @@ const Login: React.FC = () => {
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* 用户名/邮箱 */}
               <div>
-                <label htmlFor="username" className="block text-sm font-medium text-primary mb-2">
+                <label htmlFor="account" className="block text-sm font-medium text-primary mb-2">
                   邮箱/用户名
                 </label>
                 <input
                   type="text"
-                  id="username"
-                  name="username"
-                  value={formData.username}
+                  id="account"
+                  name="account"
+                  value={formData.account}
                   onChange={handleInputChange}
                   className={`input-base ${
-                    errors.username ? 'border-red-500 focus:ring-red-500' : ''
+                    errors.account ? 'border-red-500 focus:ring-red-500' : ''
                   }`}
                   placeholder="请输入用户名或邮箱"
                   disabled={isLoading}
                 />
-                {errors.username && (
-                  <p className="mt-1 text-sm text-red-500">{errors.username}</p>
+                {errors.account && (
+                  <p className="mt-1 text-sm text-red-500">{errors.account}</p>
                 )}
               </div>
 

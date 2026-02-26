@@ -2,12 +2,14 @@
  * 咖啡详情页面
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Header, Footer, Loading } from '../components';
 import { useCart } from '../contexts';
-import { MOCK_COFFEES, COFFEE_SIZES, ROUTES } from '../utils/constants';
+import { coffeeApi } from '../services/api';
+import { COFFEE_SIZES, ROUTES } from '../utils/constants';
 import { formatPrice } from '../utils/helpers';
+import type { Coffee, ApiResponse } from '../types';
 
 const CoffeeDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -16,17 +18,57 @@ const CoffeeDetail: React.FC = () => {
 
   const [selectedSize, setSelectedSize] = useState<string>('M');
   const [quantity, setQuantity] = useState<number>(1);
+  const [coffee, setCoffee] = useState<Coffee | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // 查找咖啡详情
-  const coffee = MOCK_COFFEES.find((c) => c.id === parseInt(id || '0'));
+  // 从后端获取咖啡详情
+  useEffect(() => {
+    const fetchCoffeeDetail = async () => {
+      if (!id) return;
+
+      setIsLoading(true);
+      setError(null);
+      try {
+        const coffeeId = parseInt(id);
+        const response = await coffeeApi.getDetail(coffeeId) as unknown as ApiResponse<Coffee>;
+
+        if (response.code === 200 && response.data) {
+          setCoffee(response.data);
+        } else {
+          setError(response.message || '获取咖啡详情失败');
+        }
+      } catch (err) {
+        console.error('获取咖啡详情失败:', err);
+        setError('获取咖啡详情失败');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchCoffeeDetail();
+  }, [id]);
+
+  // 加载中状态
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Header />
+        <main className="flex-1 flex items-center justify-center">
+          <Loading />
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   // 如果咖啡不存在，显示404
-  if (!coffee) {
+  if (!coffee || error) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-4xl font-bold text-primary mb-4">404</h1>
-          <p className="text-text-secondary mb-6">未找到该咖啡</p>
+          <p className="text-text-secondary mb-6">{error || '未找到该咖啡'}</p>
           <Link
             to={ROUTES.COFFEE_LIST}
             className="btn-primary"
@@ -59,7 +101,7 @@ const CoffeeDetail: React.FC = () => {
 
   // 处理添加到购物车
   const handleAddToCart = () => {
-    addItem(coffee, quantity, selectedSize);
+    addItem(coffee.coffeeId, quantity);
   };
 
   // 处理立即购买
@@ -321,7 +363,7 @@ const CoffeeDetail: React.FC = () => {
                 </div>
 
                 {/* 已在购物车提示 */}
-                {isInCart(coffee.id) && (
+                {isInCart(coffee.coffeeId) && (
                   <p className="mt-3 text-sm text-accent flex items-center">
                     <svg
                       className="w-4 h-4 mr-1"

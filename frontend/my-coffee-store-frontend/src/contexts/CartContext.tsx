@@ -1,22 +1,24 @@
 /**
  * 购物车上下文
+ * 与后端购物车 API 交互，保持前后端数据同步
  */
 
 import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
-import { CartItem, Coffee } from '../types';
-import { storage, calculateCartTotal } from '../utils/helpers';
-import { STORAGE_KEYS, COFFEE_SIZES } from '../utils/constants';
+import type { CartItem, CartResponse, ApiResponse } from '../types';
+import { cartApi } from '../services/api';
+import { useAuth } from './AuthContext';
 
 interface CartContextType {
   items: CartItem[];
   totalQuantity: number;
   totalPrice: number;
   isLoading: boolean;
-  addItem: (coffee: Coffee, quantity?: number, size?: string) => void;
-  removeItem: (id: number) => void;
-  updateQuantity: (id: number, quantity: number) => void;
-  clearCart: () => void;
+  addItem: (coffeeId: number, quantity?: number) => Promise<void>;
+  removeItem: (cartId: number) => Promise<void>;
+  updateQuantity: (cartId: number, quantity: number) => Promise<void>;
+  clearCart: () => Promise<void>;
   isInCart: (coffeeId: number) => boolean;
+  refreshCart: () => Promise<void>;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -26,96 +28,120 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
  */
 export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [items, setItems] = useState<CartItem[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [totalQuantity, setTotalQuantity] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const { isAuthenticated } = useAuth();
 
-  // 初始化：从本地存储恢复购物车
-  useEffect(() => {
-    const initCart = () => {
-      try {
-        const storedCart = storage.get<CartItem[]>(STORAGE_KEYS.CART);
-        if (storedCart) {
-          setItems(storedCart);
-        }
-      } catch (error) {
-        console.error('初始化购物车失败:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    initCart();
-  }, []);
-
-  // 保存购物车到本地存储
-  useEffect(() => {
-    if (!isLoading) {
-      storage.set(STORAGE_KEYS.CART, items);
+  /**
+   * 从后端刷新购物车数据
+   */
+  const refreshCart = useCallback(async () => {
+    if (!isAuthenticated) {
+      // 未登录时清空购物车状态
+      setItems([]);
+      setTotalQuantity(0);
+      setTotalPrice(0);
+      return;
     }
-  }, [items, isLoading]);
 
-  // 计算总数量和总价
-  const totalQuantity = items.reduce((sum, item) => sum + item.quantity, 0);
-  const totalPrice = calculateCartTotal(items);
+    try {
+      setIsLoading(true);
+      const response = await cartApi.getCart() as unknown as ApiResponse<CartResponse>;
+
+      if (response.code === 200 && response.data) {
+        setItems(response.data.items || []);
+        setTotalQuantity(response.data.totalQuantity || 0);
+        setTotalPrice(response.data.totalPrice || 0);
+      }
+    } catch (error) {
+      console.error('获取购物车失败:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [isAuthenticated]);
+
+  // 登录状态变化时刷新购物车
+  useEffect(() => {
+    refreshCart();
+  }, [refreshCart]);
 
   /**
    * 添加商品到购物车
    */
-  const addItem = useCallback((coffee: Coffee, quantity: number = 1, size: string = 'M') => {
-    setItems((prevItems) => {
-      // 查找是否已存在该商品
-      const existingItemIndex = prevItems.findIndex(
-        (item) => item.coffeeId === coffee.id && item.size === size
-      );
+  const addItem = useCallback(async (coffeeId: number, quantity: number = 1) => {
+    try {
+      const response = await cartApi.add({ coffeeId, quantity }) as unknown as ApiResponse;
 
-      if (existingItemIndex > -1) {
-        // 已存在，更新数量
-        const updatedItems = [...prevItems];
-        updatedItems[existingItemIndex].quantity += quantity;
-        return updatedItems;
+      if (response.code === 200) {
+        // 添加成功后刷新购物车
+        await refreshCart();
       } else {
-        // 不存在，添加新商品
-        const sizePrice = COFFEE_SIZES.find((s) => s.value === size)?.price || 0;
-        const newItem: CartItem = {
-          id: Date.now(),
-          coffeeId: coffee.id,
-          coffee,
-          quantity,
-          size,
-          price: coffee.price + sizePrice,
-        };
-        return [...prevItems, newItem];
+        console.error('添加购物车失败:', response.message);
       }
-    });
-  }, []);
+    } catch (error) {
+      console.error('添加购物车失败:', error);
+    }
+  }, [refreshCart]);
 
   /**
    * 从购物车移除商品
    */
-  const removeItem = useCallback((id: number) => {
-    setItems((prevItems) => prevItems.filter((item) => item.id !== id));
-  }, []);
+  const removeItem = useCallback(async (cartId: number) => {
+    try {
+      const response = await cartApi.remove(cartId) as unknown as ApiResponse;
+
+      if (response.code === 200) {
+        // 移除成功后刷新购物车
+        await refreshCart();
+      } else {
+        console.error('移除购物车项失败:', response.message);
+      }
+    } catch (error) {
+      console.error('移除购物车项失败:', error);
+    }
+  }, [refreshCart]);
 
   /**
    * 更新商品数量
    */
-  const updateQuantity = useCallback((id: number, quantity: number) => {
+  const updateQuantity = useCallback(async (cartId: number, quantity: number) => {
     if (quantity <= 0) {
-      removeItem(id);
+      await removeItem(cartId);
       return;
     }
 
-    setItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === id ? { ...item, quantity } : item
-      )
-    );
-  }, [removeItem]);
+    try {
+      const response = await cartApi.update({ cartId, quantity }) as unknown as ApiResponse;
+
+      if (response.code === 200) {
+        // 更新成功后刷新购物车
+        await refreshCart();
+      } else {
+        console.error('更新购物车数量失败:', response.message);
+      }
+    } catch (error) {
+      console.error('更新购物车数量失败:', error);
+    }
+  }, [removeItem, refreshCart]);
 
   /**
    * 清空购物车
    */
-  const clearCart = useCallback(() => {
-    setItems([]);
+  const clearCart = useCallback(async () => {
+    try {
+      const response = await cartApi.clear() as unknown as ApiResponse;
+
+      if (response.code === 200) {
+        setItems([]);
+        setTotalQuantity(0);
+        setTotalPrice(0);
+      } else {
+        console.error('清空购物车失败:', response.message);
+      }
+    } catch (error) {
+      console.error('清空购物车失败:', error);
+    }
   }, []);
 
   /**
@@ -135,6 +161,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     updateQuantity,
     clearCart,
     isInCart,
+    refreshCart,
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

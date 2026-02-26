@@ -8,7 +8,7 @@ import { Header, Footer } from '../components';
 import { useCart } from '../contexts';
 import { formatPrice } from '../utils/helpers';
 import { ROUTES } from '../utils/constants';
-import { CartItem } from '../types';
+import type { CartItem } from '../types';
 
 const Cart: React.FC = () => {
   const navigate = useNavigate();
@@ -20,9 +20,9 @@ const Cart: React.FC = () => {
   };
 
   // 处理删除商品
-  const handleRemoveItem = (id: number) => {
+  const handleRemoveItem = (cartId: number) => {
     if (confirm('确定要删除这个商品吗？')) {
-      removeItem(id);
+      removeItem(cartId);
     }
   };
 
@@ -112,7 +112,7 @@ const Cart: React.FC = () => {
             <div className="divide-y divide-gray-100">
               {items.map((item) => (
                 <CartItemCard
-                  key={item.id}
+                  key={item.cartId}
                   item={item}
                   onUpdateQuantity={updateQuantity}
                   onRemove={handleRemoveItem}
@@ -180,15 +180,15 @@ const Cart: React.FC = () => {
  */
 interface CartItemCardProps {
   item: CartItem;
-  onUpdateQuantity: (id: number, quantity: number) => void;
-  onRemove: (id: number) => void;
+  onUpdateQuantity: (cartId: number, quantity: number) => void;
+  onRemove: (cartId: number) => void;
 }
 
 const CartItemCard: React.FC<CartItemCardProps> = ({ item, onUpdateQuantity, onRemove }) => {
   const handleQuantityChange = (delta: number) => {
     const newQuantity = item.quantity + delta;
     if (newQuantity >= 1) {
-      onUpdateQuantity(item.id, newQuantity);
+      onUpdateQuantity(item.cartId, newQuantity);
     }
   };
 
@@ -196,10 +196,10 @@ const CartItemCard: React.FC<CartItemCardProps> = ({ item, onUpdateQuantity, onR
     <div className="p-6 hover:bg-gray-50 transition-colors">
       <div className="flex gap-4">
         {/* 商品图片 */}
-        <Link to={`/coffee/${item.coffee.id}`} className="flex-shrink-0">
+        <Link to={`/coffee/${item.coffeeId}`} className="flex-shrink-0">
           <img
-            src={item.coffee.imageUrl}
-            alt={item.coffee.name}
+            src={item.imageUrl}
+            alt={item.coffeeName}
             className="w-24 h-24 object-cover rounded-button"
           />
         </Link>
@@ -208,13 +208,13 @@ const CartItemCard: React.FC<CartItemCardProps> = ({ item, onUpdateQuantity, onR
         <div className="flex-1 min-w-0">
           <div className="flex justify-between mb-2">
             <Link
-              to={`/coffee/${item.coffee.id}`}
+              to={`/coffee/${item.coffeeId}`}
               className="font-georgia font-bold text-lg text-primary hover:text-accent transition-colors line-clamp-1"
             >
-              {item.coffee.name}
+              {item.coffeeName}
             </Link>
             <button
-              onClick={() => onRemove(item.id)}
+              onClick={() => onRemove(item.cartId)}
               className="text-text-secondary hover:text-red-500 transition-colors"
               aria-label="删除"
             >
@@ -234,14 +234,10 @@ const CartItemCard: React.FC<CartItemCardProps> = ({ item, onUpdateQuantity, onR
             </button>
           </div>
 
-          <p className="text-sm text-text-secondary line-clamp-2 mb-2">
-            {item.coffee.description}
-          </p>
-
-          {/* 规格标签 */}
-          {item.size && (
-            <span className="inline-block px-2 py-1 bg-gray-100 text-text-secondary text-xs rounded mr-2">
-              {item.size}
+          {/* 库存状态 */}
+          {item.stock < 10 && item.stock > 0 && (
+            <span className="inline-block px-2 py-1 bg-orange-50 text-orange-600 text-xs rounded mr-2">
+              仅剩 {item.stock} 件
             </span>
           )}
 
@@ -269,7 +265,7 @@ const CartItemCard: React.FC<CartItemCardProps> = ({ item, onUpdateQuantity, onR
                 onChange={(e) => {
                   const val = parseInt(e.target.value);
                   if (val >= 1) {
-                    onUpdateQuantity(item.id, val);
+                    onUpdateQuantity(item.cartId, val);
                   }
                 }}
                 min="1"
@@ -277,7 +273,7 @@ const CartItemCard: React.FC<CartItemCardProps> = ({ item, onUpdateQuantity, onR
               />
               <button
                 onClick={() => handleQuantityChange(1)}
-                disabled={item.quantity >= item.coffee.stock}
+                disabled={item.quantity >= item.stock}
                 className="w-8 h-8 flex items-center justify-center hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <svg
@@ -294,10 +290,10 @@ const CartItemCard: React.FC<CartItemCardProps> = ({ item, onUpdateQuantity, onR
             {/* 单价和总价 */}
             <div className="text-right">
               <div className="text-sm text-text-secondary">
-                {formatPrice(item.price)} × {item.quantity}
+                {formatPrice(item.price)} x {item.quantity}
               </div>
               <div className="text-lg font-bold text-primary">
-                {formatPrice(item.price * item.quantity)}
+                {formatPrice(item.subtotal)}
               </div>
             </div>
           </div>

@@ -7,7 +7,8 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts';
 import { ROUTES } from '../utils/constants';
 import { isValidEmail, isValidPhone, validatePassword } from '../utils/helpers';
-import { User } from '../types';
+import { userApi } from '../services/api';
+import type { ApiResponse } from '../types';
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
@@ -106,25 +107,27 @@ const Register: React.FC = () => {
     setErrors({});
 
     try {
-      // 模拟 API 调用
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // 模拟注册成功
-      const mockUser: User = {
-        id: Date.now(),
+      // 调用后端注册 API
+      const response = await userApi.register({
         username: formData.username,
         email: formData.email,
-        phone: formData.phone,
-        createTime: new Date().toISOString(),
-      };
+        phone: formData.phone || undefined,
+        password: formData.password,
+      }) as unknown as ApiResponse;
 
-      const mockToken = 'mock-jwt-token-' + Date.now();
-
-      login(mockUser, mockToken);
-      navigate(ROUTES.HOME);
-    } catch (error) {
+      if (response.code === 200) {
+        // 注册成功，从响应中获取 token 和用户信息
+        const { token, user: userData } = response.data;
+        login(userData, token);
+        navigate(ROUTES.HOME);
+      } else {
+        setErrors({
+          general: response.message || '注册失败，请稍后重试',
+        });
+      }
+    } catch (error: any) {
       setErrors({
-        general: '注册失败，请稍后重试',
+        general: error?.response?.data?.message || '注册失败，请稍后重试',
       });
     } finally {
       setIsLoading(false);

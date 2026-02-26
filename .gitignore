@@ -1,0 +1,27 @@
+# 本地文档（不提交）
+docs/
+
+# YAML 文件（不提交）
+*.yml
+*.yaml
+# 但保留后端配置文件
+!backend/src/main/resources/application.yml
+
+# Java 编译产物
+backend/target/
+
+# Node
+frontend/my-coffee-store-frontend/node_modules/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# OS
+.DS_Store
+
+# 临时文件
+*.md.bak
+error-summary-*.md
+experience-*.md

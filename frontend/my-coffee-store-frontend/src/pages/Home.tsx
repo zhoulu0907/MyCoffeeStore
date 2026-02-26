@@ -2,22 +2,42 @@
  * 首页
  */
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Header, Footer, CoffeeCard, Carousel } from '../components';
 import { useCart } from '../contexts';
-import { MOCK_COFFEES, CAROUSEL_ITEMS } from '../utils/constants';
-import { Coffee } from '../types';
+import { coffeeApi } from '../services/api';
+import { CAROUSEL_ITEMS } from '../utils/constants';
+import type { Coffee, ApiResponse, PageResponse } from '../types';
 
 const Home: React.FC = () => {
   const { addItem } = useCart();
+  const [featuredCoffees, setFeaturedCoffees] = useState<Coffee[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   // 获取精选咖啡（取前3个）
-  const featuredCoffees = MOCK_COFFEES.slice(0, 3);
+  useEffect(() => {
+    const fetchFeaturedCoffees = async () => {
+      try {
+        const response = await coffeeApi.getList({ page: 1, size: 3 }) as unknown as ApiResponse<PageResponse<Coffee>>;
+
+        if (response.code === 200 && response.data) {
+          setFeaturedCoffees(response.data.list || []);
+        }
+      } catch (error) {
+        console.error('获取精选咖啡失败:', error);
+        setFeaturedCoffees([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchFeaturedCoffees();
+  }, []);
 
   // 处理添加到购物车
   const handleAddToCart = (coffee: Coffee) => {
-    addItem(coffee, 1);
+    addItem(coffee.coffeeId, 1);
   };
 
   return (
@@ -44,15 +64,21 @@ const Home: React.FC = () => {
             </div>
 
             {/* 咖啡卡片网格 */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {featuredCoffees.map((coffee) => (
-                <CoffeeCard
-                  key={coffee.id}
-                  coffee={coffee}
-                  onAddToCart={handleAddToCart}
-                />
-              ))}
-            </div>
+            {isLoading ? (
+              <div className="text-center py-12 text-text-secondary">加载中...</div>
+            ) : featuredCoffees.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {featuredCoffees.map((coffee) => (
+                  <CoffeeCard
+                    key={coffee.coffeeId}
+                    coffee={coffee}
+                    onAddToCart={handleAddToCart}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12 text-text-secondary">暂无咖啡数据</div>
+            )}
 
             {/* 查看更多按钮 */}
             <div className="text-center mt-12">

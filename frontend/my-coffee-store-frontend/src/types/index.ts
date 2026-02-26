@@ -14,14 +14,15 @@ export interface User {
  * 咖啡产品类型
  */
 export interface Coffee {
-  id: number;
+  coffeeId: number;
   name: string;
   description: string;
   price: number;
-  category: CoffeeCategory;
+  originalPrice?: number;
+  category: string;
   imageUrl: string;
   stock: number;
-  status: 'active' | 'inactive';
+  status: number;
   rating?: number;
   brewingTime?: number; // 冲泡时间（分钟）
   size?: string[];
@@ -33,9 +34,25 @@ export interface Coffee {
 export type CoffeeCategory = 'espresso' | 'latte' | 'cappuccino' | 'americano' | 'mocha' | 'other';
 
 /**
- * 购物车项目类型
+ * 购物车项目类型（后端返回格式）
  */
 export interface CartItem {
+  cartId: number;
+  coffeeId: number;
+  coffeeName: string;
+  imageUrl: string;
+  price: number;
+  quantity: number;
+  subtotal: number;
+  stock: number;
+  status: string;
+}
+
+/**
+ * 购物车项目类型（本地兼容，用于 UI 展示）
+ * @deprecated 请使用 CartItem，已适配后端字段
+ */
+export interface LocalCartItem {
   id: number;
   coffeeId: number;
   coffee: Coffee;
@@ -78,17 +95,27 @@ export interface OrderItem {
   orderId: number;
   coffeeId: number;
   coffeeName: string;
-  coffeeImage: string;
+  coffeeImage?: string;
+  imageUrl?: string;
   quantity: number;
   price: number;
   size?: string;
 }
 
 /**
+ * 购物车响应类型（后端返回）
+ */
+export interface CartResponse {
+  totalQuantity: number;
+  totalPrice: number;
+  items: CartItem[];
+}
+
+/**
  * 用户登录请求类型
  */
 export interface LoginRequest {
-  username: string;
+  account: string;
   password: string;
 }
 
@@ -110,6 +137,7 @@ export interface ApiResponse<T = any> {
   code: number;
   message: string;
   data: T;
+  timestamp: number;
 }
 
 /**
@@ -117,7 +145,7 @@ export interface ApiResponse<T = any> {
  */
 export interface PageParams {
   page: number;
-  pageSize: number;
+  size: number;
 }
 
 /**
@@ -127,8 +155,7 @@ export interface PageResponse<T> {
   list: T[];
   total: number;
   page: number;
-  pageSize: number;
-  totalPages: number;
+  size: number;
 }
 
 /**

@@ -3,9 +3,10 @@
  */
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { User } from '../types';
+import type { User } from '../types';
 import { tokenManager, storage } from '../utils/helpers';
 import { STORAGE_KEYS } from '../utils/constants';
+import { userApi } from '../services/api';
 
 interface AuthContextType {
   user: User | null;
@@ -57,11 +58,19 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   /**
    * 登出
    */
-  const logout = () => {
-    setUser(null);
-    tokenManager.removeToken();
-    storage.remove(STORAGE_KEYS.USER);
-    storage.remove(STORAGE_KEYS.CART);
+  const logout = async () => {
+    try {
+      // 调用后端登出 API
+      await userApi.logout();
+    } catch (error) {
+      console.error('登出 API 调用失败:', error);
+    } finally {
+      // 无论 API 是否成功，都清除本地状态
+      setUser(null);
+      tokenManager.removeToken();
+      storage.remove(STORAGE_KEYS.USER);
+      storage.remove(STORAGE_KEYS.CART);
+    }
   };
 
   /**

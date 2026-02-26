@@ -2,91 +2,14 @@
  * 订单页面
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Header, Footer } from '../components';
+import { Header, Footer, Loading } from '../components';
 import { useAuth, useCart } from '../contexts';
+import { orderApi } from '../services/api';
 import { ORDER_STATUS, ORDER_TYPES, ROUTES } from '../utils/constants';
 import { formatPrice, formatDate } from '../utils/helpers';
-import { Order, OrderStatus } from '../types';
-
-// 模拟订单数据
-const MOCK_ORDERS: Order[] = [
-  {
-    id: 1,
-    userId: 1,
-    orderNo: 'ORD202502260001',
-    totalPrice: 88,
-    status: 'preparing',
-    orderType: 'takeout',
-    items: [
-      {
-        id: 1,
-        orderId: 1,
-        coffeeId: 1,
-        coffeeName: '经典拿铁',
-        coffeeImage: 'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=200',
-        quantity: 2,
-        price: 30,
-        size: 'M',
-      },
-      {
-        id: 2,
-        orderId: 1,
-        coffeeId: 3,
-        coffeeName: '美式咖啡',
-        coffeeImage: 'https://images.unsplash.com/photo-1517701604599-bb29b5c7fa69?w=200',
-        quantity: 1,
-        price: 18,
-        size: 'L',
-      },
-    ],
-    createTime: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
-    remark: '少糖，少冰',
-  },
-  {
-    id: 2,
-    userId: 1,
-    orderNo: 'ORD202502250001',
-    totalPrice: 56,
-    status: 'completed',
-    orderType: 'dine_in',
-    items: [
-      {
-        id: 3,
-        orderId: 2,
-        coffeeId: 2,
-        coffeeName: '卡布奇诺',
-        coffeeImage: 'https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=200',
-        quantity: 2,
-        price: 26,
-        size: 'M',
-      },
-    ],
-    createTime: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
-  },
-  {
-    id: 3,
-    userId: 1,
-    orderNo: 'ORD202502240001',
-    totalPrice: 32,
-    status: 'cancelled',
-    orderType: 'delivery',
-    items: [
-      {
-        id: 4,
-        orderId: 3,
-        coffeeId: 5,
-        coffeeName: '焦糖摩卡',
-        coffeeImage: 'https://images.unsplash.com/photo-1578314675249-a6910f80cc4e?w=200',
-        quantity: 1,
-        price: 32,
-        size: 'L',
-      },
-    ],
-    createTime: new Date(Date.now() - 1000 * 60 * 60 * 48).toISOString(),
-  },
-];
+import type { Order as OrderType, OrderStatus, ApiResponse, PageResponse } from '../types';
 
 const Order: React.FC = () => {
   const navigate = useNavigate();
@@ -94,7 +17,11 @@ const Order: React.FC = () => {
   const { clearCart } = useCart();
 
   const [selectedStatus, setSelectedStatus] = useState<string>('all');
-  const [orders] = useState<Order[]>(MOCK_ORDERS);
+  const [orders, setOrders] = useState<OrderType[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const pageSize = 10;
 
   // 未登录状态
   React.useEffect(() => {
@@ -103,29 +30,78 @@ const Order: React.FC = () => {
     }
   }, [isAuthenticated, navigate]);
 
+  // 获取订单列表
+  useEffect(() => {
+    const fetchOrders = async () => {
+      if (!isAuthenticated) return;
+
+      setIsLoading(true);
+      try {
+        const params: { status?: string; page: number; size: number } = {
+          page,
+          size: pageSize,
+        };
+
+        // 状态筛选
+        if (selectedStatus !== 'all') {
+          params.status = selectedStatus;
+        }
+
+        const response = await orderApi.getList(params) as unknown as ApiResponse<PageResponse<OrderType>>;
+
+        if (response.code === 200 && response.data) {
+          setOrders(response.data.list || []);
+          setTotal(response.data.total || 0);
+        }
+      } catch (error) {
+        console.error('获取订单列表失败:', error);
+        setOrders([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchOrders();
+  }, [isAuthenticated, selectedStatus, page]);
+
   // 处理返回
   const handleBack = () => {
     navigate(-1);
   };
 
-  // 过滤订单
-  const filteredOrders = orders.filter((order) => {
-    if (selectedStatus === 'all') return true;
-    return order.status === selectedStatus;
-  });
+  // 处理状态筛选切换
+  const handleStatusChange = (status: string) => {
+    setSelectedStatus(status);
+    setPage(1); // 切换状态时重置页码
+  };
 
   // 取消订单
-  const handleCancelOrder = (orderId: number) => {
+  const handleCancelOrder = async (orderId: string) => {
     if (confirm('确定要取消这个订单吗？')) {
-      // 这里应该调用 API 取消订单
-      console.log('取消订单:', orderId);
+      try {
+        const response = await orderApi.cancel(orderId, '用户主动取消') as unknown as ApiResponse;
+
+        if (response.code === 200) {
+          // 取消成功，刷新订单列表
+          setOrders((prevOrders) =>
+            prevOrders.map((order) =>
+              order.orderNo === orderId ? { ...order, status: 'cancelled' as OrderStatus } : order
+            )
+          );
+        } else {
+          alert(response.message || '取消订单失败');
+        }
+      } catch (error) {
+        console.error('取消订单失败:', error);
+        alert('取消订单失败，请稍后重试');
+      }
     }
   };
 
   // 确认收货
-  const handleConfirmOrder = (orderId: number) => {
+  const handleConfirmOrder = (orderId: string) => {
     if (confirm('确认已收到咖啡？')) {
-      // 这里应该调用 API 确认收货
+      // 确认收货逻辑（如果后端有此接口可添加）
       console.log('确认收货:', orderId);
     }
   };
@@ -167,7 +143,7 @@ const Order: React.FC = () => {
           <div className="bg-white border-b border-gray-200 px-6 py-4">
             <div className="flex flex-wrap gap-2">
               <button
-                onClick={() => setSelectedStatus('all')}
+                onClick={() => handleStatusChange('all')}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                   selectedStatus === 'all'
                     ? 'bg-primary text-white'
@@ -177,7 +153,7 @@ const Order: React.FC = () => {
                 全部
               </button>
               <button
-                onClick={() => setSelectedStatus('pending')}
+                onClick={() => handleStatusChange('pending')}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                   selectedStatus === 'pending'
                     ? 'bg-primary text-white'
@@ -187,7 +163,7 @@ const Order: React.FC = () => {
                 待确认
               </button>
               <button
-                onClick={() => setSelectedStatus('preparing')}
+                onClick={() => handleStatusChange('preparing')}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                   selectedStatus === 'preparing'
                     ? 'bg-primary text-white'
@@ -197,7 +173,7 @@ const Order: React.FC = () => {
                 制作中
               </button>
               <button
-                onClick={() => setSelectedStatus('completed')}
+                onClick={() => handleStatusChange('completed')}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                   selectedStatus === 'completed'
                     ? 'bg-primary text-white'
@@ -211,7 +187,11 @@ const Order: React.FC = () => {
 
           {/* 订单列表 */}
           <div className="bg-white rounded-b-2xl shadow-sm">
-            {filteredOrders.length === 0 ? (
+            {isLoading ? (
+              <div className="flex justify-center py-16">
+                <Loading />
+              </div>
+            ) : orders.length === 0 ? (
               /* 空状态 */
               <div className="py-16 text-center">
                 <svg
@@ -241,9 +221,9 @@ const Order: React.FC = () => {
             ) : (
               /* 订单卡片列表 */
               <div className="divide-y divide-gray-100">
-                {filteredOrders.map((order) => (
+                {orders.map((order) => (
                   <OrderCard
-                    key={order.id}
+                    key={order.orderNo}
                     order={order}
                     onCancel={handleCancelOrder}
                     onConfirm={handleConfirmOrder}
@@ -264,9 +244,9 @@ const Order: React.FC = () => {
  * 订单卡片组件
  */
 interface OrderCardProps {
-  order: Order;
-  onCancel: (orderId: number) => void;
-  onConfirm: (orderId: number) => void;
+  order: OrderType;
+  onCancel: (orderId: string) => void;
+  onConfirm: (orderId: string) => void;
 }
 
 const OrderCard: React.FC<OrderCardProps> = ({ order, onCancel, onConfirm }) => {
@@ -302,14 +282,14 @@ const OrderCard: React.FC<OrderCardProps> = ({ order, onCancel, onConfirm }) => 
             className="flex-shrink-0 flex items-center gap-3 p-3 bg-gray-50 rounded-button"
           >
             <img
-              src={item.coffeeImage}
+              src={item.coffeeImage || item.imageUrl || ''}
               alt={item.coffeeName}
               className="w-16 h-16 object-cover rounded"
             />
             <div>
               <div className="font-medium text-primary">{item.coffeeName}</div>
               <div className="text-sm text-text-secondary">
-                {item.size && `(${item.size})`} × {item.quantity}
+                {item.size && `(${item.size})`} x {item.quantity}
               </div>
               <div className="text-sm font-medium text-accent">
                 {formatPrice(item.price * item.quantity)}
@@ -344,7 +324,7 @@ const OrderCard: React.FC<OrderCardProps> = ({ order, onCancel, onConfirm }) => 
           {order.status === 'pending' && (
             <>
               <button
-                onClick={() => onCancel(order.id)}
+                onClick={() => onCancel(order.orderNo)}
                 className="px-4 py-2 border border-red-500 text-red-500 rounded-button text-sm font-medium hover:bg-red-50 transition-colors"
               >
                 取消订单
@@ -361,7 +341,7 @@ const OrderCard: React.FC<OrderCardProps> = ({ order, onCancel, onConfirm }) => 
           )}
           {order.status === 'ready' && (
             <button
-              onClick={() => onConfirm(order.id)}
+              onClick={() => onConfirm(order.orderNo)}
               className="px-4 py-2 bg-accent text-white rounded-button text-sm font-medium hover:bg-accent-light transition-colors"
             >
               确认收货
