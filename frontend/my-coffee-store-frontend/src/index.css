@@ -1,0 +1,105 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 自定义基础样式 */
+@layer base {
+  * {
+    @apply box-border;
+  }
+
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply m-0 p-0 font-sans text-text-primary bg-background antialiased;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-georgia font-bold text-primary;
+  }
+
+  a {
+    @apply transition-colors duration-200;
+  }
+
+  button {
+    @apply transition-all duration-200 cursor-pointer;
+  }
+}
+
+/* 自定义组件样式 */
+@layer components {
+  /* 按钮样式 */
+  .btn-primary {
+    @apply bg-accent text-white px-6 py-3 rounded-button font-medium hover:bg-accent-light focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2;
+  }
+
+  .btn-secondary {
+    @apply bg-transparent text-primary border border-primary px-6 py-3 rounded-button font-medium hover:bg-primary hover:text-white focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2;
+  }
+
+  .btn-outline {
+    @apply bg-transparent text-accent border border-accent px-6 py-3 rounded-button font-medium hover:bg-accent hover:text-white focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2;
+  }
+
+  /* 输入框样式 */
+  .input-base {
+    @apply w-full px-4 py-3 rounded-input border border-gray-200 bg-surface text-text-primary placeholder-text-light focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all;
+  }
+
+  /* 卡片样式 */
+  .card-base {
+    @apply bg-white rounded-card p-6 shadow-sm hover:shadow-md transition-shadow duration-200;
+  }
+
+  /* 容器样式 */
+  .container-custom {
+    @apply max-w-7xl mx-auto px-container;
+  }
+
+  /* Section 样式 */
+  .section-padding {
+    @apply py-section px-container;
+  }
+}
+
+/* 自定义工具类 */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .aspect-video-custom {
+    aspect-ratio: 16 / 9;
+  }
+
+  .aspect-square-custom {
+    aspect-ratio: 1 / 1;
+  }
+}
+
+/* 全局动画 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* 响应式字体大小 */
+@media (max-width: 768px) {
+  html {
+    font-size: 14px;
+  }
+}
