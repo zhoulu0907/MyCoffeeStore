@@ -3,7 +3,7 @@ package com.mycoffeestore.service.impl.agent;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.mycoffeestore.config.ModelScopeConfig;
+import com.mycoffeestore.config.ModelScopeProperties;
 import com.mycoffeestore.dto.agent.AgentChatRequestDTO;
 import com.mycoffeestore.service.agent.AgentService;
 import com.mycoffeestore.util.AgentToolExecutor;
@@ -30,7 +30,7 @@ import java.util.*;
 public class AgentServiceImpl implements AgentService {
 
     private final WebClient modelScopeWebClient;
-    private final ModelScopeConfig modelScopeConfig;
+    private final ModelScopeProperties modelScopeProperties;
     private final AgentToolExecutor toolExecutor;
     private final ObjectMapper objectMapper;
 
@@ -134,7 +134,7 @@ public class AgentServiceImpl implements AgentService {
         try {
             // 构建请求体
             ObjectNode requestBody = objectMapper.createObjectNode();
-            requestBody.put("model", modelScopeConfig.getModel());
+            requestBody.put("model", modelScopeProperties.getModel());
             requestBody.set("messages", objectMapper.valueToTree(messages));
             requestBody.put("stream", true);
             requestBody.put("temperature", 0.6);
