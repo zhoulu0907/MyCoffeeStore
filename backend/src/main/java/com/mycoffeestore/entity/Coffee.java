@@ -1,6 +1,7 @@
 package com.mycoffeestore.entity;
 
 import com.mycoffeestore.common.base.BaseEntity;
+import com.mybatisflex.annotation.Column;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
@@ -81,6 +82,7 @@ public class Coffee extends BaseEntity {
      * 图片列表（JSON）
      */
     @Schema(description = "图片列表")
+    @Column(typeHandler = com.mycoffeestore.handler.JsonbTypeHandler.class)
     private String images;
 
     /**

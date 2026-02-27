@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -31,6 +32,8 @@ import java.util.concurrent.CompletableFuture;
 @RequiredArgsConstructor
 @Tag(name = "AI Agent", description = "AI Agent 对话接口")
 public class AgentController {
+
+    private static final Set<String> VALID_AGENT_TYPES = Set.of("coffee_advisor", "customer_service", "order_assistant");
 
     private final AgentService agentService;
     private final JwtUtil jwtUtil;
@@ -49,6 +52,11 @@ public class AgentController {
                            HttpServletRequest httpRequest) {
 
         log.info("收到 Agent 聊天请求，角色: {}，消息数: {}", request.getAgentType(), request.getMessages().size());
+
+        // 校验 agentType 有效性
+        if (!VALID_AGENT_TYPES.contains(request.getAgentType())) {
+            throw new IllegalArgumentException("无效的角色类型: " + request.getAgentType() + "，支持: " + VALID_AGENT_TYPES);
+        }
 
         // 可选提取 userId（未登录为 null）
         Long userId = extractUserIdOptional(httpRequest);

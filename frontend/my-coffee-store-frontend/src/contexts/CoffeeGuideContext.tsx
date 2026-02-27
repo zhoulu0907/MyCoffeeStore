@@ -28,7 +28,7 @@ interface CoffeeGuideProviderProps {
 export const CoffeeGuideProvider: React.FC<CoffeeGuideProviderProps> = ({ children }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const toggle = () => setIsExpanded(!isExpanded);
+  const toggle = () => setIsExpanded((prev) => !prev);
   const setExpanded = (expanded: boolean) => setIsExpanded(expanded);
 
   return (

@@ -363,6 +363,19 @@ export const agentApi = {
             }
           }
         }
+
+        // 处理 buffer 中残留的最后一行数据
+        if (buffer.startsWith('data:')) {
+          const jsonStr = buffer.slice(5).trim();
+          if (jsonStr !== '') {
+            try {
+              const event: AgentSSEEvent = JSON.parse(jsonStr);
+              onEvent(event);
+            } catch {
+              // 忽略解析失败的行
+            }
+          }
+        }
         onComplete();
       })
       .catch((error: Error) => {

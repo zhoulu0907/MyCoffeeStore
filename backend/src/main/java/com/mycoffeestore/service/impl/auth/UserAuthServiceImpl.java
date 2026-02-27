@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+
 /**
  * 用户认证服务实现类
  *
@@ -86,12 +87,26 @@ public class UserAuthServiceImpl implements UserAuthService {
     @Override
     public LoginVO login(UserLoginDTO dto) {
         // 查询用户（支持用户名/邮箱/手机号登录）
+        String account = dto.getAccount();
+        // 先按用户名查
         QueryWrapper wrapper = QueryWrapper.create()
-                .where("(username = ? OR email = ? OR phone = ?)",
-                        dto.getAccount(), dto.getAccount(), dto.getAccount())
-                .and(User::getIsDeleted).eq(0);
-
+                .eq(User::getUsername, account)
+                .eq(User::getIsDeleted, 0);
         User user = userMapper.selectOneByQuery(wrapper);
+        // 再按邮箱查
+        if (user == null) {
+            wrapper = QueryWrapper.create()
+                    .eq(User::getEmail, account)
+                    .eq(User::getIsDeleted, 0);
+            user = userMapper.selectOneByQuery(wrapper);
+        }
+        // 再按手机号查
+        if (user == null) {
+            wrapper = QueryWrapper.create()
+                    .eq(User::getPhone, account)
+                    .eq(User::getIsDeleted, 0);
+            user = userMapper.selectOneByQuery(wrapper);
+        }
 
         if (user == null) {
             throw new BusinessException(1003, "用户名或密码错误");

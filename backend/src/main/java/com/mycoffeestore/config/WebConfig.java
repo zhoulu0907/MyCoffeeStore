@@ -42,7 +42,8 @@ public class WebConfig implements WebMvcConfigurer {
                         "/v1/auth/login",
                         "/v1/auth/register",
                         "/v1/coffee/**",
-                        "/v1/agent/**"
+                        "/v1/agent/**",
+                        "/v1/recommendation/**"
                 );
     }
 }

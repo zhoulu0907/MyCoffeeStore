@@ -2,7 +2,7 @@
  * 咖啡向导组件 - Agent 流式对话
  */
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { agentApi } from '../services/api';
 import type { AgentChatMessage } from '../services/api';
 import { useCoffeeGuide } from '../contexts/CoffeeGuideContext';
@@ -56,9 +56,30 @@ const CoffeeGuide: React.FC = () => {
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const abortControllerRef = useRef<AbortController | null>(null);
+
+  // 组件卸载时取消进行中的 SSE 请求
+  useEffect(() => {
+    return () => {
+      abortControllerRef.current?.abort();
+    };
+  }, []);
 
   const handleRoleSelect = (roleId: string) => {
+    if (roleId === selectedRole) return;
+    // 切换角色时取消进行中的请求并重置对话
+    abortControllerRef.current?.abort();
+    abortControllerRef.current = null;
     setSelectedRole(roleId);
+    setIsLoading(false);
+    setMessages([
+      {
+        id: Date.now().toString(),
+        role: 'assistant',
+        content: getRoleHint(roleId),
+        timestamp: new Date(),
+      },
+    ]);
   };
 
   const handleSendMessage = async () => {
@@ -93,7 +114,7 @@ const CoffeeGuide: React.FC = () => {
     };
     setMessages((prev) => [...prev, assistantMessage]);
 
-    agentApi.chat(
+    abortControllerRef.current = agentApi.chat(
       { agentType: selectedRole, messages: chatMessages },
       // onEvent
       (event) => {
@@ -248,7 +269,7 @@ const CoffeeGuide: React.FC = () => {
               className="flex-1 h-11 bg-white rounded-xl px-2.5 text-xs text-text-muted placeholder-text-muted focus:outline-none disabled:opacity-50"
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && !isLoading && handleSendMessage()}
+              onKeyDown={(e) => e.key === 'Enter' && !isLoading && handleSendMessage()}
               onClick={(e) => e.stopPropagation()}
               disabled={isLoading}
             />
@@ -374,7 +395,7 @@ const CoffeeGuide: React.FC = () => {
             className="flex-1 h-11 bg-white rounded-xl px-2.5 text-xs text-text-muted placeholder-text-muted focus:outline-none disabled:opacity-50"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && !isLoading && handleSendMessage()}
+            onKeyDown={(e) => e.key === 'Enter' && !isLoading && handleSendMessage()}
             disabled={isLoading}
           />
           <button
