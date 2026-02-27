@@ -276,4 +276,103 @@ export const recommendationApi = {
   },
 };
 
+/**
+ * Agent 聊天消息
+ */
+export interface AgentChatMessage {
+  role: 'user' | 'assistant';
+  content: string;
+}
+
+/**
+ * Agent SSE 事件数据
+ */
+export interface AgentSSEEvent {
+  type: 'text' | 'tool_call' | 'tool_result' | 'done' | 'error';
+  content?: string;
+  toolName?: string;
+  toolArgs?: Record<string, unknown>;
+  result?: unknown;
+  message?: string;
+}
+
+/**
+ * Agent API - SSE 流式聊天
+ */
+export const agentApi = {
+  /**
+   * Agent 流式聊天
+   * 使用 fetch + ReadableStream 处理 SSE（axios 不支持流式）
+   *
+   * @param data 请求数据（agentType + messages）
+   * @param onEvent SSE 事件回调
+   * @param onError 错误回调
+   * @param onComplete 完成回调
+   * @returns AbortController 用于取消请求
+   */
+  chat: (
+    data: { agentType: string; messages: AgentChatMessage[] },
+    onEvent: (event: AgentSSEEvent) => void,
+    onError: (error: Error) => void,
+    onComplete: () => void,
+  ): AbortController => {
+    const token = tokenManager.getToken();
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    };
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    const abortController = new AbortController();
+
+    fetch(`${API_BASE_URL}/v1/agent/chat`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(data),
+      signal: abortController.signal,
+    })
+      .then(async (response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+        const reader = response.body?.getReader();
+        if (!reader) throw new Error('无法读取响应流');
+
+        const decoder = new TextDecoder();
+        let buffer = '';
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split('\n');
+          buffer = lines.pop() || '';
+
+          for (const line of lines) {
+            if (line.startsWith('data:')) {
+              const jsonStr = line.slice(5).trim();
+              if (jsonStr === '') continue;
+              try {
+                const event: AgentSSEEvent = JSON.parse(jsonStr);
+                onEvent(event);
+              } catch {
+                // 忽略解析失败的行
+              }
+            }
+          }
+        }
+        onComplete();
+      })
+      .catch((error: Error) => {
+        if (error.name !== 'AbortError') {
+          onError(error);
+        }
+      });
+
+    return abortController;
+  },
+};
+
 export default axiosInstance;

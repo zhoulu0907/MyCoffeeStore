@@ -1,11 +1,11 @@
 /**
- * 咖啡向导组件 - AI 推荐对话框
+ * 咖啡向导组件 - Agent 流式对话
  */
 
 import React, { useState } from 'react';
-import { recommendationApi } from '../services/api';
+import { agentApi } from '../services/api';
+import type { AgentChatMessage } from '../services/api';
 import { useCoffeeGuide } from '../contexts/CoffeeGuideContext';
-import type { ApiResponse } from '../types';
 
 export interface CoffeeRole {
   id: string;
@@ -18,43 +18,47 @@ export interface GuideMessage {
   role: 'assistant' | 'user';
   content: string;
   timestamp: Date;
-  type?: 'text' | 'loading' | 'error';
+  type?: 'text' | 'loading' | 'error' | 'tool_status';
 }
 
 const COFFEE_ROLES: CoffeeRole[] = [
-  { id: 'beginner', label: '咖啡新手', color: '#2A1A15' },
-  { id: 'energy', label: '上班提神', color: '#5A4036' },
-  { id: 'drip', label: '手冲玩家', color: '#8A6A58' },
+  { id: 'coffee_advisor', label: '咖啡顾问', color: '#2A1A15' },
+  { id: 'customer_service', label: '客服助手', color: '#5A4036' },
+  { id: 'order_assistant', label: '订单助手', color: '#8A6A58' },
 ];
 
-const MAX_SELECTED_ROLES = 3;
+/**
+ * 根据角色 ID 返回对应的提示文字
+ */
+const getRoleHint = (roleId: string): string => {
+  switch (roleId) {
+    case 'coffee_advisor':
+      return '告诉我你喜欢的风味（如：不太酸、偏坚果、适合下午），我来推荐。';
+    case 'customer_service':
+      return '有什么可以帮你的？门店信息、配送、退款等问题都可以问。';
+    case 'order_assistant':
+      return '我可以帮你查菜单、下单、查订单，试试看吧！';
+    default:
+      return '有什么可以帮你的？';
+  }
+};
 
 const CoffeeGuide: React.FC = () => {
   const { isExpanded, toggle } = useCoffeeGuide();
-  const [selectedRoles, setSelectedRoles] = useState<string[]>(['beginner']);
+  const [selectedRole, setSelectedRole] = useState<string>('coffee_advisor');
   const [messages, setMessages] = useState<GuideMessage[]>([
     {
       id: '1',
       role: 'assistant',
-      content: '你好，我可以根据你的偏好快速推荐 3 款咖啡。选择一个角色开始吧！',
+      content: '你好，我是你的咖啡顾问，有什么可以帮你的？',
       timestamp: new Date(),
     },
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  // handleToggle 已移除，直接使用 context 的 toggle
-
-  const handleRoleToggle = (roleId: string) => {
-    setSelectedRoles((prev) => {
-      if (prev.includes(roleId)) {
-        return prev.filter((id) => id !== roleId);
-      }
-      if (prev.length < MAX_SELECTED_ROLES) {
-        return [...prev, roleId];
-      }
-      return prev;
-    });
+  const handleRoleSelect = (roleId: string) => {
+    setSelectedRole(roleId);
   };
 
   const handleSendMessage = async () => {
@@ -70,55 +74,88 @@ const CoffeeGuide: React.FC = () => {
     setMessages((prev) => [...prev, userMessage]);
     const currentInput = inputValue;
     setInputValue('');
-
-    // 添加加载消息
-    const loadingMessage: GuideMessage = {
-      id: (Date.now() + 1).toString(),
-      role: 'assistant',
-      content: '正在分析你的偏好...',
-      timestamp: new Date(),
-      type: 'loading',
-    };
-    setMessages((prev) => [...prev, loadingMessage]);
-
     setIsLoading(true);
 
-    try {
-      const response = await recommendationApi.recommend({
-        roles: selectedRoles,
-        preference: currentInput,
-      }) as ApiResponse<{ recommendations: string; coffeeIds?: number[] }>;
+    // 构建对话历史（给模型的 messages）
+    const chatMessages: AgentChatMessage[] = messages
+      .filter((msg) => msg.type !== 'loading' && msg.type !== 'error' && msg.type !== 'tool_status')
+      .map((msg) => ({ role: msg.role, content: msg.content }));
+    chatMessages.push({ role: 'user', content: currentInput });
 
-      // 移除加载消息
-      setMessages((prev) => prev.filter((msg) => msg.id !== loadingMessage.id));
+    // 创建 assistant 消息占位
+    const assistantMsgId = (Date.now() + 1).toString();
+    const assistantMessage: GuideMessage = {
+      id: assistantMsgId,
+      role: 'assistant',
+      content: '',
+      timestamp: new Date(),
+      type: 'text',
+    };
+    setMessages((prev) => [...prev, assistantMessage]);
 
-      // 添加 AI 响应
-      const aiResponse: GuideMessage = {
-        id: (Date.now() + 2).toString(),
-        role: 'assistant',
-        content: response.data?.recommendations || '抱歉，暂时无法生成推荐，请稍后再试。',
-        timestamp: new Date(),
-        type: 'text',
-      };
-      setMessages((prev) => [...prev, aiResponse]);
-    } catch (error) {
-      console.error('[CoffeeGuide] 推荐请求失败:', error);
-
-      // 移除加载消息
-      setMessages((prev) => prev.filter((msg) => msg.id !== loadingMessage.id));
-
-      // 添加错误消息
-      const errorMessage: GuideMessage = {
-        id: (Date.now() + 2).toString(),
-        role: 'assistant',
-        content: '抱歉，网络出现问题，请检查连接后重试。',
-        timestamp: new Date(),
-        type: 'error',
-      };
-      setMessages((prev) => [...prev, errorMessage]);
-    } finally {
-      setIsLoading(false);
-    }
+    agentApi.chat(
+      { agentType: selectedRole, messages: chatMessages },
+      // onEvent
+      (event) => {
+        switch (event.type) {
+          case 'text':
+            // 追加文本到 assistant 消息（打字机效果）
+            setMessages((prev) =>
+              prev.map((msg) =>
+                msg.id === assistantMsgId
+                  ? { ...msg, content: msg.content + (event.content || '') }
+                  : msg
+              )
+            );
+            break;
+          case 'tool_call':
+            // 显示工具调用状态
+            setMessages((prev) => [
+              ...prev,
+              {
+                id: (Date.now() + Math.random()).toString(),
+                role: 'assistant' as const,
+                content: `正在查询 ${event.toolName}...`,
+                timestamp: new Date(),
+                type: 'tool_status' as const,
+              },
+            ]);
+            break;
+          case 'tool_result':
+            // 工具结果可以选择不显示，或显示简要摘要
+            break;
+          case 'error':
+            setMessages((prev) =>
+              prev.map((msg) =>
+                msg.id === assistantMsgId
+                  ? { ...msg, content: event.message || '抱歉，服务暂时不可用', type: 'error' as const }
+                  : msg
+              )
+            );
+            break;
+          case 'done':
+            break;
+        }
+      },
+      // onError
+      (error) => {
+        console.error('[CoffeeGuide] Agent 请求失败:', error);
+        setMessages((prev) =>
+          prev.map((msg) =>
+            msg.id === assistantMsgId
+              ? { ...msg, content: '抱歉，网络出现问题，请检查连接后重试。', type: 'error' as const }
+              : msg
+          )
+        );
+        setIsLoading(false);
+      },
+      // onComplete
+      () => {
+        // 移除 tool_status 类型的消息
+        setMessages((prev) => prev.filter((msg) => msg.type !== 'tool_status'));
+        setIsLoading(false);
+      },
+    );
   };
 
   const getRoleColor = (roleId: string) => {
@@ -159,19 +196,18 @@ const CoffeeGuide: React.FC = () => {
             </svg>
           </div>
 
-          {/* 已选角色 */}
+          {/* 当前角色色条 */}
           <div className="flex gap-1.5 mb-3">
-            {selectedRoles.map((roleId) => (
-              <div
-                key={roleId}
-                className="h-6 rounded-full flex-1 flex items-center justify-center"
-                style={{ backgroundColor: getRoleColor(roleId) }}
-              >
-                <div className="w-3.5 h-3.5 rounded-full bg-white/30" />
-              </div>
-            ))}
+            <div
+              className="h-6 rounded-full flex-1 flex items-center justify-center"
+              style={{ backgroundColor: getRoleColor(selectedRole) }}
+            >
+              <span className="text-[10px] text-white/80 font-medium">
+                {COFFEE_ROLES.find((r) => r.id === selectedRole)?.label}
+              </span>
+            </div>
             <button
-              className="h-6 rounded-full flex-1 flex items-center justify-center bg-accent-light"
+              className="h-6 rounded-full w-8 flex items-center justify-center bg-accent-light"
               onClick={(e) => {
                 e.stopPropagation();
                 toggle();
@@ -183,12 +219,12 @@ const CoffeeGuide: React.FC = () => {
 
           {/* 提示文字 */}
           <p className="text-xs text-text-light leading-relaxed mb-3">
-            告诉我你喜欢的风味（如：不太酸、偏坚果、适合下午），我来推荐。
+            {getRoleHint(selectedRole)}
           </p>
 
           {/* 消息区域 */}
           <div className="bg-white rounded-xl p-2.5 space-y-2">
-            {messages.map((msg) => (
+            {messages.filter((msg) => msg.type !== 'tool_status').map((msg) => (
               <p
                 key={msg.id}
                 className={`text-xs leading-relaxed ${
@@ -204,7 +240,7 @@ const CoffeeGuide: React.FC = () => {
             ))}
           </div>
 
-          {/* 输入区域 - 优化触摸目标尺寸为 44px */}
+          {/* 输入区域 */}
           <div className="flex gap-2 mt-2">
             <input
               type="text"
@@ -256,12 +292,12 @@ const CoffeeGuide: React.FC = () => {
               <div
                 key={role.id}
                 className={`h-6 rounded-full flex-1 flex items-center justify-center cursor-pointer transition-all ${
-                  selectedRoles.includes(role.id)
+                  selectedRole === role.id
                     ? 'opacity-100'
                     : 'opacity-50 hover:opacity-70'
                 }`}
                 style={{ backgroundColor: role.color }}
-                onClick={() => handleRoleToggle(role.id)}
+                onClick={() => handleRoleSelect(role.id)}
               >
                 <div className="w-3.5 h-3.5 rounded-full bg-white/30" />
               </div>
@@ -275,21 +311,21 @@ const CoffeeGuide: React.FC = () => {
           </div>
         </div>
 
-        {/* 角色选择区域 - 优化触摸目标尺寸为 44px */}
+        {/* 角色选择区域 */}
         <div className="bg-white rounded-xl p-2.5 space-y-2 mb-3">
           <p className="text-xs font-bold text-text-secondary">选择角色</p>
           {COFFEE_ROLES.map((role) => (
             <button
               key={role.id}
               className={`w-full h-11 rounded-lg flex items-center gap-2 px-3 transition-all ${
-                selectedRoles.includes(role.id)
+                selectedRole === role.id
                   ? 'bg-surface-light'
                   : 'hover:bg-surface-light/50'
               }`}
               style={{
-                backgroundColor: selectedRoles.includes(role.id) ? '#F7F1E8' : 'transparent',
+                backgroundColor: selectedRole === role.id ? '#F7F1E8' : 'transparent',
               }}
-              onClick={() => handleRoleToggle(role.id)}
+              onClick={() => handleRoleSelect(role.id)}
             >
               <div
                 className="w-3.5 h-3.5 rounded-full"
@@ -297,24 +333,23 @@ const CoffeeGuide: React.FC = () => {
               />
               <span
                 className={`text-xs ${
-                  selectedRoles.includes(role.id) ? 'font-semibold text-text-secondary' : 'text-text-secondary'
+                  selectedRole === role.id ? 'font-semibold text-text-secondary' : 'text-text-secondary'
                 }`}
               >
                 {role.label}
               </span>
             </button>
           ))}
-          <p className="text-[11px] text-text-muted">最多可选择 3 个角色</p>
         </div>
 
         {/* 提示文字 */}
         <p className="text-xs text-text-light leading-relaxed mb-3">
-          告诉我你喜欢的风味（如：不太酸、偏坚果、适合下午），我来推荐。
+          {getRoleHint(selectedRole)}
         </p>
 
         {/* 消息区域 */}
         <div className="bg-white rounded-xl p-2.5 space-y-2 mb-2 max-h-[178px] overflow-y-auto">
-          {messages.map((msg) => (
+          {messages.filter((msg) => msg.type !== 'tool_status').map((msg) => (
             <p
               key={msg.id}
               className={`text-xs leading-relaxed ${
@@ -331,7 +366,7 @@ const CoffeeGuide: React.FC = () => {
           ))}
         </div>
 
-        {/* 输入区域 - 优化触摸目标尺寸为 44px */}
+        {/* 输入区域 */}
         <div className="flex gap-2">
           <input
             type="text"

@@ -44,3 +44,10 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
     enabled: true
+
+# Modelscope AI 配置
+modelscope:
+  api-key: ${MODELSCOPE_API_KEY:sk-placeholder}
+  base-url: https://api-inference.modelscope.cn/v1
+  model: moonshotai/Kimi-K2.5
+  timeout: 60000
