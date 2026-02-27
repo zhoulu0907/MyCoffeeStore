@@ -197,3 +197,24 @@ export interface UserState {
   token: string | null;
   isAuthenticated: boolean;
 }
+
+/**
+ * 推荐请求类型
+ */
+export interface RecommendationRequest {
+  roles: string[];
+  preference: string;
+}
+
+/**
+ * 推荐响应类型
+ */
+export interface RecommendationResponse {
+  recommendations: string;
+  coffeeIds?: number[];
+}
+
+/**
+ * 推荐响应包装类型（API 响应）
+ */
+export interface RecommendationApiResponse extends ApiResponse<RecommendationResponse> {}

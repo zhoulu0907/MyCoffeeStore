@@ -5,7 +5,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Header, Footer, Loading } from '../components';
-import { useAuth, useCart } from '../contexts';
+import { useAuth } from '../contexts';
 import { orderApi } from '../services/api';
 import { ORDER_STATUS, ORDER_TYPES, ROUTES } from '../utils/constants';
 import { formatPrice, formatDate } from '../utils/helpers';
@@ -13,14 +13,12 @@ import type { Order as OrderType, OrderStatus, ApiResponse, PageResponse } from 
 
 const Order: React.FC = () => {
   const navigate = useNavigate();
-  const { user, isAuthenticated } = useAuth();
-  const { clearCart } = useCart();
+  const { isAuthenticated } = useAuth();
 
   const [selectedTab, setSelectedTab] = useState<string>('processing'); // processing | history
   const [orders, setOrders] = useState<OrderType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useState(1);
-  const [total, setTotal] = useState(0);
   const pageSize = 10;
 
   // 未登录状态
@@ -42,10 +40,6 @@ const Order: React.FC = () => {
 
       setIsLoading(true);
       try {
-        const params: { status?: string; page: number; size: number } = {
-          page,
-          size: pageSize,
-        };
 
         // 根据选择的标签获取对应的订单
         // 注意：后端可能不支持多个状态查询，所以这里获取全部后前端过滤
@@ -62,7 +56,6 @@ const Order: React.FC = () => {
           }
 
           setOrders(filteredOrders);
-          setTotal(filteredOrders.length);
         }
       } catch (error) {
         console.error('获取订单列表失败:', error);
@@ -124,16 +117,16 @@ const Order: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#F7F1E8' }}>
       <Header />
 
       <main className="flex-1 py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* 页头 */}
+          {/* 页头 - 优化返回按钮触摸目标尺寸为 44px */}
           <div className="bg-primary text-white px-6 py-4 rounded-t-2xl flex items-center">
             <button
               onClick={handleBack}
-              className="mr-4 text-white hover:text-accent transition-colors"
+              className="p-2.5 -ml-2.5 mr-1.5 text-white hover:text-accent transition-colors"
             >
               <svg
                 className="w-6 h-6"
@@ -152,26 +145,28 @@ const Order: React.FC = () => {
             <h1 className="text-xl font-bold">我的订单</h1>
           </div>
 
-          {/* 订单筛选 */}
+          {/* 订单筛选 - 优化触摸目标尺寸为 44px */}
           <div className="bg-white border-b border-gray-200 px-6 py-4">
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-3">
               <button
                 onClick={() => handleTabChange('processing')}
-                className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
+                className={`px-4 h-11 rounded-full text-sm font-medium transition-all ${
                   selectedTab === 'processing'
-                    ? 'bg-accent text-white'
-                    : 'bg-gray-100 text-text-primary hover:bg-gray-200'
+                    ? 'bg-[#2A1A15] text-white'
+                    : 'bg-[#DCCCB9] text-[#2A1A15] hover:opacity-80'
                 }`}
+                style={{ minWidth: '88px' }}
               >
                 正在处理
               </button>
               <button
                 onClick={() => handleTabChange('history')}
-                className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
+                className={`px-4 h-11 rounded-full text-sm font-medium transition-all ${
                   selectedTab === 'history'
-                    ? 'bg-accent text-white'
-                    : 'bg-gray-100 text-text-primary hover:bg-gray-200'
+                    ? 'bg-[#2A1A15] text-white'
+                    : 'bg-[#DCCCB9] text-[#2A1A15] hover:opacity-80'
                 }`}
+                style={{ minWidth: '88px' }}
               >
                 历史成交
               </button>
@@ -317,13 +312,13 @@ const OrderCard: React.FC<OrderCardProps> = ({ order, onCancel, onConfirm }) => 
           总计：{formatPrice(totalPrice)}
         </div>
 
-        {/* 操作按钮 */}
+        {/* 操作按钮 - 优化触摸目标尺寸为 44px */}
         <div className="flex gap-2">
           {order.status === 'pending' && (
             <>
               <button
                 onClick={() => onCancel(orderNo)}
-                className="px-4 py-2 border border-red-500 text-red-500 rounded-button text-sm font-medium hover:bg-red-50 transition-colors"
+                className="h-11 px-4 border border-red-500 text-red-500 rounded-button text-sm font-medium hover:bg-red-50 transition-colors"
               >
                 取消订单
               </button>
@@ -331,7 +326,7 @@ const OrderCard: React.FC<OrderCardProps> = ({ order, onCancel, onConfirm }) => 
           )}
           {order.status === 'preparing' && (
             <button
-              className="px-4 py-2 border border-gray-300 text-text-primary rounded-button text-sm font-medium hover:bg-gray-50 transition-colors"
+              className="h-11 px-4 border border-gray-300 text-text-primary rounded-button text-sm font-medium hover:bg-gray-50 transition-colors"
               disabled
             >
               制作中...
@@ -340,7 +335,7 @@ const OrderCard: React.FC<OrderCardProps> = ({ order, onCancel, onConfirm }) => 
           {order.status === 'ready' && (
             <button
               onClick={() => onConfirm(orderNo)}
-              className="px-4 py-2 bg-accent text-white rounded-button text-sm font-medium hover:bg-accent-light transition-colors"
+              className="h-11 px-4 bg-accent text-white rounded-button text-sm font-medium hover:bg-accent-light transition-colors"
             >
               确认收货
             </button>
@@ -348,7 +343,7 @@ const OrderCard: React.FC<OrderCardProps> = ({ order, onCancel, onConfirm }) => 
           {order.status === 'completed' && (
             <Link
               to="/coffee"
-              className="px-4 py-2 border border-gray-300 text-text-primary rounded-button text-sm font-medium hover:bg-gray-50 transition-colors"
+              className="h-11 px-4 border border-gray-300 text-text-primary rounded-button text-sm font-medium hover:bg-gray-50 transition-colors"
             >
               再次购买
             </Link>

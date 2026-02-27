@@ -264,4 +264,16 @@ export const orderApi = {
   },
 };
 
+/**
+ * 推荐 API
+ */
+export const recommendationApi = {
+  /**
+   * 获取咖啡推荐
+   */
+  recommend: (data: { roles: string[]; preference: string }) => {
+    return post('/v1/recommendation', data);
+  },
+};
+
 export default axiosInstance;

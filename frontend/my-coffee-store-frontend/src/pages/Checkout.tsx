@@ -13,7 +13,7 @@ import type { ApiResponse } from '../types';
 
 const Checkout: React.FC = () => {
   const navigate = useNavigate();
-  const { user, isAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuth();
   const { items, totalQuantity, totalPrice, clearCart } = useCart();
 
   // 订单类型状态
@@ -141,7 +141,7 @@ const Checkout: React.FC = () => {
   // 购物车为空
   if (items.length === 0) {
     return (
-      <div className="min-h-screen flex flex-col bg-gray-50">
+      <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#F7F1E8' }}>
         <Header />
 
         <main className="flex-1 flex items-center justify-center px-4">
@@ -178,16 +178,16 @@ const Checkout: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#F7F1E8' }}>
       <Header />
 
       <main className="flex-1 py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* 页头 */}
+          {/* 页头 - 优化返回按钮触摸目标尺寸为 44px */}
           <div className="bg-primary text-white px-6 py-4 rounded-t-2xl flex items-center">
             <button
               onClick={handleBack}
-              className="mr-4 text-white hover:text-accent transition-colors"
+              className="p-2.5 -ml-2.5 mr-1.5 text-white hover:text-accent transition-colors"
             >
               <svg
                 className="w-6 h-6"
@@ -249,7 +249,7 @@ const Checkout: React.FC = () => {
               </div>
             </div>
 
-            {/* 订单类型选择 */}
+            {/* 订单类型选择 - 优化触摸目标尺寸为 44px */}
             <div className="p-6 border-b border-gray-200">
               <h2 className="text-lg font-bold text-primary mb-4">订单类型</h2>
               <div className="flex gap-3">
@@ -257,10 +257,10 @@ const Checkout: React.FC = () => {
                   <button
                     key={type.value}
                     onClick={() => setOrderType(type.value)}
-                    className={`flex-1 px-4 py-3 rounded-button text-sm font-medium transition-all ${
+                    className={`flex-1 h-11 px-4 rounded-pill text-sm font-medium transition-all ${
                       orderType === type.value
                         ? 'bg-primary text-white'
-                        : 'bg-gray-100 text-text-primary hover:bg-gray-200'
+                        : 'bg-gold text-text-primary hover:bg-gold-dark'
                     }`}
                   >
                     {type.label}
@@ -283,7 +283,7 @@ const Checkout: React.FC = () => {
                       value={address.address}
                       onChange={(e) => setAddress({ ...address, address: e.target.value })}
                       placeholder="请输入详细地址"
-                      className="input-base w-full"
+                      className="w-full h-11 px-4 rounded-input bg-white border border-[#E5E4E1] text-text-primary placeholder-text-light focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all"
                     />
                   </div>
 
@@ -297,7 +297,7 @@ const Checkout: React.FC = () => {
                         value={address.city}
                         onChange={(e) => setAddress({ ...address, city: e.target.value })}
                         placeholder="请输入城市"
-                        className="input-base w-full"
+                        className="w-full h-11 px-4 rounded-input bg-white border border-[#E5E4E1] text-text-primary placeholder-text-light focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all"
                       />
                     </div>
                     <div>
@@ -309,7 +309,7 @@ const Checkout: React.FC = () => {
                         value={address.state}
                         onChange={(e) => setAddress({ ...address, state: e.target.value })}
                         placeholder="请输入省份"
-                        className="input-base w-full"
+                        className="w-full h-11 px-4 rounded-input bg-white border border-[#E5E4E1] text-text-primary placeholder-text-light focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all"
                       />
                     </div>
                   </div>
@@ -324,7 +324,7 @@ const Checkout: React.FC = () => {
                         value={address.zipCode}
                         onChange={(e) => setAddress({ ...address, zipCode: e.target.value })}
                         placeholder="请输入邮编"
-                        className="input-base w-full"
+                        className="w-full h-11 px-4 rounded-input bg-white border border-[#E5E4E1] text-text-primary placeholder-text-light focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all"
                       />
                     </div>
                     <div>
@@ -336,7 +336,7 @@ const Checkout: React.FC = () => {
                         value={address.phone}
                         onChange={(e) => setAddress({ ...address, phone: e.target.value })}
                         placeholder="请输入联系电话"
-                        className="input-base w-full"
+                        className="w-full h-11 px-4 rounded-input bg-white border border-[#E5E4E1] text-text-primary placeholder-text-light focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all"
                       />
                     </div>
                   </div>
@@ -352,7 +352,7 @@ const Checkout: React.FC = () => {
                 onChange={(e) => setRemark(e.target.value)}
                 placeholder="如有特殊需求，请在此备注（可选）"
                 rows={3}
-                className="input-base w-full resize-none"
+                className="w-full px-4 py-3 rounded-input bg-white border border-[#E5E4E1] text-text-primary placeholder-text-light focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all resize-none"
               />
             </div>
 
@@ -368,7 +368,7 @@ const Checkout: React.FC = () => {
                 <div className="space-y-3">
                   <div className="flex justify-between text-text-secondary">
                     <span>账户余额</span>
-                    <span className="font-medium text-primary">
+                    <span className={`font-medium ${!isBalanceSufficient ? 'text-red-600' : 'text-primary'}`}>
                       {balance !== null ? formatPrice(balance) : '获取失败'}
                     </span>
                   </div>
@@ -378,16 +378,16 @@ const Checkout: React.FC = () => {
                       -{formatPrice(totalPrice)}
                     </span>
                   </div>
-                  <div className="flex justify-between pt-3 border-t border-gray-200">
+                  <div className={`flex justify-between pt-3 border-t ${!isBalanceSufficient ? 'border-red-300' : 'border-gray-200'}`}>
                     <span className="font-medium text-text-secondary">支付后余额</span>
-                    <span className={`font-bold ${remainingBalance >= 0 ? 'text-primary' : 'text-red-500'}`}>
+                    <span className={`font-bold ${remainingBalance >= 0 ? 'text-primary' : 'text-red-600'}`}>
                       {balance !== null ? formatPrice(remainingBalance) : '--'}
                     </span>
                   </div>
 
                   {/* 余额不足警告 */}
                   {balance !== null && !isBalanceSufficient && (
-                    <div className="mt-3 p-3 bg-red-50 border border-red-200 rounded-button">
+                    <div className="mt-3 p-3 bg-red-50 border-2 border-red-500 rounded-input">
                       <p className="text-red-600 text-sm font-medium">
                         余额不足！当前余额 {formatPrice(balance)}，还需充值 {formatPrice(totalPrice - balance)}
                       </p>
@@ -396,7 +396,7 @@ const Checkout: React.FC = () => {
 
                   {/* 余额获取失败提示 */}
                   {balance === null && !balanceLoading && (
-                    <div className="mt-3 p-3 bg-yellow-50 border border-yellow-200 rounded-button">
+                    <div className="mt-3 p-3 bg-yellow-50 border border-yellow-200 rounded-input">
                       <p className="text-yellow-600 text-sm font-medium">
                         无法获取账户余额，请刷新页面重试
                       </p>
@@ -409,7 +409,7 @@ const Checkout: React.FC = () => {
             {/* 错误信息 */}
             {error && (
               <div className="px-6 pt-4">
-                <div className="p-3 bg-red-50 border border-red-200 rounded-button">
+                <div className="p-3 bg-red-50 border border-red-200 rounded-input">
                   <p className="text-red-600 text-sm font-medium">{error}</p>
                 </div>
               </div>
@@ -421,9 +421,9 @@ const Checkout: React.FC = () => {
               <button
                 onClick={handleSubmit}
                 disabled={!canSubmit}
-                className={`w-full py-4 text-lg font-medium rounded-button transition-all ${
+                className={`w-full py-4 text-lg font-medium rounded-pill transition-all ${
                   canSubmit
-                    ? 'btn-primary'
+                    ? 'bg-primary text-white hover:bg-primary-dark'
                     : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                 }`}
               >

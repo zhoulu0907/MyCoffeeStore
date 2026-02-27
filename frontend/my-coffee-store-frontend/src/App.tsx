@@ -2,10 +2,10 @@
  * 应用主组件
  */
 
-import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, CartProvider } from './contexts';
 import { Home, Login, Register, CoffeeList, CoffeeDetail, Cart, Checkout, Order, Profile } from './pages';
+import { CoffeeGuide } from './components';
 import { ROUTES } from './utils/constants';
 
 function App() {
@@ -33,6 +33,9 @@ function App() {
           {/* 默认重定向到首页 */}
           <Route path="*" element={<Navigate to={ROUTES.HOME} replace />} />
         </Routes>
+
+        {/* 咖啡向导 - 全局显示 */}
+        <CoffeeGuide />
       </CartProvider>
     </AuthProvider>
   );

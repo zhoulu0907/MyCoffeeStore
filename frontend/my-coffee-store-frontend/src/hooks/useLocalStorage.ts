@@ -2,7 +2,7 @@
  * 本地存储 Hook
  */
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 export const useLocalStorage = <T>(key: string, initialValue: T) => {
   const [storedValue, setStoredValue] = useState<T>(() => {

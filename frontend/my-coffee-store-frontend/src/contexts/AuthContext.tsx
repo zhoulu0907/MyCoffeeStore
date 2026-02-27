@@ -2,7 +2,8 @@
  * 认证上下文
  */
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import type { ReactNode } from 'react';
 import type { User } from '../types';
 import { tokenManager, storage } from '../utils/helpers';
 import { STORAGE_KEYS } from '../utils/constants';

@@ -136,10 +136,17 @@ const Register: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      {/* 简化的页头 */}
-      <div className="bg-white h-20 flex items-center px-6">
-        <Link to={ROUTES.HOME} className="font-georgia text-2xl font-bold text-primary">
+    <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#F7F1E8' }}>
+      {/* 深咖啡色头部区域 */}
+      <div
+        className="flex items-center"
+        style={{ backgroundColor: '#1F130F', height: '84px', padding: '0 20px' }}
+      >
+        <Link
+          to={ROUTES.HOME}
+          className="font-georgia text-2xl font-bold hover:opacity-90 transition-opacity"
+          style={{ color: '#F7F1E8' }}
+        >
           MyCoffeeStore
         </Link>
       </div>
@@ -147,20 +154,31 @@ const Register: React.FC = () => {
       {/* 注册表单 */}
       <div className="flex-1 flex items-center justify-center px-4 py-12">
         <div className="w-full max-w-md">
-          <div className="bg-white rounded-2xl shadow-sm p-8">
+          {/* 白色表单卡片 */}
+          <div
+            className="p-8"
+            style={{
+              backgroundColor: '#FFFFFF',
+              borderRadius: '16px',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+            }}
+          >
             {/* 标题 */}
             <div className="text-center mb-8">
-              <h1 className="font-georgia text-3xl font-bold text-primary mb-2">
+              <h1
+                className="font-georgia text-3xl font-bold mb-2"
+                style={{ color: '#1F130F' }}
+              >
                 创建账户
               </h1>
-              <p className="text-text-secondary">加入我们的社区</p>
+              <p style={{ color: '#5B4035' }}>加入我们的社区</p>
             </div>
 
             {/* 表单 */}
             <form onSubmit={handleSubmit} className="space-y-5">
               {/* 用户名 */}
               <div>
-                <label htmlFor="username" className="block text-sm font-medium text-primary mb-2">
+                <label htmlFor="username" className="block text-sm font-medium mb-2" style={{ color: '#2A1A15' }}>
                   用户名 <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -169,9 +187,15 @@ const Register: React.FC = () => {
                   name="username"
                   value={formData.username}
                   onChange={handleInputChange}
-                  className={`input-base ${
-                    errors.username ? 'border-red-500 focus:ring-red-500' : ''
+                  className={`w-full px-4 py-3 focus:outline-none transition-all ${
+                    errors.username ? 'border-red-500 focus:ring-2 focus:ring-red-500' : ''
                   }`}
+                  style={{
+                    backgroundColor: '#FAFAF8',
+                    border: `1px solid ${errors.username ? '#EF4444' : '#E5E4E1'}`,
+                    borderRadius: '12px',
+                    color: '#2A1A15',
+                  }}
                   placeholder="请输入用户名"
                   disabled={isLoading}
                 />
@@ -182,7 +206,7 @@ const Register: React.FC = () => {
 
               {/* 邮箱 */}
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-primary mb-2">
+                <label htmlFor="email" className="block text-sm font-medium mb-2" style={{ color: '#2A1A15' }}>
                   邮箱 <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -191,9 +215,15 @@ const Register: React.FC = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className={`input-base ${
-                    errors.email ? 'border-red-500 focus:ring-red-500' : ''
+                  className={`w-full px-4 py-3 focus:outline-none transition-all ${
+                    errors.email ? 'border-red-500 focus:ring-2 focus:ring-red-500' : ''
                   }`}
+                  style={{
+                    backgroundColor: '#FAFAF8',
+                    border: `1px solid ${errors.email ? '#EF4444' : '#E5E4E1'}`,
+                    borderRadius: '12px',
+                    color: '#2A1A15',
+                  }}
                   placeholder="请输入邮箱"
                   disabled={isLoading}
                 />
@@ -204,7 +234,7 @@ const Register: React.FC = () => {
 
               {/* 手机号 */}
               <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-primary mb-2">
+                <label htmlFor="phone" className="block text-sm font-medium mb-2" style={{ color: '#2A1A15' }}>
                   手机号
                 </label>
                 <input
@@ -213,9 +243,15 @@ const Register: React.FC = () => {
                   name="phone"
                   value={formData.phone}
                   onChange={handleInputChange}
-                  className={`input-base ${
-                    errors.phone ? 'border-red-500 focus:ring-red-500' : ''
+                  className={`w-full px-4 py-3 focus:outline-none transition-all ${
+                    errors.phone ? 'border-red-500 focus:ring-2 focus:ring-red-500' : ''
                   }`}
+                  style={{
+                    backgroundColor: '#FAFAF8',
+                    border: `1px solid ${errors.phone ? '#EF4444' : '#E5E4E1'}`,
+                    borderRadius: '12px',
+                    color: '#2A1A15',
+                  }}
                   placeholder="请输入手机号（可选）"
                   disabled={isLoading}
                 />
@@ -226,7 +262,7 @@ const Register: React.FC = () => {
 
               {/* 密码 */}
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-primary mb-2">
+                <label htmlFor="password" className="block text-sm font-medium mb-2" style={{ color: '#2A1A15' }}>
                   密码 <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -235,9 +271,15 @@ const Register: React.FC = () => {
                   name="password"
                   value={formData.password}
                   onChange={handleInputChange}
-                  className={`input-base ${
-                    errors.password ? 'border-red-500 focus:ring-red-500' : ''
+                  className={`w-full px-4 py-3 focus:outline-none transition-all ${
+                    errors.password ? 'border-red-500 focus:ring-2 focus:ring-red-500' : ''
                   }`}
+                  style={{
+                    backgroundColor: '#FAFAF8',
+                    border: `1px solid ${errors.password ? '#EF4444' : '#E5E4E1'}`,
+                    borderRadius: '12px',
+                    color: '#2A1A15',
+                  }}
                   placeholder="请输入密码（至少6位）"
                   disabled={isLoading}
                 />
@@ -248,7 +290,7 @@ const Register: React.FC = () => {
 
               {/* 确认密码 */}
               <div>
-                <label htmlFor="confirmPassword" className="block text-sm font-medium text-primary mb-2">
+                <label htmlFor="confirmPassword" className="block text-sm font-medium mb-2" style={{ color: '#2A1A15' }}>
                   确认密码 <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -257,9 +299,15 @@ const Register: React.FC = () => {
                   name="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleInputChange}
-                  className={`input-base ${
-                    errors.confirmPassword ? 'border-red-500 focus:ring-red-500' : ''
+                  className={`w-full px-4 py-3 focus:outline-none transition-all ${
+                    errors.confirmPassword ? 'border-red-500 focus:ring-2 focus:ring-red-500' : ''
                   }`}
+                  style={{
+                    backgroundColor: '#FAFAF8',
+                    border: `1px solid ${errors.confirmPassword ? '#EF4444' : '#E5E4E1'}`,
+                    borderRadius: '12px',
+                    color: '#2A1A15',
+                  }}
                   placeholder="请再次输入密码"
                   disabled={isLoading}
                 />
@@ -276,16 +324,19 @@ const Register: React.FC = () => {
                   name="agreeTerms"
                   checked={formData.agreeTerms}
                   onChange={handleInputChange}
-                  className="mt-1 w-4 h-4 text-accent border-gray-300 rounded focus:ring-accent"
+                  className="mt-1 w-4 h-4 border-gray-300 rounded focus:ring-2 focus:ring-offset-0 transition-all cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
+                  style={{
+                    accentColor: '#3D8A5A',
+                  }}
                   disabled={isLoading}
                 />
-                <label htmlFor="agreeTerms" className="ml-2 text-sm text-text-secondary">
+                <label htmlFor="agreeTerms" className="ml-2 text-sm" style={{ color: '#5B4035' }}>
                   我已阅读并同意{' '}
-                  <Link to="/terms" className="text-accent hover:text-accent-light">
+                  <Link to="/terms" className="hover:underline" style={{ color: '#3D8A5A' }}>
                     服务条款
                   </Link>
                   {' '}和{' '}
-                  <Link to="/privacy" className="text-accent hover:text-accent-light">
+                  <Link to="/privacy" className="hover:underline" style={{ color: '#3D8A5A' }}>
                     隐私政策
                   </Link>
                 </label>
@@ -305,18 +356,24 @@ const Register: React.FC = () => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full py-3 font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90"
+                style={{
+                  backgroundColor: '#1F130F',
+                  color: '#FFFFFF',
+                  borderRadius: '12px',
+                }}
               >
                 {isLoading ? '注册中...' : '注册'}
               </button>
 
               {/* 底部链接 */}
               <div className="text-center">
-                <p className="text-sm text-text-secondary">
+                <p className="text-sm" style={{ color: '#5B4035' }}>
                   已有账户？{' '}
                   <Link
                     to={ROUTES.LOGIN}
-                    className="text-accent hover:text-accent-light font-medium"
+                    className="font-medium hover:underline"
+                    style={{ color: '#3D8A5A' }}
                   >
                     立即登录
                   </Link>

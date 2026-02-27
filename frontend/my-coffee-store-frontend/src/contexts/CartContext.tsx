@@ -3,7 +3,8 @@
  * 与后端购物车 API 交互，保持前后端数据同步
  */
 
-import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import type { ReactNode } from 'react';
 import type { CartItem, CartResponse, ApiResponse } from '../types';
 import { cartApi } from '../services/api';
 import { useAuth } from './AuthContext';

@@ -6,7 +6,6 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts';
 import { ROUTES } from '../utils/constants';
-import { validatePassword } from '../utils/helpers';
 import { userApi } from '../services/api';
 import type { ApiResponse } from '../types';
 
@@ -90,7 +89,7 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#F3EBE2' }}>
       {/* 简化的页头 */}
       <div className="bg-white h-20 flex items-center px-6">
         <Link to={ROUTES.HOME} className="font-georgia text-2xl font-bold text-primary">
@@ -101,97 +100,120 @@ const Login: React.FC = () => {
       {/* 登录表单 */}
       <div className="flex-1 flex items-center justify-center px-4 py-12">
         <div className="w-full max-w-md">
-          <div className="bg-white rounded-2xl shadow-sm p-8">
-            {/* 标题 */}
-            <div className="text-center mb-8">
-              <h1 className="font-georgia text-3xl font-bold text-primary mb-2">
-                欢迎回来
-              </h1>
-              <p className="text-text-secondary">登录您的账户</p>
+          {/* 标题 */}
+          <div className="text-center mb-8">
+            <h1 className="font-georgia font-bold mb-2" style={{ fontSize: '36px', color: '#2A1A15' }}>
+              欢迎回来
+            </h1>
+            <p style={{ fontSize: '15px', color: '#3D3D3D' }}>
+              登录您的账户
+            </p>
+          </div>
+
+          {/* 表单 */}
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* 用户名/邮箱 */}
+            <div>
+              <label htmlFor="account" className="block text-sm font-medium mb-2" style={{ color: '#2A1A15' }}>
+                邮箱/用户名
+              </label>
+              <input
+                type="text"
+                id="account"
+                name="account"
+                value={formData.account}
+                onChange={handleInputChange}
+                className="w-full bg-white transition-all focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+                style={{
+                  height: '48px',
+                  padding: '0 16px',
+                  border: `1px solid ${errors.account ? '#EF4444' : '#D8CFC3'}`,
+                  borderRadius: '12px',
+                  color: '#2A1A15',
+                }}
+                placeholder="请输入用户名或邮箱"
+                disabled={isLoading}
+              />
+              {errors.account && (
+                <p className="mt-1 text-sm text-red-500">{errors.account}</p>
+              )}
             </div>
 
-            {/* 表单 */}
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* 用户名/邮箱 */}
-              <div>
-                <label htmlFor="account" className="block text-sm font-medium text-primary mb-2">
-                  邮箱/用户名
-                </label>
-                <input
-                  type="text"
-                  id="account"
-                  name="account"
-                  value={formData.account}
-                  onChange={handleInputChange}
-                  className={`input-base ${
-                    errors.account ? 'border-red-500 focus:ring-red-500' : ''
-                  }`}
-                  placeholder="请输入用户名或邮箱"
-                  disabled={isLoading}
-                />
-                {errors.account && (
-                  <p className="mt-1 text-sm text-red-500">{errors.account}</p>
-                )}
-              </div>
-
-              {/* 密码 */}
-              <div>
-                <label htmlFor="password" className="block text-sm font-medium text-primary mb-2">
-                  密码
-                </label>
-                <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleInputChange}
-                  className={`input-base ${
-                    errors.password ? 'border-red-500 focus:ring-red-500' : ''
-                  }`}
-                  placeholder="请输入密码"
-                  disabled={isLoading}
-                />
-                {errors.password && (
-                  <p className="mt-1 text-sm text-red-500">{errors.password}</p>
-                )}
-              </div>
-
-              {/* 通用错误 */}
-              {errors.general && (
-                <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-button text-sm">
-                  {errors.general}
-                </div>
-              )}
-
-              {/* 登录按钮 */}
-              <button
-                type="submit"
+            {/* 密码 */}
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium mb-2" style={{ color: '#2A1A15' }}>
+                密码
+              </label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                value={formData.password}
+                onChange={handleInputChange}
+                className="w-full bg-white transition-all focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+                style={{
+                  height: '48px',
+                  padding: '0 16px',
+                  border: `1px solid ${errors.password ? '#EF4444' : '#D8CFC3'}`,
+                  borderRadius: '12px',
+                  color: '#2A1A15',
+                }}
+                placeholder="请输入密码"
                 disabled={isLoading}
-                className="w-full btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isLoading ? '登录中...' : '登录'}
-              </button>
+              />
+              {errors.password && (
+                <p className="mt-1 text-sm text-red-500">{errors.password}</p>
+              )}
+            </div>
 
-              {/* 底部链接 */}
-              <div className="text-center space-y-2">
-                <div className="text-sm text-text-secondary">
-                  还没有账户？{' '}
-                  <Link
-                    to={ROUTES.REGISTER}
-                    className="text-accent hover:text-accent-light font-medium"
-                  >
-                    立即注册
-                  </Link>
-                </div>
+            {/* 通用错误 */}
+            {errors.general && (
+              <div className="text-sm px-4 py-3" style={{
+                backgroundColor: '#FEF2F2',
+                border: '1px solid #FCA5A5',
+                color: '#DC2626',
+                borderRadius: '12px',
+              }}>
+                {errors.general}
+              </div>
+            )}
+
+            {/* 登录按钮 */}
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full font-medium transition-all disabled:cursor-not-allowed"
+              style={{
+                height: '48px',
+                backgroundColor: isLoading ? 'rgba(31, 19, 15, 0.5)' : '#1F130F',
+                color: '#FFFFFF',
+                borderRadius: '12px',
+              }}
+            >
+              {isLoading ? '登录中...' : '登录'}
+            </button>
+
+            {/* 底部链接 */}
+            <div className="text-center space-y-2">
+              <div className="text-sm" style={{ color: '#5B4035' }}>
+                还没有账户？{' '}
                 <Link
-                  to="/forgot-password"
-                  className="block text-sm text-text-secondary hover:text-accent"
+                  to={ROUTES.REGISTER}
+                  className="font-medium hover:underline"
+                  style={{ color: '#D4A574' }}
                 >
-                  忘记密码？
+                  立即注册
                 </Link>
               </div>
-            </form>
-          </div>
+              <Link
+                to="/forgot-password"
+                className="block text-sm hover:underline"
+                style={{ color: '#5B4035' }}
+              >
+                忘记密码？
+              </Link>
+            </div>
+          </form>
         </div>
       </div>
     </div>

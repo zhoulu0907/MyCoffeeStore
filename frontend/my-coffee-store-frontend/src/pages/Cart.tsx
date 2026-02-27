@@ -41,7 +41,7 @@ const Cart: React.FC = () => {
   // 空状态
   if (items.length === 0) {
     return (
-      <div className="min-h-screen flex flex-col bg-gray-50">
+      <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#F7F1E8' }}>
         <Header />
 
         <main className="flex-1 flex items-center justify-center px-4">
@@ -78,16 +78,16 @@ const Cart: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#F7F1E8' }}>
       <Header />
 
-      <main className="flex-1 py-12">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* 页头 */}
-          <div className="bg-primary text-white px-6 py-4 rounded-t-2xl flex items-center">
+      <main className="flex-1 py-8 px-4 sm:px-6">
+        <div className="max-w-3xl mx-auto">
+          {/* 页头 - 移除深色背景，优化返回按钮触摸目标尺寸为 44px */}
+          <div className="flex items-center mb-6">
             <button
               onClick={handleBack}
-              className="mr-4 text-white hover:text-accent transition-colors"
+              className="mr-4 p-2.5 -ml-2.5 text-gray-600 hover:text-primary transition-colors"
             >
               <svg
                 className="w-6 h-6"
@@ -103,12 +103,12 @@ const Cart: React.FC = () => {
                 />
               </svg>
             </button>
-            <h1 className="text-xl font-bold">购物车 ({totalQuantity} 件)</h1>
+            <h1 className="text-2xl font-bold text-primary">购物车</h1>
+            <span className="ml-2 text-text-secondary">({totalQuantity} 件)</span>
           </div>
 
-          {/* 购物车内容 */}
-          <div className="bg-white rounded-b-2xl shadow-sm">
-            {/* 商品列表 */}
+          {/* 商品列表 - 白色卡片布局 */}
+          <div className="bg-white rounded-2xl p-4 sm:p-6 mb-6" style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
             <div className="divide-y divide-gray-100">
               {items.map((item) => (
                 <CartItemCard
@@ -119,52 +119,53 @@ const Cart: React.FC = () => {
                 />
               ))}
             </div>
+          </div>
 
-            {/* 底部汇总 */}
-            <div className="border-t border-gray-200 p-6">
-              {/* 清空购物车按钮 */}
-              <div className="flex justify-end mb-4">
-                <button
-                  onClick={handleClearCart}
-                  className="text-sm text-text-secondary hover:text-red-500 transition-colors"
-                >
-                  清空购物车
-                </button>
-              </div>
-
-              {/* 汇总信息 */}
-              <div className="space-y-3 mb-6">
-                <div className="flex justify-between text-text-secondary">
-                  <span>商品数量</span>
-                  <span>{totalQuantity} 件</span>
-                </div>
-                <div className="flex justify-between text-text-secondary">
-                  <span>运费</span>
-                  <span className="text-accent">免费</span>
-                </div>
-                <div className="flex justify-between text-xl font-bold text-primary pt-3 border-t border-gray-200">
-                  <span>合计</span>
-                  <span>{formatPrice(totalPrice)}</span>
-                </div>
-              </div>
-
-              {/* 结算按钮 */}
+          {/* 底部汇总卡片 */}
+          <div className="bg-white rounded-2xl p-6" style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
+            {/* 清空购物车按钮 */}
+            <div className="flex justify-end mb-4">
               <button
-                onClick={handleCheckout}
-                className="w-full btn-primary py-4 text-lg"
+                onClick={handleClearCart}
+                className="text-sm text-text-secondary hover:text-red-500 transition-colors"
               >
-                去结算
+                清空购物车
               </button>
+            </div>
 
-              {/* 继续购物链接 */}
-              <div className="text-center mt-4">
-                <Link
-                  to={ROUTES.COFFEE_LIST}
-                  className="text-accent hover:text-accent-light font-medium"
-                >
-                  继续购物
-                </Link>
+            {/* 汇总信息 */}
+            <div className="space-y-3 mb-6">
+              <div className="flex justify-between text-text-secondary">
+                <span>商品数量</span>
+                <span>{totalQuantity} 件</span>
               </div>
+              <div className="flex justify-between text-text-secondary">
+                <span>运费</span>
+                <span className="text-accent">免费</span>
+              </div>
+              <div className="flex justify-between text-2xl font-bold pt-3 border-t border-gray-200" style={{ color: '#1F130F' }}>
+                <span>合计</span>
+                <span>{formatPrice(totalPrice)}</span>
+              </div>
+            </div>
+
+            {/* 结算按钮 - 深色 */}
+            <button
+              onClick={handleCheckout}
+              className="w-full py-4 text-lg font-medium text-white transition-all hover:opacity-90 rounded-xl"
+              style={{ backgroundColor: '#1F130F' }}
+            >
+              去结算
+            </button>
+
+            {/* 继续购物链接 */}
+            <div className="text-center mt-4">
+              <Link
+                to={ROUTES.COFFEE_LIST}
+                className="text-accent hover:text-accent-light font-medium"
+              >
+                继续购物
+              </Link>
             </div>
           </div>
         </div>
@@ -193,14 +194,14 @@ const CartItemCard: React.FC<CartItemCardProps> = ({ item, onUpdateQuantity, onR
   };
 
   return (
-    <div className="p-6 hover:bg-gray-50 transition-colors">
+    <div className="p-4 sm:p-5 last:pb-0">
       <div className="flex gap-4">
         {/* 商品图片 */}
         <Link to={`/coffee/${item.coffeeId}`} className="flex-shrink-0">
           <img
             src={item.imageUrl}
             alt={item.coffeeName}
-            className="w-24 h-24 object-cover rounded-button"
+            className="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded-xl"
           />
         </Link>
 
@@ -209,13 +210,14 @@ const CartItemCard: React.FC<CartItemCardProps> = ({ item, onUpdateQuantity, onR
           <div className="flex justify-between mb-2">
             <Link
               to={`/coffee/${item.coffeeId}`}
-              className="font-georgia font-bold text-lg text-primary hover:text-accent transition-colors line-clamp-1"
+              className="font-bold text-base sm:text-lg text-primary hover:text-accent transition-colors line-clamp-1"
+              style={{ color: '#1F130F' }}
             >
               {item.coffeeName}
             </Link>
             <button
               onClick={() => onRemove(item.cartId)}
-              className="text-text-secondary hover:text-red-500 transition-colors"
+              className="p-2 -m-2 text-text-secondary hover:text-red-500 transition-colors flex-shrink-0"
               aria-label="删除"
             >
               <svg
@@ -236,19 +238,20 @@ const CartItemCard: React.FC<CartItemCardProps> = ({ item, onUpdateQuantity, onR
 
           {/* 库存状态 */}
           {item.stock < 10 && item.stock > 0 && (
-            <span className="inline-block px-2 py-1 bg-orange-50 text-orange-600 text-xs rounded mr-2">
+            <span className="inline-block px-2 py-1 bg-orange-50 text-orange-600 text-xs rounded-full mr-2">
               仅剩 {item.stock} 件
             </span>
           )}
 
           {/* 数量和价格 */}
           <div className="flex items-center justify-between mt-3">
-            {/* 数量控制器 */}
-            <div className="flex items-center border border-gray-300 rounded-button">
+            {/* 数量控制器 - 优化触摸目标尺寸为 44px */}
+            <div className="flex items-center rounded-lg overflow-hidden">
               <button
                 onClick={() => handleQuantityChange(-1)}
                 disabled={item.quantity <= 1}
-                className="w-8 h-8 flex items-center justify-center hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-11 h-11 flex items-center justify-center transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                style={{ backgroundColor: '#DCCCB9' }}
               >
                 <svg
                   className="w-4 h-4"
@@ -269,12 +272,13 @@ const CartItemCard: React.FC<CartItemCardProps> = ({ item, onUpdateQuantity, onR
                   }
                 }}
                 min="1"
-                className="w-14 text-center border-x border-gray-300 py-2 focus:outline-none"
+                className="w-14 h-11 text-center border-x border-gray-200 focus:outline-none text-sm"
               />
               <button
                 onClick={() => handleQuantityChange(1)}
                 disabled={item.quantity >= item.stock}
-                className="w-8 h-8 flex items-center justify-center hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-11 h-11 flex items-center justify-center transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                style={{ backgroundColor: '#DCCCB9' }}
               >
                 <svg
                   className="w-4 h-4"
@@ -292,7 +296,7 @@ const CartItemCard: React.FC<CartItemCardProps> = ({ item, onUpdateQuantity, onR
               <div className="text-sm text-text-secondary">
                 {formatPrice(item.price)} x {item.quantity}
               </div>
-              <div className="text-lg font-bold text-primary">
+              <div className="text-lg sm:text-xl font-bold" style={{ color: '#1F130F' }}>
                 {formatPrice(item.subtotal)}
               </div>
             </div>

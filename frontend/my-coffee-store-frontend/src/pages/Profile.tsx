@@ -8,7 +8,7 @@ import { Header, Footer, Loading } from '../components';
 import { useAuth } from '../contexts';
 import { userApi } from '../services/api';
 import { ROUTES } from '../utils/constants';
-import { formatPrice, formatDate } from '../utils/helpers';
+import { formatPrice } from '../utils/helpers';
 import type { ApiResponse } from '../types';
 
 const Profile: React.FC = () => {
@@ -96,16 +96,16 @@ const Profile: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#F7F1E8' }}>
       <Header />
 
       <main className="flex-1 py-12">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* 页头 */}
+          {/* 页头 - 优化返回按钮触摸目标尺寸为 44px */}
           <div className="bg-primary text-white px-6 py-4 rounded-t-2xl flex items-center">
             <button
               onClick={handleBack}
-              className="mr-4 text-white hover:text-accent transition-colors"
+              className="p-2.5 -ml-2.5 mr-1.5 text-white hover:text-accent transition-colors"
             >
               <svg
                 className="w-6 h-6"
@@ -156,7 +156,7 @@ const Profile: React.FC = () => {
                     </div>
                     <button
                       onClick={() => setShowRecharge(!showRecharge)}
-                      className="px-4 py-2 bg-accent text-white text-sm font-medium rounded-button hover:bg-accent-light transition-colors"
+                      className="px-4 h-11 bg-accent text-white text-sm font-medium rounded-button hover:bg-accent-light transition-colors"
                     >
                       {showRecharge ? '取消' : '充值'}
                     </button>
@@ -164,18 +164,21 @@ const Profile: React.FC = () => {
 
                   {/* 充值面板 */}
                   {showRecharge && (
-                    <div className="bg-gray-50 rounded-xl p-4">
-                      {/* 快捷金额 */}
+                    <div style={{ backgroundColor: '#F1E7DB', borderRadius: '12px', padding: '20px' }}>
+                      {/* 快捷金额 - 优化触摸目标尺寸为 44px */}
                       <div className="grid grid-cols-4 gap-2 mb-3">
                         {quickAmounts.map((amount) => (
                           <button
                             key={amount}
                             onClick={() => setRechargeAmount(String(amount))}
-                            className={`py-2 text-sm font-medium rounded-button transition-colors ${
-                              rechargeAmount === String(amount)
-                                ? 'bg-primary text-white'
-                                : 'bg-white text-primary border border-gray-200 hover:border-primary'
-                            }`}
+                            className="text-sm font-medium transition-colors"
+                            style={{
+                              width: '100px',
+                              height: '44px',
+                              borderRadius: '8px',
+                              backgroundColor: rechargeAmount === String(amount) ? '#2A1A15' : '#DCCCB9',
+                              color: rechargeAmount === String(amount) ? '#FFFFFF' : '#2A1A15',
+                            }}
                           >
                             {formatPrice(amount)}
                           </button>
@@ -197,7 +200,11 @@ const Profile: React.FC = () => {
                         <button
                           onClick={handleRecharge}
                           disabled={isRecharging || !rechargeAmount}
-                          className="px-6 py-2 btn-primary disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+                          className="h-11 px-6 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap text-white font-medium"
+                          style={{
+                            backgroundColor: '#2A1A15',
+                            borderRadius: '12px',
+                          }}
                         >
                           {isRecharging ? '充值中...' : '确认充值'}
                         </button>
@@ -212,24 +219,24 @@ const Profile: React.FC = () => {
             {message && (
               <div className="px-6 pt-4">
                 <div
-                  className={`px-4 py-3 rounded-button text-sm ${
-                    message.type === 'success'
-                      ? 'bg-green-50 border border-green-200 text-green-600'
-                      : 'bg-red-50 border border-red-200 text-red-600'
-                  }`}
+                  className="px-4 py-3 rounded-button text-sm"
+                  style={{
+                    backgroundColor: message.type === 'success' ? '#3D8A5A' : '#D32F2F',
+                    color: '#FFFFFF',
+                  }}
                 >
                   {message.text}
                 </div>
               </div>
             )}
 
-            {/* 功能入口 */}
+            {/* 功能入口 - 优化触摸目标尺寸为 44px */}
             <div className="p-6 space-y-3">
               <h3 className="text-sm font-medium text-text-secondary mb-3">常用功能</h3>
 
               <Link
                 to={ROUTES.ORDER}
-                className="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
+                className="flex items-center justify-between p-4 min-h-[56px] bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
               >
                 <div className="flex items-center gap-3">
                   <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -244,7 +251,7 @@ const Profile: React.FC = () => {
 
               <Link
                 to={ROUTES.COFFEE_LIST}
-                className="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
+                className="flex items-center justify-between p-4 min-h-[56px] bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
               >
                 <div className="flex items-center gap-3">
                   <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -259,7 +266,7 @@ const Profile: React.FC = () => {
 
               <Link
                 to={ROUTES.CART}
-                className="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
+                className="flex items-center justify-between p-4 min-h-[56px] bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
               >
                 <div className="flex items-center gap-3">
                   <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -273,11 +280,11 @@ const Profile: React.FC = () => {
               </Link>
             </div>
 
-            {/* 退出登录 */}
+            {/* 退出登录 - 优化触摸目标尺寸为 44px */}
             <div className="p-6">
               <button
                 onClick={handleLogout}
-                className="w-full py-3 text-red-500 font-medium text-center rounded-button border border-red-200 hover:bg-red-50 transition-colors"
+                className="w-full h-11 text-red-500 font-medium text-center rounded-button border border-red-200 hover:bg-red-50 transition-colors"
               >
                 退出登录
               </button>

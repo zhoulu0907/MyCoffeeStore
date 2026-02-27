@@ -1,5 +1,5 @@
 /**
- * 页头组件
+ * 页头组件 - Haight Ashbury Cafe
  */
 
 import React, { useState, useEffect } from 'react';
@@ -18,6 +18,7 @@ const Header: React.FC = () => {
   const { totalQuantity, totalPrice } = useCart();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [balance, setBalance] = useState<number | null>(null);
+  const [showGuide, setShowGuide] = useState(false);
 
   // 获取用户余额
   useEffect(() => {
@@ -44,7 +45,6 @@ const Header: React.FC = () => {
   const navItems = [
     { path: ROUTES.HOME, label: '首页' },
     { path: ROUTES.COFFEE_LIST, label: '菜单' },
-    // { path: '/about', label: '关于我们' },
   ];
 
   // 处理登录按钮点击
@@ -65,70 +65,64 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className="bg-primary text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <header style={{ backgroundColor: '#1F130F' }}>
+      <div className="max-w-7xl mx-auto px-8">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <Link
             to={ROUTES.HOME}
-            className="font-georgia text-2xl font-bold text-white hover:text-accent transition-colors"
+            className="text-2xl font-bold text-background hover:text-gold transition-colors"
+            style={{ fontFamily: 'Inter, sans-serif' }}
             onClick={() => setIsMobileMenuOpen(false)}
           >
-            MyCoffeeStore
+            Haight Ashbury Cafe
           </Link>
 
           {/* 桌面端导航 */}
-          <nav className="hidden md:flex items-center space-x-10">
+          <nav className="hidden md:flex items-center space-x-6">
             {navItems.map((item) => (
-              <Link
+              <span
                 key={item.path}
-                to={item.path}
-                className={`text-base font-medium transition-colors hover:text-accent ${
-                  location.pathname === item.path ? 'text-accent' : 'text-white'
-                }`}
+                onClick={() => handleNavClick(item.path)}
+                className={`text-base cursor-pointer transition-colors ${
+                  location.pathname === item.path ? 'text-background' : 'text-gold-dark'
+                } hover:text-background`}
+                style={{ fontFamily: 'Inter, sans-serif' }}
               >
                 {item.label}
-              </Link>
+              </span>
             ))}
           </nav>
 
           {/* 右侧按钮组 */}
           <div className="hidden md:flex items-center space-x-4">
             {/* 购物车按钮 */}
-            <button
+            <span
               onClick={handleCartClick}
-              className="relative p-2 text-white hover:text-accent transition-colors"
-              aria-label="购物车"
+              className="cursor-pointer text-gold-dark hover:text-background transition-colors"
+              style={{ fontFamily: 'Inter, sans-serif' }}
             >
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                />
-              </svg>
-              {totalQuantity > 0 && (
-                <span className="absolute -top-1 -right-1 bg-accent text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                  {totalQuantity}
-                </span>
-              )}
+              购物车({totalQuantity})
+            </span>
+
+            {/* 咖啡向导按钮 - 优化触摸目标尺寸为 44px */}
+            <button
+              onClick={() => setShowGuide(!showGuide)}
+              className="px-4 h-11 rounded-full text-sm font-medium flex items-center justify-center hover:opacity-90 transition-opacity"
+              style={{ backgroundColor: '#EADBC9', color: '#2A1A15' }}
+            >
+              咖啡向导
             </button>
 
-            {/* 登录/用户信息按钮 */}
+            {/* 登录/用户信息 */}
             {isAuthenticated ? (
               <Link
                 to={ROUTES.PROFILE}
-                className="px-4 py-2 text-sm font-medium text-white hover:text-accent transition-colors"
+                className="text-background text-sm font-medium hover:text-gold transition-colors"
               >
                 <span>{user?.username}</span>
                 {balance !== null && (
-                  <span className="ml-2 text-xs text-accent">
+                  <span className="ml-2 text-xs" style={{ color: '#D8C8B4' }}>
                     {formatPrice(balance)}
                   </span>
                 )}
@@ -136,26 +130,16 @@ const Header: React.FC = () => {
             ) : (
               <button
                 onClick={handleLoginClick}
-                className="px-6 py-2 text-sm font-medium text-white border border-transparent rounded-button hover:text-accent transition-colors"
+                className="text-background text-sm font-medium hover:text-gold transition-colors"
               >
                 登录
               </button>
             )}
-
-            {/* 注册按钮 */}
-            {!isAuthenticated && (
-              <Link
-                to={ROUTES.REGISTER}
-                className="px-6 py-2 text-sm font-medium text-primary bg-accent rounded-button hover:bg-accent-light transition-colors"
-              >
-                注册
-              </Link>
-            )}
           </div>
 
-          {/* 移动端菜单按钮 */}
+          {/* 移动端菜单按钮 - 优化触摸目标尺寸为 44px */}
           <button
-            className="md:hidden p-2 text-white"
+            className="md:hidden p-2.5 text-background"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="菜单"
           >
@@ -187,48 +171,48 @@ const Header: React.FC = () => {
 
       {/* 移动端菜单 */}
       {isMobileMenuOpen && (
-        <div className="md:hidden bg-primary border-t border-gray-800">
+        <div className="md:hidden border-t" style={{ borderColor: '#5A4036', backgroundColor: '#1F130F' }}>
           <div className="px-4 py-4 space-y-3">
-            {/* 导航链接 */}
+            {/* 导航链接 - 优化触摸目标尺寸为 44px */}
             {navItems.map((item) => (
               <button
                 key={item.path}
                 onClick={() => handleNavClick(item.path)}
-                className={`block w-full text-left px-3 py-2 text-base font-medium rounded-button transition-colors ${
+                className={`block w-full text-left px-4 py-3 text-base rounded-button transition-colors ${
                   location.pathname === item.path
-                    ? 'text-accent bg-gray-900'
-                    : 'text-white hover:text-accent hover:bg-gray-900'
+                    ? 'text-background'
+                    : 'text-gold-dark hover:text-background'
                 }`}
               >
                 {item.label}
               </button>
             ))}
 
-            {/* 购物车 */}
+            {/* 购物车 - 优化触摸目标尺寸为 44px */}
             <button
               onClick={handleCartClick}
-              className="flex items-center justify-between w-full px-3 py-2 text-base font-medium text-white rounded-button hover:text-accent hover:bg-gray-900 transition-colors"
+              className="flex items-center justify-between w-full px-4 py-3 text-base text-gold-dark rounded-button hover:text-background transition-colors"
             >
               <span>购物车</span>
               <div className="flex items-center space-x-2">
                 {totalQuantity > 0 && (
-                  <span className="text-accent">{totalQuantity} 件</span>
+                  <span className="text-background">{totalQuantity} 件</span>
                 )}
                 {totalPrice > 0 && (
-                  <span className="text-accent">{formatPrice(totalPrice)}</span>
+                  <span className="text-background">{formatPrice(totalPrice)}</span>
                 )}
               </div>
             </button>
 
-            {/* 登录/用户信息 */}
+            {/* 登录/用户信息 - 优化触摸目标尺寸为 44px */}
             {isAuthenticated ? (
               <button
                 onClick={() => handleNavClick(ROUTES.PROFILE)}
-                className="block w-full text-left px-3 py-2 text-base font-medium text-white rounded-button hover:text-accent hover:bg-gray-900 transition-colors"
+                className="block w-full text-left px-4 py-3 text-base text-background rounded-button hover:text-gold transition-colors"
               >
                 <span>{user?.username}</span>
                 {balance !== null && (
-                  <span className="ml-2 text-xs text-accent">
+                  <span className="ml-2 text-xs" style={{ color: '#D8C8B4' }}>
                     余额：{formatPrice(balance)}
                   </span>
                 )}
@@ -236,19 +220,9 @@ const Header: React.FC = () => {
             ) : (
               <button
                 onClick={() => handleNavClick(ROUTES.LOGIN)}
-                className="block w-full text-left px-3 py-2 text-base font-medium text-white rounded-button hover:text-accent hover:bg-gray-900 transition-colors"
+                className="block w-full text-left px-4 py-3 text-base text-gold-dark rounded-button hover:text-background transition-colors"
               >
                 登录
-              </button>
-            )}
-
-            {/* 注册 */}
-            {!isAuthenticated && (
-              <button
-                onClick={() => handleNavClick(ROUTES.REGISTER)}
-                className="w-full px-6 py-3 text-base font-medium text-primary bg-accent rounded-button hover:bg-accent-light transition-colors"
-              >
-                注册
               </button>
             )}
           </div>

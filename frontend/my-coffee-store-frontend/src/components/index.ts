@@ -7,3 +7,4 @@ export { default as Footer } from './Footer';
 export { default as CoffeeCard } from './CoffeeCard';
 export { default as Carousel } from './Carousel';
 export { default as Loading } from './Loading';
+export { default as CoffeeGuide } from './CoffeeGuide';

@@ -7,14 +7,26 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: '#1A1A1A',
+        // 品牌色 - 咖啡主题
+        primary: '#2A1A15',
+        'primary-dark': '#1F130F',
+        'primary-darker': '#1A110E',
         accent: '#D4A574',
-        'accent-light': '#E8C49E',
-        background: '#FFFFFF',
-        surface: '#F5F5F5',
-        'text-primary': '#1A1A1A',
-        'text-secondary': '#666666',
-        'text-light': '#999999',
+        'accent-light': '#EADBC9',
+        'accent-bg': '#EFE4D7',
+        // 背景色
+        background: '#F7F1E8',
+        surface: '#F1E7DB',
+        'surface-light': '#FFF9F0',
+        // 文字色
+        'text-primary': '#2A1A15',
+        'text-secondary': '#5B4035',
+        'text-light': '#6A4E43',
+        'text-muted': '#9A7E6F',
+        // 辅助色
+        brown: '#C5BEB6',
+        gold: '#DCCCB9',
+        'gold-dark': '#D8C8B4',
       },
       fontFamily: {
         georgia: ['Georgia', 'serif'],
@@ -32,6 +44,7 @@ export default {
         'card': '16px',
         'button': '8px',
         'input': '8px',
+        'pill': '12px',
       },
       spacing: {
         'section': '80px',

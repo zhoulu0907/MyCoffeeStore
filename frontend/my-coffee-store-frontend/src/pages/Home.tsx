@@ -1,28 +1,54 @@
 /**
- * 首页
+ * 首页 - Haight Ashbury Cafe
  */
 
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { Header, Footer, CoffeeCard, Carousel } from '../components';
+import { Header } from '../components';
 import { useCart } from '../contexts';
 import { coffeeApi } from '../services/api';
-import { CAROUSEL_ITEMS } from '../utils/constants';
+import { formatPrice } from '../utils/helpers';
 import type { Coffee, ApiResponse, PageResponse } from '../types';
+
+interface FeaturedCoffee extends Coffee {
+  recommendationReason?: string;
+  rating?: number;
+}
 
 const Home: React.FC = () => {
   const { addItem } = useCart();
-  const [featuredCoffees, setFeaturedCoffees] = useState<Coffee[]>([]);
+  const [featuredCoffees, setFeaturedCoffees] = useState<FeaturedCoffee[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // 获取精选咖啡（取前3个）
+  // Hero 三栏轮播数据
+  const heroItems = [
+    {
+      title: 'Haight House Blend',
+      subtitle: '坚果与可可尾韵',
+      image: 'https://images.unsplash.com/photo-1762657433581-15773c721a42?w=800',
+    },
+    {
+      title: 'Golden Gate Cold Brew',
+      subtitle: '12h 冷萃，清爽明亮',
+      image: 'https://images.unsplash.com/photo-1762545387133-2eb76f3de1f3?w=800',
+    },
+    {
+      title: 'Sunset Pour Over',
+      subtitle: '花香柑橘，层次细腻',
+      image: 'https://images.unsplash.com/photo-1729277133093-5915b9b18c9c?w=800',
+    },
+  ];
+
   useEffect(() => {
     const fetchFeaturedCoffees = async () => {
       try {
         const response = await coffeeApi.getList({ page: 1, size: 3 }) as unknown as ApiResponse<PageResponse<Coffee>>;
-
         if (response.code === 200 && response.data) {
-          setFeaturedCoffees(response.data.list || []);
+          const coffees = (response.data.list || []).map((coffee, index) => ({
+            ...coffee,
+            recommendationReason: getRecommendationReason(index),
+            rating: getRating(index),
+          }));
+          setFeaturedCoffees(coffees);
         }
       } catch (error) {
         console.error('获取精选咖啡失败:', error);
@@ -31,263 +57,172 @@ const Home: React.FC = () => {
         setIsLoading(false);
       }
     };
-
     fetchFeaturedCoffees();
   }, []);
 
-  // 处理添加到购物车
+  const getRecommendationReason = (index: number) => {
+    const reasons = [
+      '推荐理由：偏好中深烘、早晨常点意式',
+      '推荐理由：近期更偏爱果香与手冲层次',
+      '推荐理由：当前气温偏低，冷萃口感更顺滑',
+    ];
+    return reasons[index] || reasons[0];
+  };
+
+  const getRating = (index: number) => {
+    const ratings = [5, 4, 3];
+    return ratings[index] || 5;
+  };
+
+  const renderStars = (rating: number) => {
+    return '★'.repeat(rating) + '☆'.repeat(5 - rating);
+  };
+
   const handleAddToCart = async (coffee: Coffee) => {
-    console.log('=== [Home] 开始添加到购物车 ===');
-    console.log('[Home] coffee:', coffee.name, 'coffeeId:', coffee.coffeeId);
-
-    // 用原生 DOM 弹框测试
-    console.log('[Home] 创建原生 DOM 弹窗...');
-    const div = document.createElement('div');
-    div.id = 'home-toast';
-    div.style.cssText = 'position:fixed;top:20%;left:50%;transform:translate(-50%,-50%);z-index:999999;background:rgba(0,0,0,0.8);color:#fff;padding:20px 40px;border-radius:12px;font-size:16px;';
-    div.textContent = `已将 ${coffee.name} 加入购物车！`;
-    document.body.appendChild(div);
-    console.log('[Home] 弹窗已添加到 body');
-
-    setTimeout(() => {
-      console.log('[Home] 移除弹窗');
-      div.remove();
-    }, 2000);
-
     try {
-      console.log('[Home] 调用 addItem...');
       await addItem(coffee.coffeeId, 1);
-      console.log('[Home] addItem 完成');
     } catch (err) {
-      console.error('[Home] addItem 出错:', err);
+      console.error('添加购物车失败:', err);
     }
-    console.log('=== [Home] 添加到购物车结束 ===');
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#F7F1E8' }}>
       <Header />
 
       <main className="flex-1">
-        {/* Hero 轮播图区域 */}
-        <section className="h-[600px]">
-          <Carousel items={CAROUSEL_ITEMS} />
+        {/* Hero 三栏轮播区域 */}
+        <section className="h-[380px]">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 h-full px-6 py-4">
+            {heroItems.map((item, index) => (
+              <div
+                key={index}
+                className="relative rounded-2xl overflow-hidden h-full"
+              >
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                <div className="absolute bottom-4 left-4 right-4">
+                  <h3 className="text-white text-xl md:text-2xl font-bold mb-1">
+                    {item.title}
+                  </h3>
+                  <p className="text-white/90 text-sm">
+                    {item.subtitle}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
         </section>
 
-        {/* 精选咖啡区域 */}
-        <section className="section-padding bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            {/* 标题 */}
-            <div className="text-center mb-12">
-              <h2 className="font-georgia text-4xl font-bold text-primary mb-4">
-                精选咖啡
-              </h2>
-              <p className="text-text-secondary text-lg">
-                用心烘焙，每一杯都是艺术品
-              </p>
-            </div>
+        {/* 推荐咖啡区域 */}
+        <section className="py-3">
+          <div className="px-6">
+            <h2 className="text-3xl font-bold text-primary mb-3">
+              推荐咖啡
+            </h2>
+            <p className="text-text-muted text-sm mb-3">
+              本周人气推荐三款：
+            </p>
 
-            {/* 咖啡卡片网格 */}
             {isLoading ? (
-              <div className="text-center py-12 text-text-secondary">加载中...</div>
+              <div className="text-center py-12 text-text-light">加载中...</div>
             ) : featuredCoffees.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {featuredCoffees.map((coffee) => (
-                  <CoffeeCard
+                  <div
                     key={coffee.coffeeId}
-                    coffee={coffee}
-                    onAddToCart={handleAddToCart}
-                  />
+                    className="bg-white rounded-xl p-3 shadow-sm flex flex-col"
+                  >
+                    <img
+                      src={coffee.imageUrl || 'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=400'}
+                      alt={coffee.name}
+                      className="w-full h-[180px] object-cover rounded-lg mb-3"
+                    />
+                    <h3 className="text-xl font-bold text-primary mb-1">
+                      {coffee.name}
+                    </h3>
+                    <p className="text-text-secondary mb-2">
+                      {formatPrice(coffee.price)}
+                    </p>
+                    <p className="text-xs text-text-light mb-2">
+                      {coffee.recommendationReason}
+                    </p>
+                    <p className="text-xs text-gold-dark mb-3">
+                      推荐指数：{renderStars(coffee.rating || 5)}
+                    </p>
+                    <button
+                      onClick={() => handleAddToCart(coffee)}
+                      className="mt-auto w-full py-3 bg-primary text-background rounded-xl font-bold text-sm hover:opacity-90 transition-opacity"
+                    >
+                      加入购物车
+                    </button>
+                  </div>
                 ))}
               </div>
             ) : (
-              <div className="text-center py-12 text-text-secondary">暂无咖啡数据</div>
+              <div className="text-center py-12 text-text-light">暂无咖啡数据</div>
             )}
-
-            {/* 查看更多按钮 */}
-            <div className="text-center mt-12">
-              <Link
-                to="/coffee"
-                className="inline-block px-8 py-3 bg-primary text-white rounded-button font-medium hover:bg-gray-800 transition-colors"
-              >
-                查看全部咖啡
-              </Link>
-            </div>
           </div>
         </section>
 
         {/* 关于我们区域 */}
-        <section className="section-padding bg-primary">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-              {/* 内容 */}
-              <div>
-                <h2 className="font-georgia text-3xl md:text-4xl font-bold text-white mb-6">
-                  关于 MyCoffeeStore
+        <section style={{ backgroundColor: '#F1E7DB' }} className="py-4">
+          <div className="px-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div className="flex flex-col justify-center">
+                <h2 className="text-3xl font-bold text-primary mb-2.5">
+                  关于我们
                 </h2>
-                <p className="text-gray-300 text-lg leading-relaxed mb-8">
-                  位于旧金山 Haight Ashbury 的精品咖啡店，我们致力于为每一位顾客提供最优质的咖啡体验。
-                  从精选咖啡豆到专业烘焙，从精心冲煮到完美呈现，每一杯咖啡都承载着我们的热情与专注。
+                <p className="text-text-secondary leading-relaxed">
+                  位于 San Francisco Haight Ashbury，我们专注单一产地与创意拼配。
+                  联系电话：+1 (415) 555-0136
+                  地址：1452 Haight St, San Francisco, CA
                 </p>
-
-                {/* 店铺信息 */}
-                <div className="space-y-4">
-                  <div className="flex items-center text-gray-300">
-                    <svg
-                      className="w-6 h-6 mr-4 text-accent"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
-                    <span>周一至周日 7:00 - 22:00</span>
-                  </div>
-                  <div className="flex items-center text-gray-300">
-                    <svg
-                      className="w-6 h-6 mr-4 text-accent"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                      />
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                      />
-                    </svg>
-                    <span>123 Haight St, San Francisco, CA 94117</span>
-                  </div>
-                  <div className="flex items-center text-gray-300">
-                    <svg
-                      className="w-6 h-6 mr-4 text-accent"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-                      />
-                    </svg>
-                    <span>(415) 555-0123</span>
-                  </div>
-                </div>
               </div>
-
-              {/* 图片 */}
-              <div className="relative">
-                <div className="aspect-[4/3] rounded-2xl overflow-hidden">
-                  <img
-                    src="https://images.unsplash.com/photo-1736813133887-321f44e44224?w=800"
-                    alt="咖啡店环境"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                {/* 装饰元素 */}
-                <div className="absolute -bottom-6 -left-6 w-24 h-24 bg-accent rounded-2xl -z-10" />
-                <div className="absolute -top-6 -right-6 w-24 h-24 bg-accent rounded-2xl -z-10" />
+              <div className="rounded-2xl overflow-hidden">
+                <img
+                  src="https://images.unsplash.com/photo-1769987030211-4630ace160e2?w=600"
+                  alt="咖啡店环境"
+                  className="w-full h-full object-cover"
+                />
               </div>
             </div>
           </div>
         </section>
 
         {/* 特色服务区域 */}
-        <section className="section-padding bg-gray-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="font-georgia text-3xl md:text-4xl font-bold text-primary mb-4">
-                为什么选择我们
-              </h2>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {/* 特色 1 */}
-              <div className="text-center p-6">
-                <div className="w-16 h-16 bg-accent rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg
-                    className="w-8 h-8 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
-                    />
-                  </svg>
-                </div>
-                <h3 className="font-georgia text-xl font-bold text-primary mb-2">
+        <section className="py-3">
+          <div className="px-6">
+            <h2 className="text-3xl font-bold text-primary mb-3">
+              特色服务
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="rounded-xl p-4" style={{ backgroundColor: '#F1E7DB' }}>
+                <h3 className="text-xl font-bold text-primary mb-2">
                   精选咖啡豆
                 </h3>
-                <p className="text-text-secondary">
-                  从世界各地精心挑选优质咖啡豆，确保每一杯都拥有最纯正的风味
+                <p className="text-text-secondary text-sm leading-relaxed">
+                  每周小批量烘焙，追求稳定风味。
                 </p>
               </div>
-
-              {/* 特色 2 */}
-              <div className="text-center p-6">
-                <div className="w-16 h-16 bg-accent rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg
-                    className="w-8 h-8 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                </div>
-                <h3 className="font-georgia text-xl font-bold text-primary mb-2">
+              <div className="rounded-xl p-4" style={{ backgroundColor: '#F1E7DB' }}>
+                <h3 className="text-xl font-bold text-primary mb-2">
                   现磨现做
                 </h3>
-                <p className="text-text-secondary">
-                  每一杯咖啡都是现磨现做，保留最新鲜的口感和香气
+                <p className="text-text-secondary text-sm leading-relaxed">
+                  下单后研磨冲煮，保留最佳香气。
                 </p>
               </div>
-
-              {/* 特色 3 */}
-              <div className="text-center p-6">
-                <div className="w-16 h-16 bg-accent rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg
-                    className="w-8 h-8 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                </div>
-                <h3 className="font-georgia text-xl font-bold text-primary mb-2">
+              <div className="rounded-xl p-4" style={{ backgroundColor: '#F1E7DB' }}>
+                <h3 className="text-xl font-bold text-primary mb-2">
                   专业服务
                 </h3>
-                <p className="text-text-secondary">
-                  经验丰富的咖啡师团队，为您打造完美的咖啡体验
+                <p className="text-text-secondary text-sm leading-relaxed">
+                  咖啡师可根据口味推荐豆单与萃取方案。
                 </p>
               </div>
             </div>
@@ -295,7 +230,17 @@ const Home: React.FC = () => {
         </section>
       </main>
 
-      <Footer />
+      {/* Footer */}
+      <footer className="py-12 px-6" style={{ backgroundColor: '#1A110E' }}>
+        <div className="max-w-7xl mx-auto flex justify-between items-center">
+          <p className="text-sm" style={{ color: '#F2E8DC' }}>
+            Haight Ashbury Cafe · Brew Bold, Stay Local
+          </p>
+          <p className="text-sm" style={{ color: '#CDBAA4' }}>
+            快速链接: 首页 菜单 登录 | © 2026
+          </p>
+        </div>
+      </footer>
     </div>
   );
 };
