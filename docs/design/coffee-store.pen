@@ -4822,6 +4822,7 @@
           "name": "hero",
           "width": "fill_container",
           "height": 380,
+          "layout": "vertical",
           "gap": 12,
           "padding": [
             16,
@@ -4839,16 +4840,17 @@
                 "author": "Kaylee Stoll"
               },
               "width": "fill_container",
-              "height": "fill_container",
+              "height": 304,
               "fill": {
                 "type": "image",
                 "enabled": true,
                 "url": "https://images.unsplash.com/photo-1762657433581-15773c721a42?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NzIxMjMzMjB8&ixlib=rb-4.1.0&q=80&w=1080",
                 "mode": "fill"
               },
-              "cornerRadius": 16,
+              "cornerRadius": 20,
               "layout": "vertical",
-              "padding": 16,
+              "gap": 6,
+              "padding": 24,
               "justifyContent": "end",
               "children": [
                 {
@@ -4858,108 +4860,138 @@
                   "fill": "#FFFFFF",
                   "content": "Haight House Blend",
                   "fontFamily": "Inter",
-                  "fontSize": 22,
+                  "fontSize": 28,
                   "fontWeight": "700"
                 },
                 {
                   "type": "text",
                   "id": "bpclT",
                   "name": "cap2",
-                  "fill": "#F0E6D9",
+                  "fill": "#F5EBDD",
                   "content": "坚果与可可尾韵",
                   "fontFamily": "Inter",
-                  "fontSize": 14,
+                  "fontSize": 15,
                   "fontWeight": "normal"
                 }
               ]
             },
             {
               "type": "frame",
-              "id": "jpn8f",
-              "name": "h2",
-              "metadata": {
-                "type": "unsplash",
-                "username": "starsang",
-                "link": "https://unsplash.com/@starsang",
-                "author": "Wanghao SANG"
-              },
+              "id": "v5yA8",
+              "name": "controls",
               "width": "fill_container",
-              "height": "fill_container",
-              "fill": {
-                "type": "image",
-                "enabled": true,
-                "url": "https://images.unsplash.com/photo-1762545387133-2eb76f3de1f3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NzIxMjMzMjF8&ixlib=rb-4.1.0&q=80&w=1080",
-                "mode": "fill"
-              },
-              "cornerRadius": 16,
-              "layout": "vertical",
-              "padding": 16,
-              "justifyContent": "end",
+              "height": 32,
+              "justifyContent": "space_between",
+              "alignItems": "center",
               "children": [
                 {
-                  "type": "text",
-                  "id": "NiT2N",
-                  "name": "cap3",
-                  "fill": "#FFFFFF",
-                  "content": "Golden Gate Cold Brew",
-                  "fontFamily": "Inter",
-                  "fontSize": 22,
-                  "fontWeight": "700"
+                  "type": "frame",
+                  "id": "wqzyd",
+                  "name": "leftWrap",
+                  "width": 88,
+                  "height": 32,
+                  "gap": 8,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "JhtCV",
+                      "name": "leftBtn",
+                      "width": 32,
+                      "height": 32,
+                      "fill": "$--secondary",
+                      "cornerRadius": 999,
+                      "stroke": {
+                        "thickness": 1,
+                        "fill": "$--border"
+                      },
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon_font",
+                          "id": "DLkJu",
+                          "name": "leftIcon",
+                          "width": 16,
+                          "height": 16,
+                          "iconFontName": "chevron-left",
+                          "iconFontFamily": "lucide",
+                          "fill": "$--foreground"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "ENJKf",
+                      "name": "count",
+                      "fill": "$--muted-foreground",
+                      "content": "01 / 03",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "500"
+                    }
+                  ]
                 },
                 {
-                  "type": "text",
-                  "id": "eg61j",
-                  "name": "cap4",
-                  "fill": "#F0E6D9",
-                  "content": "12h 冷萃，清爽明亮",
-                  "fontFamily": "Inter",
-                  "fontSize": 14,
-                  "fontWeight": "normal"
-                }
-              ]
-            },
-            {
-              "type": "frame",
-              "id": "nVhh2",
-              "name": "h3",
-              "metadata": {
-                "type": "unsplash",
-                "username": "btcarpenter",
-                "link": "https://unsplash.com/@btcarpenter",
-                "author": "Beau Carpenter"
-              },
-              "width": "fill_container",
-              "height": "fill_container",
-              "fill": {
-                "type": "image",
-                "enabled": true,
-                "url": "https://images.unsplash.com/photo-1729277133093-5915b9b18c9c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NzIxMjMzMjN8&ixlib=rb-4.1.0&q=80&w=1080",
-                "mode": "fill"
-              },
-              "cornerRadius": 16,
-              "layout": "vertical",
-              "padding": 16,
-              "justifyContent": "end",
-              "children": [
-                {
-                  "type": "text",
-                  "id": "qu8yf",
-                  "name": "cap5",
-                  "fill": "#FFFFFF",
-                  "content": "Sunset Pour Over",
-                  "fontFamily": "Inter",
-                  "fontSize": 22,
-                  "fontWeight": "700"
+                  "type": "frame",
+                  "id": "ULS7n",
+                  "name": "dots",
+                  "height": 12,
+                  "gap": 8,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "ellipse",
+                      "id": "6Xzox",
+                      "name": "dot1",
+                      "fill": "$--primary",
+                      "width": 24,
+                      "height": 8
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "WCZM0",
+                      "name": "dot2",
+                      "fill": "$--border",
+                      "width": 8,
+                      "height": 8
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "r3Fgw",
+                      "name": "dot3",
+                      "fill": "$--border",
+                      "width": 8,
+                      "height": 8
+                    }
+                  ]
                 },
                 {
-                  "type": "text",
-                  "id": "qKFms",
-                  "name": "cap6",
-                  "fill": "#F0E6D9",
-                  "content": "花香柑橘，层次细腻",
-                  "fontFamily": "Inter",
-                  "fontSize": 14,
-                  "fontWeight": "normal"
+                  "type": "frame",
+                  "id": "L2PTV",
+                  "name": "rightBtn",
+                  "width": 32,
+                  "height": 32,
+                  "fill": "$--secondary",
+                  "cornerRadius": 999,
+                  "stroke": {
+                    "thickness": 1,
+                    "fill": "$--border"
+                  },
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "5i878",
+                      "name": "rightIcon",
+                      "width": 16,
+                      "height": 16,
+                      "iconFontName": "chevron-right",
+                      "iconFontFamily": "lucide",
+                      "fill": "$--foreground"
+                    }
+                  ]
                 }
               ]
             }

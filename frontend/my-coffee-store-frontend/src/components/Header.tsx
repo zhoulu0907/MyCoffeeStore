@@ -6,6 +6,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts';
 import { useCart } from '../contexts';
+import { useCoffeeGuide } from '../contexts/CoffeeGuideContext';
 import { userApi } from '../services/api';
 import { formatPrice } from '../utils/helpers';
 import { ROUTES } from '../utils/constants';
@@ -18,7 +19,7 @@ const Header: React.FC = () => {
   const { totalQuantity, totalPrice } = useCart();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [balance, setBalance] = useState<number | null>(null);
-  const [showGuide, setShowGuide] = useState(false);
+  const { isExpanded: isGuideExpanded, toggle: toggleGuide } = useCoffeeGuide();
 
   // 获取用户余额
   useEffect(() => {
@@ -107,11 +108,11 @@ const Header: React.FC = () => {
 
             {/* 咖啡向导按钮 - 优化触摸目标尺寸为 44px */}
             <button
-              onClick={() => setShowGuide(!showGuide)}
+              onClick={toggleGuide}
               className="px-4 h-11 rounded-full text-sm font-medium flex items-center justify-center hover:opacity-90 transition-opacity"
               style={{ backgroundColor: '#EADBC9', color: '#2A1A15' }}
             >
-              咖啡向导
+              {isGuideExpanded ? '收起' : '咖啡向导'}
             </button>
 
             {/* 登录/用户信息 */}

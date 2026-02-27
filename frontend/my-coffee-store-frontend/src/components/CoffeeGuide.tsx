@@ -4,6 +4,7 @@
 
 import React, { useState } from 'react';
 import { recommendationApi } from '../services/api';
+import { useCoffeeGuide } from '../contexts/CoffeeGuideContext';
 import type { ApiResponse } from '../types';
 
 export interface CoffeeRole {
@@ -28,13 +29,8 @@ const COFFEE_ROLES: CoffeeRole[] = [
 
 const MAX_SELECTED_ROLES = 3;
 
-interface CoffeeGuideProps {
-  isOpen?: boolean;
-  onToggle?: () => void;
-}
-
-const CoffeeGuide: React.FC<CoffeeGuideProps> = ({ isOpen = true, onToggle }) => {
-  const [isExpanded, setIsExpanded] = useState(isOpen);
+const CoffeeGuide: React.FC = () => {
+  const { isExpanded, toggle } = useCoffeeGuide();
   const [selectedRoles, setSelectedRoles] = useState<string[]>(['beginner']);
   const [messages, setMessages] = useState<GuideMessage[]>([
     {
@@ -47,10 +43,7 @@ const CoffeeGuide: React.FC<CoffeeGuideProps> = ({ isOpen = true, onToggle }) =>
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleToggle = () => {
-    setIsExpanded(!isExpanded);
-    onToggle?.();
-  };
+  // handleToggle 已移除，直接使用 context 的 toggle
 
   const handleRoleToggle = (roleId: string) => {
     setSelectedRoles((prev) => {
@@ -139,7 +132,7 @@ const CoffeeGuide: React.FC<CoffeeGuideProps> = ({ isOpen = true, onToggle }) =>
         style={{
           boxShadow: '0 8px 24px rgba(0,0,0,0.13)',
         }}
-        onClick={handleToggle}
+        onClick={toggle}
       >
         {/* 收起状态 */}
         <div className="p-3">
@@ -181,7 +174,7 @@ const CoffeeGuide: React.FC<CoffeeGuideProps> = ({ isOpen = true, onToggle }) =>
               className="h-6 rounded-full flex-1 flex items-center justify-center bg-accent-light"
               onClick={(e) => {
                 e.stopPropagation();
-                handleToggle();
+                toggle();
               }}
             >
               <span className="text-lg text-text-light">+</span>
@@ -252,7 +245,7 @@ const CoffeeGuide: React.FC<CoffeeGuideProps> = ({ isOpen = true, onToggle }) =>
       <div className="p-3">
         {/* 拖动指示条 */}
         <div className="flex justify-center mb-2">
-          <div className="w-16 h-1 bg-gold rounded-full cursor-pointer" onClick={handleToggle} />
+          <div className="w-16 h-1 bg-gold rounded-full cursor-pointer" onClick={toggle} />
         </div>
 
         {/* 标题栏 */}
@@ -275,7 +268,7 @@ const CoffeeGuide: React.FC<CoffeeGuideProps> = ({ isOpen = true, onToggle }) =>
             ))}
             <button
               className="h-6 rounded-full w-6 flex items-center justify-center bg-accent-light"
-              onClick={handleToggle}
+              onClick={toggle}
             >
               <span className="text-sm text-text-light">−</span>
             </button>
