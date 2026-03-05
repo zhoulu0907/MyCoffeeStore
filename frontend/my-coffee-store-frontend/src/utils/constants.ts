@@ -64,6 +64,7 @@ export const ROUTES = {
   ORDER: '/order',
   ORDER_DETAIL: '/order/:id',
   PROFILE: '/profile',
+  ADMIN: '/admin',
 } as const;
 
 // 轮播图配置

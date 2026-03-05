@@ -388,4 +388,66 @@ export const agentApi = {
   },
 };
 
+/**
+ * 管理员 API
+ */
+export const adminApi = {
+  /**
+   * 获取用户列表
+   */
+  getUsers: (params?: { page?: number; size?: number }) => {
+    return get('/v1/admin/users', params);
+  },
+
+  /**
+   * 获取用户详情
+   */
+  getUserDetail: (userId: number) => {
+    return get('/v1/admin/users/detail', { userId });
+  },
+
+  /**
+   * 禁用/启用用户
+   */
+  updateUserStatus: (userId: number, status: 'active' | 'inactive' | 'banned') => {
+    return post('/v1/admin/users/status', { userId, status });
+  },
+
+  /**
+   * 获取 LLM 配置列表
+   */
+  getLlmConfigs: () => {
+    return get('/v1/admin/llm/configs');
+  },
+
+  /**
+   * 更新 LLM 配置
+   */
+  updateLlmConfig: (config: {
+    provider: string;
+    baseUrl: string;
+    apiKey: string;
+    model: string;
+    temperature: number;
+    maxTokens: number;
+    enabled?: boolean;
+  }) => {
+    return post('/v1/admin/llm/config', config);
+  },
+
+  /**
+   * 测试 LLM 连接
+   */
+  testLlmConnection: (provider: string) => {
+    return post('/v1/admin/llm/test', { provider });
+  },
+
+  /**
+   * 获取可用的 LLM 提供商
+   */
+  getLlmProviders: () => {
+    return get('/v1/admin/llm/providers');
+  },
+};
+
 export default axiosInstance;

@@ -9,6 +9,7 @@ export interface User {
   avatar?: string;
   balance?: number;
   createTime: string;
+  role?: 'user' | 'admin';
 }
 
 /**
@@ -218,3 +219,6 @@ export interface RecommendationResponse {
  * 推荐响应包装类型（API 响应）
  */
 export interface RecommendationApiResponse extends ApiResponse<RecommendationResponse> {}
+
+// 导出管理员类型
+export * from './admin';

@@ -111,8 +111,8 @@ CREATE INDEX IF NOT EXISTS idx_order_item_coffee_id ON mcs_order_item(coffee_id)
 
 -- 测试用户（密码均为: Coffee123!，BCrypt加密后）
 INSERT INTO mcs_user (username, password, email, phone) VALUES
-('admin', '$2b$10$.t7uDrC1gkBp9an6b5qqK.yi2LFRSRKkoXT4EJghCo8xdLvfSOAXS', 'admin@mycoffeestore.com', '14155550001'),
-('test_user', '$2b$10$.t7uDrC1gkBp9an6b5qqK.yi2LFRSRKkoXT4EJghCo8xdLvfSOAXS', 'test@example.com', '14155550002')
+('admin', '$2a$10$VSFNKkOJHp4uCJGLAGNp4.LHn4r.8IyuTLfOD7TrT6qc/cblgiNQu', 'admin@mycoffeestore.com', '14155550001'),
+('test_user', '$2a$10$VSFNKkOJHp4uCJGLAGNp4.LHn4r.8IyuTLfOD7TrT6qc/cblgiNQu', 'test@example.com', '14155550002')
 ON CONFLICT (username) DO NOTHING;
 
 -- 咖啡产品数据

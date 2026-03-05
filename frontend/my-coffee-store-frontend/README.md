@@ -21,7 +21,15 @@ src/
 │   ├── Footer.tsx
 │   ├── CoffeeCard.tsx
 │   ├── Carousel.tsx
-│   └── Loading.tsx
+│   ├── Loading.tsx
+│   ├── ProtectedRoute.tsx  # 路由权限控制
+│   └── admin/           # 管理员组件
+│       ├── AdminHeader.tsx
+│       ├── UsersSection.tsx
+│       ├── UserRow.tsx
+│       ├── LlmConfigSection.tsx
+│       ├── ConfigField.tsx
+│       └── index.ts
 ├── pages/          # 页面组件
 │   ├── Home.tsx
 │   ├── Login.tsx
@@ -29,7 +37,9 @@ src/
 │   ├── CoffeeList.tsx
 │   ├── CoffeeDetail.tsx
 │   ├── Cart.tsx
-│   └── Order.tsx
+│   ├── Order.tsx
+│   ├── Profile.tsx
+│   └── AdminPage.tsx     # 管理员页面
 ├── contexts/       # Context 状态管理
 │   ├── AuthContext.tsx
 │   └── CartContext.tsx
@@ -40,13 +50,77 @@ src/
 │   ├── useDebounce.ts
 │   └── useFetch.ts
 ├── types/          # TypeScript 类型
-│   └── index.ts
+│   ├── index.ts
+│   └── admin.ts        # 管理员相关类型
 ├── utils/          # 工具函数
 │   ├── constants.ts
 │   └── helpers.ts
 ├── App.tsx         # 应用根组件
 └── main.tsx        # 应用入口
 ```
+
+## 管理员页面
+
+### 访问路径
+- **URL**: `/admin`
+- **权限**: 需要管理员权限（`user.role === 'admin'`）
+
+### 功能模块
+
+#### 1. 用户列表
+- 显示所有注册用户信息
+- 包含：账户名、邮箱、订单数、最近订单
+- 支持分页加载
+
+#### 2. LLM 配置
+- 配置 LLM 服务连接参数
+- 支持字段：
+  - Base URL: API 基础地址
+  - API Key: 认证密钥
+  - Model: 模型名称
+  - Temperature: 温度参数 (0-2)
+  - Max Tokens: 最大令牌数
+- 功能：
+  - 保存配置
+  - 测试连接
+
+### API 接口
+
+管理员相关 API 定义在 `src/services/api.ts` 中的 `adminApi`：
+
+```typescript
+// 获取用户列表
+adminApi.getUsers({ page: 1, size: 50 })
+
+// 获取用户详情
+adminApi.getUserDetail(userId)
+
+// 更新用户状态
+adminApi.updateUserStatus(userId, 'active' | 'inactive' | 'banned')
+
+// 获取 LLM 配置
+adminApi.getLlmConfigs()
+
+// 更新 LLM 配置
+adminApi.updateLlmConfig(config)
+
+// 测试 LLM 连接
+adminApi.testLlmConnection(provider)
+
+// 获取可用的 LLM 提供商
+adminApi.getLlmProviders()
+```
+
+### 类型定义
+
+管理员相关类型定义在 `src/types/admin.ts`：
+
+- `LlmConfig`: LLM 配置类型
+- `LlmProvider`: LLM 提供商类型
+- `AdminUser`: 管理员视图用户类型
+- `UserListResponse`: 用户列表响应类型
+- `LlmConfigResponse`: LLM 配置响应类型
+- `TestConnectionResponse`: 测试连接响应类型
 
 ## 功能特性
 

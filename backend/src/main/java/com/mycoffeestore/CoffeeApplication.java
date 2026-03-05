@@ -10,7 +10,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author Backend Developer
  * @since 2024-02-26
  */
-@SpringBootApplication
+@SpringBootApplication(exclude = {
+        com.alibaba.cloud.ai.autoconfigure.dashscope.DashScopeAutoConfiguration.class
+})
 @MapperScan("com.mycoffeestore.mapper")
 public class CoffeeApplication {
 

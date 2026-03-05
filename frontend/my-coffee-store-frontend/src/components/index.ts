@@ -8,3 +8,4 @@ export { default as CoffeeCard } from './CoffeeCard';
 export { default as Carousel } from './Carousel';
 export { default as Loading } from './Loading';
 export { default as CoffeeGuide } from './CoffeeGuide';
+export { default as ProtectedRoute } from './ProtectedRoute';

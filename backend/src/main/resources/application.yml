@@ -51,3 +51,11 @@ modelscope:
   base-url: https://api-inference.modelscope.cn/v1
   model: moonshotai/Kimi-K2.5
   timeout: 60000
+
+# LLM 加密配置
+llm:
+  encryption:
+    # 主密钥环境变量名（优先级最高）
+    master-key-env: LLM_MASTER_KEY
+    # 主密钥文件路径（环境变量不存在时使用）
+    master-key-file: ${user.home}/.mycoffeestore/master.key

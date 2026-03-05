@@ -5,8 +5,8 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, CartProvider } from './contexts';
 import { CoffeeGuideProvider } from './contexts/CoffeeGuideContext';
-import { Home, Login, Register, CoffeeList, CoffeeDetail, Cart, Checkout, Order, Profile } from './pages';
-import { CoffeeGuide } from './components';
+import { Home, Login, Register, CoffeeList, CoffeeDetail, Cart, Checkout, Order, Profile, AdminPage } from './pages';
+import { CoffeeGuide, ProtectedRoute } from './components';
 import { ROUTES } from './utils/constants';
 
 function App() {
@@ -31,6 +31,16 @@ function App() {
             <Route path={ROUTES.CHECKOUT} element={<Checkout />} />
             <Route path={ROUTES.ORDER} element={<Order />} />
             <Route path={ROUTES.PROFILE} element={<Profile />} />
+
+            {/* 管理员页面 */}
+            <Route
+              path={ROUTES.ADMIN}
+              element={
+                <ProtectedRoute requireAdmin={true}>
+                  <AdminPage />
+                </ProtectedRoute>
+              }
+            />
 
             {/* 默认重定向到首页 */}
             <Route path="*" element={<Navigate to={ROUTES.HOME} replace />} />

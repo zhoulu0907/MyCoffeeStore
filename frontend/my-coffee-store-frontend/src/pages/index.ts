@@ -11,3 +11,4 @@ export { default as Cart } from './Cart';
 export { default as Checkout } from './Checkout';
 export { default as Order } from './Order';
 export { default as Profile } from './Profile';
+export { default as AdminPage } from './AdminPage';
