@@ -66,6 +66,7 @@ const Order: React.FC = () => {
     };
 
     fetchOrders();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated, selectedTab, page]);
 
   // 处理返回

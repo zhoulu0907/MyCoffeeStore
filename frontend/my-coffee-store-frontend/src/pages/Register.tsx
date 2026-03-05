@@ -113,7 +113,7 @@ const Register: React.FC = () => {
         email: formData.email,
         phone: formData.phone || undefined,
         password: formData.password,
-      }) as unknown as ApiResponse;
+      }) as unknown as ApiResponse<{ token: string; userId: number; username: string; email: string; phone: string }>;
 
       if (response.code === 200) {
         // 注册成功，从响应中提取 token 和用户信息
@@ -126,9 +126,9 @@ const Register: React.FC = () => {
           general: response.message || '注册失败，请稍后重试',
         });
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       setErrors({
-        general: error?.response?.data?.message || '注册失败，请稍后重试',
+        general: (error instanceof Error ? error.message : null) || '注册失败，请稍后重试',
       });
     } finally {
       setIsLoading(false);

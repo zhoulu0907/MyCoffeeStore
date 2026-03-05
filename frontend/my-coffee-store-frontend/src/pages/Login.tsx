@@ -66,7 +66,7 @@ const Login: React.FC = () => {
       const response = await userApi.login({
         account: formData.account,
         password: formData.password,
-      }) as unknown as ApiResponse;
+      }) as unknown as ApiResponse<{ token: string; userId: number; username: string; email: string; phone: string }>;
 
       if (response.code === 200) {
         // 登录成功，从响应中提取 token 和用户信息
@@ -79,9 +79,9 @@ const Login: React.FC = () => {
           general: response.message || '登录失败，请检查您的账号和密码',
         });
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       setErrors({
-        general: error?.response?.data?.message || '登录失败，请检查您的账号和密码',
+        general: (error instanceof Error ? error.message : null) || '登录失败，请检查您的账号和密码',
       });
     } finally {
       setIsLoading(false);

@@ -81,8 +81,8 @@ axiosInstance.interceptors.response.use(
 /**
  * GET 请求
  */
-export const get = <T = any>(url: string, params?: any, config?: AxiosRequestConfig): Promise<T> => {
-  return axiosInstance.request<any, T>({
+export const get = <T = unknown>(url: string, params?: Record<string, unknown>, config?: AxiosRequestConfig): Promise<T> => {
+  return axiosInstance.request<unknown, T>({
     method: 'GET',
     url,
     params,
@@ -93,8 +93,8 @@ export const get = <T = any>(url: string, params?: any, config?: AxiosRequestCon
 /**
  * POST 请求
  */
-export const post = <T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> => {
-  return axiosInstance.request<any, T>({
+export const post = <T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T> => {
+  return axiosInstance.request<unknown, T>({
     method: 'POST',
     url,
     data,

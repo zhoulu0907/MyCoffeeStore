@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { AdminPage } from '../AdminPage';
 import { LlmConfigSection } from '../LlmConfigSection';
 import { UsersSection } from '../UsersSection';
@@ -207,6 +207,7 @@ describe('AdminPage', () => {
     const usersTab = screen.getByText('用户管理');
 
     // 注意：这里需要根据实际的实现添加 role 属性的测试
-    // 例如：expect(configTab).toHaveAttribute('role', 'tab');
+    expect(configTab).toBeInTheDocument();
+    expect(usersTab).toBeInTheDocument();
   });
 });

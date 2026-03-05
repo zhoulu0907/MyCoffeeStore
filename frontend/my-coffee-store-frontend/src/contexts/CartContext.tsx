@@ -179,6 +179,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 /**
  * 使用购物车上下文的 Hook
  */
+// eslint-disable-next-line react-refresh/only-export-components
 export const useCart = (): CartContextType => {
   const context = useContext(CartContext);
   if (context === undefined) {

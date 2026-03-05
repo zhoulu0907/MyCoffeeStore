@@ -13,6 +13,7 @@ interface CoffeeGuideContextType {
 
 const CoffeeGuideContext = createContext<CoffeeGuideContextType | undefined>(undefined);
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useCoffeeGuide = () => {
   const context = useContext(CoffeeGuideContext);
   if (!context) {

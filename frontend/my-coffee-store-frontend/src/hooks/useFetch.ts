@@ -13,7 +13,7 @@ interface UseFetchResult<T> {
 
 export const useFetch = <T>(
   fetchFn: () => Promise<T>,
-  dependencies: any[] = []
+  dependencies: unknown[] = []
 ): UseFetchResult<T> => {
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -34,6 +34,7 @@ export const useFetch = <T>(
 
   useEffect(() => {
     fetchData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, dependencies);
 
   return { data, loading, error, refetch: fetchData };

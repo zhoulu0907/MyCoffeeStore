@@ -70,8 +70,8 @@ const Profile: React.FC = () => {
       } else {
         setMessage({ type: 'error', text: response.message || '充值失败' });
       }
-    } catch (error: any) {
-      setMessage({ type: 'error', text: error?.response?.data?.message || '充值失败，请稍后重试' });
+    } catch (error: unknown) {
+      setMessage({ type: 'error', text: (error instanceof Error ? error.message : null) || '充值失败，请稍后重试' });
     } finally {
       setIsRecharging(false);
     }

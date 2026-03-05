@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Header } from '../Header';
-import { LlmConfigSection } from './LlmConfigSection';
-import { UsersSection } from './UsersSection';
+import Header from '../Header';
+import LlmConfigSection from './LlmConfigSection';
+import UsersSection from './UsersSection';
 
 /**
  * 管理员页面组件

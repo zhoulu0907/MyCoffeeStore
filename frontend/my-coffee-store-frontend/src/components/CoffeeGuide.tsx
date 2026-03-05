@@ -74,7 +74,7 @@ const CoffeeGuide: React.FC = () => {
     setIsLoading(false);
     setMessages([
       {
-        id: Date.now().toString(),
+        id: crypto.randomUUID(),
         role: 'assistant',
         content: getRoleHint(roleId),
         timestamp: new Date(),
