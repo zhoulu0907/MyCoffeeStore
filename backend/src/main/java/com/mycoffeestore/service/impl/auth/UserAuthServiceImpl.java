@@ -6,6 +6,7 @@ import com.mycoffeestore.entity.User;
 import com.mycoffeestore.exception.BusinessException;
 import com.mycoffeestore.mapper.UserMapper;
 import com.mycoffeestore.service.auth.UserAuthService;
+import com.mycoffeestore.service.rbac.RbacService;
 import com.mycoffeestore.util.JwtUtil;
 import com.mycoffeestore.vo.auth.LoginVO;
 import com.mycoffeestore.vo.auth.UserVO;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 /**
@@ -34,6 +36,7 @@ public class UserAuthServiceImpl implements UserAuthService {
 
     private final UserMapper userMapper;
     private final JwtUtil jwtUtil;
+    private final RbacService rbacService;
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     private static final BigDecimal DEFAULT_BALANCE = new BigDecimal("500.00");
@@ -70,8 +73,15 @@ public class UserAuthServiceImpl implements UserAuthService {
 
         userMapper.insert(user);
 
-        // 生成Token
-        String token = jwtUtil.generateToken(user.getId(), user.getUsername());
+        // 注册时自动分配 user 角色
+        rbacService.assignRole(user.getId(), "user");
+
+        // 获取角色和权限
+        String role = rbacService.getUserRoleCode(user.getId());
+        List<String> permissions = rbacService.getUserPermissions(user.getId());
+
+        // 生成Token（包含角色信息）
+        String token = jwtUtil.generateToken(user.getId(), user.getUsername(), role);
 
         // 返回登录信息
         return LoginVO.builder()
@@ -81,6 +91,8 @@ public class UserAuthServiceImpl implements UserAuthService {
                 .phone(user.getPhone())
                 .token(token)
                 .balance(user.getBalance())
+                .role(role)
+                .permissions(permissions)
                 .build();
     }
 
@@ -126,8 +138,12 @@ public class UserAuthServiceImpl implements UserAuthService {
         user.setLastLoginAt(LocalDateTime.now());
         userMapper.update(user);
 
-        // 生成Token
-        String token = jwtUtil.generateToken(user.getId(), user.getUsername());
+        // 获取角色和权限
+        String role = rbacService.getUserRoleCode(user.getId());
+        List<String> permissions = rbacService.getUserPermissions(user.getId());
+
+        // 生成Token（包含角色信息）
+        String token = jwtUtil.generateToken(user.getId(), user.getUsername(), role);
 
         // 返回登录信息
         return LoginVO.builder()
@@ -137,6 +153,8 @@ public class UserAuthServiceImpl implements UserAuthService {
                 .phone(user.getPhone())
                 .token(token)
                 .balance(user.getBalance())
+                .role(role)
+                .permissions(permissions)
                 .build();
     }
 
@@ -147,9 +165,15 @@ public class UserAuthServiceImpl implements UserAuthService {
             throw new BusinessException(404, "用户不存在");
         }
 
+        // 获取角色和权限
+        String role = rbacService.getUserRoleCode(userId);
+        List<String> permissions = rbacService.getUserPermissions(userId);
+
         UserVO vo = new UserVO();
         BeanUtils.copyProperties(user, vo);
         vo.setUserId(user.getId());
+        vo.setRole(role);
+        vo.setPermissions(permissions);
         return vo;
     }
 

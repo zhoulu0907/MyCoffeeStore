@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * 登录响应VO
@@ -59,4 +60,16 @@ public class LoginVO implements Serializable {
      */
     @Schema(description = "账户余额", example = "500.00")
     private BigDecimal balance;
+
+    /**
+     * 用户角色
+     */
+    @Schema(description = "用户角色", example = "user")
+    private String role;
+
+    /**
+     * 用户权限列表
+     */
+    @Schema(description = "用户权限列表")
+    private List<String> permissions;
 }

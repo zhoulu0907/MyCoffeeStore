@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 用户信息VO
@@ -59,4 +60,16 @@ public class UserVO implements Serializable {
      */
     @Schema(description = "创建时间")
     private LocalDateTime createTime;
+
+    /**
+     * 用户角色
+     */
+    @Schema(description = "用户角色", example = "user")
+    private String role;
+
+    /**
+     * 用户权限列表
+     */
+    @Schema(description = "用户权限列表")
+    private List<String> permissions;
 }
