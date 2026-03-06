@@ -1,5 +1,8 @@
 /**
  * 受保护的路由组件 - 用于需要认证的页面
+ *
+ * 支持通过 requiredPermission 进行权限检查，
+ * 也支持通过 requiredRole 进行角色检查。
  */
 
 import React from 'react';
@@ -9,12 +12,16 @@ import { ROUTES } from '../utils/constants';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
-  requireAdmin?: boolean;
+  /** 需要的权限码，用户必须拥有此权限才能访问 */
+  requiredPermission?: string;
+  /** 需要的角色列表，用户角色在其中即可访问 */
+  requiredRole?: Array<'user' | 'staff' | 'admin'>;
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   children,
-  requireAdmin = false,
+  requiredPermission,
+  requiredRole,
 }) => {
   const { isAuthenticated, user, isLoading } = useAuth();
 
@@ -40,8 +47,13 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     return <Navigate to={ROUTES.LOGIN} replace />;
   }
 
-  // 如果需要管理员权限，检查用户是否是管理员
-  if (requireAdmin && user?.username !== 'admin') {
+  // 检查权限
+  if (requiredPermission && !user?.permissions?.includes(requiredPermission)) {
+    return <Navigate to={ROUTES.HOME} replace />;
+  }
+
+  // 检查角色
+  if (requiredRole && user?.role && !requiredRole.includes(user.role)) {
     return <Navigate to={ROUTES.HOME} replace />;
   }
 
