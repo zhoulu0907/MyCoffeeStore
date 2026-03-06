@@ -36,12 +36,13 @@ public interface OrderService {
      * 获取订单列表
      *
      * @param userId 用户ID
+     * @param role   用户角色（user 只看自己，staff/admin 看全部）
      * @param status 状态（可选）
      * @param page   页码
      * @param size   每页数量
      * @return 订单列表
      */
-    PageResult<OrderListItemVO> list(Long userId, OrderStatus status, Integer page, Integer size);
+    PageResult<OrderListItemVO> list(Long userId, String role, OrderStatus status, Integer page, Integer size);
 
     /**
      * 取消订单

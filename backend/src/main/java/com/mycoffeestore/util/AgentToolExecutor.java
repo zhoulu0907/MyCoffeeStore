@@ -117,7 +117,7 @@ public class AgentToolExecutor {
                     OrderStatus status = statusStr != null ? OrderStatus.fromCode(statusStr) : null;
                     int page = args.has("page") ? args.get("page").asInt() : 1;
                     int size = args.has("size") ? args.get("size").asInt() : 10;
-                    yield orderService.list(userId, status, page, size);
+                    yield orderService.list(userId, "user", status, page, size);
                 }
                 case "get_order_detail" -> {
                     if (userId == null) yield Map.of("error", "该操作需要登录，请先登录");

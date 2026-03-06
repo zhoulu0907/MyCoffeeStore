@@ -165,11 +165,15 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public PageResult<OrderListItemVO> list(Long userId, OrderStatus status, Integer page, Integer size) {
+    public PageResult<OrderListItemVO> list(Long userId, String role, OrderStatus status, Integer page, Integer size) {
         QueryWrapper queryWrapper = QueryWrapper.create()
-                .eq(Order::getUserId, userId)
                 .eq(Order::getIsDeleted, 0)
                 .orderBy(Order::getCreateTime, false);
+
+        // user 角色只能查看自己的订单，staff/admin 可以查看所有订单
+        if ("user".equals(role)) {
+            queryWrapper.eq(Order::getUserId, userId);
+        }
 
         if (status != null) {
             queryWrapper.eq(Order::getStatus, status.getCode());
