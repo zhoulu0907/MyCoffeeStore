@@ -17,6 +17,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
 
     private final JwtInterceptor jwtInterceptor;
+    private final PermissionInterceptor permissionInterceptor;
 
     /**
      * 配置跨域
@@ -44,6 +45,18 @@ public class WebConfig implements WebMvcConfigurer {
                         "/v1/coffee/**",
                         "/v1/agent/**",
                         "/v1/recommendation/**"
-                );
+                )
+                .order(1);
+
+        registry.addInterceptor(permissionInterceptor)
+                .addPathPatterns("/v1/**")
+                .excludePathPatterns(
+                        "/v1/auth/login",
+                        "/v1/auth/register",
+                        "/v1/coffee/**",
+                        "/v1/agent/**",
+                        "/v1/recommendation/**"
+                )
+                .order(2);
     }
 }
