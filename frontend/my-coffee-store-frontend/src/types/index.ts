@@ -9,7 +9,8 @@ export interface User {
   avatar?: string;
   balance?: number;
   createTime: string;
-  role?: 'user' | 'admin';
+  role: 'user' | 'staff' | 'admin';
+  permissions: string[];
 }
 
 /**
