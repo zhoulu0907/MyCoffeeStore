@@ -93,6 +93,18 @@ const Header: React.FC = () => {
                 {item.label}
               </span>
             ))}
+            {/* 管理后台入口 - 仅 admin 和 staff 可见 */}
+            {(user?.role === 'admin' || user?.role === 'staff') && (
+              <span
+                onClick={() => handleNavClick(ROUTES.ADMIN)}
+                className={`text-base cursor-pointer transition-colors ${
+                  location.pathname === ROUTES.ADMIN ? 'text-background' : 'text-gold-dark'
+                } hover:text-background`}
+                style={{ fontFamily: 'Inter, sans-serif' }}
+              >
+                管理后台
+              </span>
+            )}
           </nav>
 
           {/* 右侧按钮组 */}
@@ -188,6 +200,20 @@ const Header: React.FC = () => {
                 {item.label}
               </button>
             ))}
+
+            {/* 管理后台入口（移动端） - 仅 admin 和 staff 可见 */}
+            {(user?.role === 'admin' || user?.role === 'staff') && (
+              <button
+                onClick={() => handleNavClick(ROUTES.ADMIN)}
+                className={`block w-full text-left px-4 py-3 text-base rounded-button transition-colors ${
+                  location.pathname === ROUTES.ADMIN
+                    ? 'text-background'
+                    : 'text-gold-dark hover:text-background'
+                }`}
+              >
+                管理后台
+              </button>
+            )}
 
             {/* 购物车 - 优化触摸目标尺寸为 44px */}
             <button
