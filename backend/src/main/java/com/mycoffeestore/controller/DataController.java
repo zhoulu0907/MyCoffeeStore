@@ -1,5 +1,6 @@
 package com.mycoffeestore.controller;
 
+import com.mycoffeestore.annotation.RequirePermission;
 import com.mycoffeestore.common.result.Result;
 import com.mycoffeestore.util.OrderDataGenerator;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,6 +26,7 @@ public class DataController {
     private final OrderDataGenerator orderDataGenerator;
 
     @PostMapping("/generate-orders")
+    @RequirePermission("system:data_gen")
     @Operation(summary = "生成历史订单数据", description = "为 zhoulu 用户生成500天的历史订单")
     public Result<String> generateOrders(
             @RequestHeader(value = "Authorization", required = false) String authHeader,

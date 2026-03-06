@@ -1,5 +1,6 @@
 package com.mycoffeestore.controller;
 
+import com.mycoffeestore.annotation.RequirePermission;
 import com.mycoffeestore.common.result.Result;
 import com.mycoffeestore.dto.llm.ConnectionTestRequestDTO;
 import com.mycoffeestore.dto.llm.LlmConfigUpdateRequestDTO;
@@ -37,6 +38,7 @@ import java.util.List;
 @RequestMapping("/v1/llm")
 @RequiredArgsConstructor
 @Tag(name = "LLM 配置管理", description = "LLM 提供商和模型配置管理接口")
+@RequirePermission("llm:config")
 public class LlmConfigController {
 
     private final LlmConfigService llmConfigService;

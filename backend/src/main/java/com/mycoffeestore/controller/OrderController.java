@@ -1,5 +1,6 @@
 package com.mycoffeestore.controller;
 
+import com.mycoffeestore.annotation.RequirePermission;
 import com.mycoffeestore.common.result.PageResult;
 import com.mycoffeestore.common.result.Result;
 import com.mycoffeestore.dto.order.OrderCreateDTO;
@@ -78,6 +79,7 @@ public class OrderController {
     }
 
     @PostMapping("/update-status")
+    @RequirePermission("order:update_status")
     @Operation(summary = "更新订单状态", description = "管理员更新订单状态")
     public Result<Void> updateStatus(@RequestParam String orderId,
                                      @RequestParam String status) {
