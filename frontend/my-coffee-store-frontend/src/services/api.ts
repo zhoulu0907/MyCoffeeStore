@@ -450,4 +450,37 @@ export const adminApi = {
   },
 };
 
+/**
+ * 角色管理 API
+ */
+export const roleApi = {
+  /**
+   * 获取角色列表
+   */
+  getRoles: () => {
+    return get('/v1/role/list');
+  },
+
+  /**
+   * 获取所有权限列表
+   */
+  getPermissions: () => {
+    return get('/v1/role/permissions');
+  },
+
+  /**
+   * 分配角色
+   */
+  assignRole: (data: { userId: number; roleCode: string }) => {
+    return post('/v1/role/assign', data);
+  },
+
+  /**
+   * 更新角色权限
+   */
+  updateRolePermissions: (data: { roleId: number; permissionIds: number[] }) => {
+    return post('/v1/role/permissions/update', data);
+  },
+};
+
 export default axiosInstance;

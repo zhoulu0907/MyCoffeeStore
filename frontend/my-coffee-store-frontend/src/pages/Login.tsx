@@ -66,12 +66,30 @@ const Login: React.FC = () => {
       const response = await userApi.login({
         account: formData.account,
         password: formData.password,
-      }) as unknown as ApiResponse<{ token: string; userId: number; username: string; email: string; phone: string }>;
+      }) as unknown as ApiResponse<{
+        token: string;
+        userId: number;
+        username: string;
+        email: string;
+        phone: string;
+        balance?: number;
+        role?: 'user' | 'staff' | 'admin';
+        permissions?: string[];
+      }>;
 
       if (response.code === 200) {
         // 登录成功，从响应中提取 token 和用户信息
-        const { token, userId, username, email, phone } = response.data;
-        const userData = { id: userId, username, email, phone, createTime: '' };
+        const { token, userId, username, email, phone, balance, role, permissions } = response.data;
+        const userData = {
+          id: userId,
+          username,
+          email,
+          phone,
+          balance,
+          createTime: '',
+          role: role ?? 'user',
+          permissions: permissions ?? [],
+        };
         login(userData, token);
         navigate(ROUTES.HOME);
       } else {

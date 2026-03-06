@@ -113,12 +113,28 @@ const Register: React.FC = () => {
         email: formData.email,
         phone: formData.phone || undefined,
         password: formData.password,
-      }) as unknown as ApiResponse<{ token: string; userId: number; username: string; email: string; phone: string }>;
+      }) as unknown as ApiResponse<{
+        token: string;
+        userId: number;
+        username: string;
+        email: string;
+        phone: string;
+        role?: 'user' | 'staff' | 'admin';
+        permissions?: string[];
+      }>;
 
       if (response.code === 200) {
         // 注册成功，从响应中提取 token 和用户信息
-        const { token, userId, username, email, phone } = response.data;
-        const userData = { id: userId, username, email, phone, createTime: '' };
+        const { token, userId, username, email, phone, role, permissions } = response.data;
+        const userData = {
+          id: userId,
+          username,
+          email,
+          phone,
+          createTime: '',
+          role: role ?? 'user',
+          permissions: permissions ?? [],
+        };
         login(userData, token);
         navigate(ROUTES.HOME);
       } else {
