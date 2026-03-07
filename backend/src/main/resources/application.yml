@@ -20,6 +20,20 @@ spring:
     time-zone: Asia/Shanghai
     date-format: yyyy-MM-dd HH:mm:ss
     default-property-inclusion: non_null
+  # Redis 配置
+  data:
+    redis:
+      enabled: true
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      database: ${REDIS_DATABASE:0}
+      timeout: 3000
+      # 对话记忆配置
+      memory:
+        ttl: 86400  # Redis 中消息的 TTL（秒），默认 24 小时
+        max-messages: 100  # 每个会话最多保留的消息数量
+        key-prefix: "conversation:"  # Redis Key 前缀
 
 # MyBatis-Flex 配置
 mybatis-flex:
@@ -54,8 +68,30 @@ modelscope:
 
 # LLM 加密配置
 llm:
+  enabled: true
+  provider: modelscope
   encryption:
     # 主密钥环境变量名（优先级最高）
     master-key-env: LLM_MASTER_KEY
     # 主密钥文件路径（环境变量不存在时使用）
     master-key-file: ${user.home}/.mycoffeestore/master.key
+
+# Agent 配置
+agent:
+  enabled: true
+  implementation-type: react  # direct（直接 API 调用）或 react（ReactAgent 实现）
+  max-chat-history: 10
+  session-timeout: 1800  # 30 分钟
+  enable-memory: true
+  enable-streaming: true
+  max-tool-rounds: 5
+  agents:
+    coffee-advisor:
+      temperature: 0.7
+      max-recommendations: 3
+    order-assistant:
+      temperature: 0.6
+      require-login: true
+    customer-service:
+      temperature: 0.5
+      show-store-info: true

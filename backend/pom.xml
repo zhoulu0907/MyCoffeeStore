@@ -8,7 +8,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.5</version>
+        <version>3.5.1</version>
         <relativePath/>
     </parent>
 
@@ -20,10 +20,11 @@
 
     <properties>
         <java.version>17</java.version>
-        <mybatis-flex.version>1.9.7</mybatis-flex.version>
+        <mybatis-flex.version>1.10.3</mybatis-flex.version>
         <jjwt.version>0.12.3</jjwt.version>
-        <springdoc.version>2.2.0</springdoc.version>
+        <springdoc.version>2.3.0</springdoc.version>
         <spring-ai-alibaba.version>1.0.0-M2</spring-ai-alibaba.version>
+        <spring-ai.version>1.0.0-M4</spring-ai.version>
     </properties>
 
     <dependencies>
@@ -117,25 +118,23 @@
             <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
 
-        <!-- Spring AI Alibaba Starter -->
-        <dependency>
-            <groupId>com.alibaba.cloud.ai</groupId>
-            <artifactId>spring-ai-alibaba-starter</artifactId>
-            <version>${spring-ai-alibaba.version}</version>
-            <exclusions>
-                <!-- 排除与 Spring Boot 3.1.x 不兼容的 DashScope 自动配置 -->
-                <exclusion>
-                    <groupId>com.alibaba.cloud.ai</groupId>
-                    <artifactId>spring-ai-alibaba-dashscope-autoconfigure</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
         <!-- Spring AI Core (必需) -->
         <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-core</artifactId>
-            <version>1.0.0-M4</version>
+            <version>${spring-ai.version}</version>
+        </dependency>
+
+        <!-- Spring Data Redis -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+
+        <!-- Jackson datatype for JSR310 (LocalDateTime 序列化) -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
         </dependency>
 
         <!-- Spring Boot Test -->
@@ -147,11 +146,11 @@
     </dependencies>
 
     <repositories>
-        <!-- Spring Milestone 仓库 -->
+        <!-- Maven Central 仓库（优先） -->
         <repository>
-            <id>spring-milestones</id>
-            <name>Spring Milestones</name>
-            <url>https://repo.spring.io/milestone</url>
+            <id>central</id>
+            <name>Maven Central Repository</name>
+            <url>https://repo.maven.apache.org/maven2</url>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
@@ -164,6 +163,27 @@
             <releases>
                 <enabled>true</enabled>
             </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <!-- Aliyun Spring 仓库 -->
+        <repository>
+            <id>aliyun-spring</id>
+            <name>Aliyun Spring Repository</name>
+            <url>https://maven.aliyun.com/repository/spring</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <!-- Spring Milestone 仓库 -->
+        <repository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/milestone</url>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
@@ -182,6 +202,22 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <source>17</source>
+                    <target>17</target>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>1.18.30</version>
+                        </path>
+                    </annotationProcessorPaths>
                 </configuration>
             </plugin>
         </plugins>

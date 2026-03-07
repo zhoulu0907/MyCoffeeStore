@@ -2,20 +2,24 @@ package com.mycoffeestore.ai.config;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import org.springframework.ai.chat.prompt.ChatOptions;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
  * ModelScope 聊天选项
  * 定义 ModelScope API 调用的可配置参数
+ * 实现 Spring AI ChatOptions 接口
  *
  * @author Backend Developer
  * @since 2026-03-05
  */
 @Data
 @Schema(description = "ModelScope 聊天选项")
-public class ModelScopeChatOptions {
+public class ModelScopeChatOptions implements ChatOptions {
 
     /**
      * 模型名称
@@ -210,5 +214,29 @@ public class ModelScopeChatOptions {
             options.setExtraParams(extraParams != null ? extraParams : new HashMap<>());
             return options;
         }
+    }
+
+    @Override
+    public ModelScopeChatOptions copy() {
+        ModelScopeChatOptions copy = new ModelScopeChatOptions();
+        copy.setModel(model);
+        copy.setTemperature(temperature);
+        copy.setMaxTokens(maxTokens);
+        copy.setTopP(topP);
+        copy.setTopK(topK);
+        copy.setStop(stop);
+        copy.setFrequencyPenalty(frequencyPenalty);
+        copy.setPresencePenalty(presencePenalty);
+        copy.setStream(stream);
+        copy.setExtraParams(new HashMap<>(extraParams));
+        return copy;
+    }
+
+    @Override
+    public List<String> getStopSequences() {
+        if (stop == null) {
+            return null;
+        }
+        return Arrays.asList(stop);
     }
 }

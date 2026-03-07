@@ -9,6 +9,7 @@ import com.mycoffeestore.service.agent.AgentService;
 import com.mycoffeestore.util.AgentToolExecutor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -25,8 +26,10 @@ import java.util.*;
  * @since 2026-02-27
  */
 @Slf4j
-@Service
+@Service("agentDirectService")
+@Primary
 @RequiredArgsConstructor
+@org.springframework.core.annotation.Order(2)
 public class AgentServiceImpl implements AgentService {
 
     private final WebClient modelScopeWebClient;

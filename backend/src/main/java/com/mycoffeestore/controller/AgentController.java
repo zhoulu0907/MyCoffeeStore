@@ -1,7 +1,9 @@
 package com.mycoffeestore.controller;
 
 import com.mycoffeestore.dto.agent.AgentChatRequestDTO;
+import com.mycoffeestore.dto.agent.AgentChatRequestV2DTO;
 import com.mycoffeestore.service.agent.AgentService;
+import com.mycoffeestore.service.agent.AgentServiceV2;
 import com.mycoffeestore.util.JwtUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -28,30 +30,30 @@ import java.util.concurrent.CompletableFuture;
  */
 @Slf4j
 @RestController
-@RequestMapping("/v1/agent")
 @RequiredArgsConstructor
 @Tag(name = "AI Agent", description = "AI Agent 对话接口")
 public class AgentController {
 
-    private static final Set<String> VALID_AGENT_TYPES = Set.of("coffee_advisor", "customer_service", "order_assistant");
+    private static final Set<String> VALID_AGENT_TYPES = Set.of("coffee_advisor", "customer_service", "order_assistant", "general_chat");
 
     private final AgentService agentService;
+    private final AgentServiceV2 agentServiceV2;
     private final JwtUtil jwtUtil;
 
     /**
-     * Agent 流式聊天
+     * V1 版本：Agent 流式聊天
      * 支持未登录和已登录用户，JWT 在内部可选解析
      *
      * @param request     聊天请求
      * @param httpRequest HTTP 请求（用于提取 JWT Token）
      * @return SSE 事件流
      */
-    @PostMapping(value = "/chat", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    @Operation(summary = "Agent 流式聊天", description = "SSE 流式响应，支持多角色 Agent 和工具调用")
-    public SseEmitter chat(@RequestBody @Valid AgentChatRequestDTO request,
-                           HttpServletRequest httpRequest) {
+    @PostMapping(value = "/v1/agent/chat", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @Operation(summary = "V1 Agent 流式聊天", description = "SSE 流式响应，支持多角色 Agent 和工具调用（向后兼容）")
+    public SseEmitter chatV1(@RequestBody @Valid AgentChatRequestDTO request,
+                             HttpServletRequest httpRequest) {
 
-        log.info("收到 Agent 聊天请求，角色: {}，消息数: {}", request.getAgentType(), request.getMessages().size());
+        log.info("收到 V1 Agent 聊天请求，角色: {}，消息数: {}", request.getAgentType(), request.getMessages().size());
 
         // 校验 agentType 有效性
         if (!VALID_AGENT_TYPES.contains(request.getAgentType())) {
@@ -71,6 +73,44 @@ public class AgentController {
         // 异步执行聊天
         CompletableFuture.runAsync(() -> {
             agentService.chatStream(request, userId, emitter);
+        });
+
+        return emitter;
+    }
+
+    /**
+     * V2 版本：Agent 流式聊天（推荐使用）
+     * 新功能：
+     * - 智能路由：自动选择合适的 Agent
+     * - 对话记忆：自动加载和保存历史消息
+     * - 会话管理：自动生成和管理 sessionId
+     * - 简化接口：单条消息，无需传递历史
+     *
+     * @param request     聊天请求（V2 格式）
+     * @param httpRequest HTTP 请求（用于提取 JWT Token）
+     * @return SSE 事件流
+     */
+    @PostMapping(value = "/v2/agent/chat", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @Operation(summary = "V2 Agent 流式聊天（推荐）", description = "支持智能路由、对话记忆、会话管理。自动选择 Agent，自动管理对话历史")
+    public SseEmitter chatV2(@RequestBody @Valid AgentChatRequestV2DTO request,
+                             HttpServletRequest httpRequest) {
+
+        log.info("收到 V2 Agent 聊天请求，消息: {}, agentType: {}, sessionId: {}",
+                request.getMessage(), request.getAgentType(), request.getSessionId());
+
+        // 可选提取 userId（未登录为 null）
+        Long userId = extractUserIdOptional(httpRequest);
+
+        // 创建 SSE 发射器，60 秒超时
+        SseEmitter emitter = new SseEmitter(60000L);
+
+        // 设置超时和错误回调
+        emitter.onTimeout(() -> log.warn("SSE 连接超时"));
+        emitter.onError(e -> log.warn("SSE 连接错误: {}", e.getMessage()));
+
+        // 异步执行聊天（V2 版本）
+        CompletableFuture.runAsync(() -> {
+            agentServiceV2.chatStreamV2(request, userId, emitter);
         });
 
         return emitter;
